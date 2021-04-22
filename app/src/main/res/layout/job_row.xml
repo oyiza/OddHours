@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true"
+    >
+
+<!--    https://www.youtube.com/watch?v=op2rBiJb79A  -->
+<!--    https://www.youtube.com/watch?v=6Gm3eMG8KqI  this was better / clearer -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp" >
+
+        <TextView
+            android:id="@+id/txtJobName"
+            android:layout_width="156dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:text="@string/placeholder_job_name" />
+
+        <TextView
+            android:id="@+id/txtJobLocation"
+            android:layout_width="203dp"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:gravity="end"
+            android:layout_toEndOf="@+id/txtJobName"
+            android:text="@string/placeholder_job_location" />
+
+        <TextView
+            android:id="@+id/txtJobInfo"
+            android:layout_width="231dp"
+            android:layout_height="36dp"
+            android:textSize="14sp"
+            android:layout_below="@+id/txtJobName"
+            android:layout_marginTop="1dp"
+            android:text="@string/placeholder_job_information" />
+
+        <Button
+            android:id="@+id/btnAddHours"
+            android:layout_width="126dp"
+            android:layout_height="34dp"
+            android:layout_below="@+id/txtJobLocation"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="3dp"
+            android:layout_toEndOf="@+id/txtJobInfo"
+            android:text="@string/btn_add_hours"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
