@@ -43,22 +43,22 @@ class HomeFragment : Fragment() {
      * when we eventually have the DB setup, we should have a helper function that grabs the data from the DB
      * and returns it in a List<JobModel>
      */
-    private fun generateDummyList(size: Int): List<JobModel> {
-        val list = ArrayList<JobModel>()
-
-        for (i in 1 until size+1) {
-            val item = JobModel("Job number $i", "Location, LO", "This week: X hours")
-            list += item
-        }
-
-        return list
-    }
+//    private fun generateDummyList(size: Int): List<JobModel> {
+//        val list = ArrayList<JobModel>()
+//
+//        for (i in 1 until size+1) {
+//            val item = JobModel("Job number $i", "Location, LO", "This week: X hours")
+//            list += item
+//        }
+//
+//        return list
+//    }
 
     private fun generateDummyListUsingModels(size: Int): List<JobModel> {
         val list = ArrayList<JobModel>()
 
         for (i in 1 until size+1) {
-            val item = jobRepository.createJob("Job number $i", "Location, LO", "This week: X hours")
+            val item = jobRepository.createJob("Job number $i", "Location, LO")
             list += item
         }
 

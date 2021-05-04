@@ -32,7 +32,7 @@ class HomeAdapter(private val jobList: List<JobModel>) : RecyclerView.Adapter<Ho
 
         // onClick listener for the add hours button
         holder.addHoursButton.setOnClickListener {
-            // Todo: button click should lead to new add hours fragment or activity
+            // TODO: button click should lead to new add hours fragment or activity
             Toast.makeText(
                 holder.itemView.context,
                 "You clicked button of : ${holder.jobName.text}",
