@@ -58,7 +58,7 @@ class HomeFragment : Fragment() {
         val list = ArrayList<JobModel>()
 
         for (i in 1 until size+1) {
-            val item = jobRepository.createJob("Job number $i", "Location, LO")
+            val item = jobRepository.buildJobList("Job number $i", "Location, LO")
             list += item
         }
 

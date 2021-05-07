@@ -1,3 +1,3 @@
 package com.example.oddhours.data.model
 
-data class JobModel(val jobName: String, val jobLocation: String, val jobInfo: String = "calculating total hours for the week...")
+data class JobModel(val jobID: Int, var jobName: String, var jobLocation: String, var jobInfo: String = "No information for current week...")
