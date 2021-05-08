@@ -13,7 +13,7 @@ class DatabaseHelper(context: Context):
             "$job_ID_COL_1 INTEGER PRIMARY KEY, " +
             "$job_Name_COL_2 TEXT, " +
             "$job_Location_COL_3 TEXT);"
-    val sqlCreateTable_hours = "CREATE TABLE IF NOT EXISTS $shiftsTable (" +
+    val sqlCreateTable_shifts = "CREATE TABLE IF NOT EXISTS $shiftsTable (" +
             "$shift_ID_COL_1 INTEGER PRIMARY KEY, " +
             "$shift_Date_COL_2 TEXT, " +
             "$job_ID_COL_3 INTEGER, " +
@@ -29,11 +29,11 @@ class DatabaseHelper(context: Context):
 
     companion object {
         val dbName = "oddHours"
-        val jobTable = "Job"
+        val jobTable = "Jobs"
         val job_ID_COL_1 = "JobID"
         val job_Name_COL_2 = "JobName"
         val job_Location_COL_3 = "JobLocation"
-        val shiftsTable = "Hours"
+        val shiftsTable = "Shifts"
         val shift_ID_COL_1 = "ShiftID"
         val shift_Date_COL_2 = "ShiftDate"
         val job_ID_COL_3 = "JobID"
@@ -49,7 +49,7 @@ class DatabaseHelper(context: Context):
 
     override fun onCreate(db: SQLiteDatabase?) {
         db!!.execSQL(sqlCreateTable_job)
-        db!!.execSQL(sqlCreateTable_hours)
+        db!!.execSQL(sqlCreateTable_shifts)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
