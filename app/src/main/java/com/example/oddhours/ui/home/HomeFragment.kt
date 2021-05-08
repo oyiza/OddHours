@@ -1,6 +1,7 @@
 package com.example.oddhours.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,6 +56,7 @@ class HomeFragment : Fragment() {
 //    }
 
     private fun generateDummyListUsingModels(size: Int): List<JobModel> {
+        Log.i(TAG, "generating dummy list...")
         val list = ArrayList<JobModel>()
 
         for (i in 1 until size+1) {
@@ -63,5 +65,9 @@ class HomeFragment : Fragment() {
         }
 
         return list
+    }
+
+    companion object {
+        private const val TAG = "HomeAdapter"
     }
 }

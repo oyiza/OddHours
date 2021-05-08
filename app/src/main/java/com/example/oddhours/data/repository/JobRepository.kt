@@ -1,5 +1,6 @@
 package com.example.oddhours.data.repository
 
+import android.util.Log
 import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.data.model.JobModel
 
@@ -22,6 +23,7 @@ class JobRepository() {
      * what we feed into the recyclerview adapter!
      */
     fun buildJobList(jobName: String, jobLocation: String): JobModel {
+        Log.i(TAG, "buildJobList() started")
         return JobModel(1, jobName, jobLocation, getTotalHoursForWeek(jobName))
     }
 
@@ -38,5 +40,9 @@ class JobRepository() {
      */
     fun addNewJob(jobName: String, jobLocation: String, jobInfo: String): JobModel {
         return JobModel(1, jobName, jobLocation, jobInfo)
+    }
+
+    companion object {
+        private const val TAG = "JobRepository"
     }
 }
