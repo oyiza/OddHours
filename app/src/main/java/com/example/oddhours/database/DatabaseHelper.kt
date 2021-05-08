@@ -13,13 +13,13 @@ class DatabaseHelper(context: Context):
             "$job_ID_COL_1 INTEGER PRIMARY KEY, " +
             "$job_Name_COL_2 TEXT, " +
             "$job_Location_COL_3 TEXT);"
-    val sqlCreateTable_hours = "CREATE TABLE IF NOT EXISTS $hoursTable (" +
+    val sqlCreateTable_hours = "CREATE TABLE IF NOT EXISTS $shiftsTable (" +
             "$shift_ID_COL_1 INTEGER PRIMARY KEY, " +
             "$shift_Date_COL_2 TEXT, " +
             "$job_ID_COL_3 INTEGER, " +
             "$start_Time_COL_4 TEXT, " +
             "$end_Time_COL_5 TEXT, " +
-            "$hours_Worked_COL_6 INTEGER, " +
+            "$hours_Worked_COL_6 TEXT, " +
             "FOREIGN KEY($job_ID_COL_3) REFERENCES $jobTable($job_ID_COL_1));"
 
     val getJobs = "SELECT * FROM $jobTable"
@@ -33,7 +33,7 @@ class DatabaseHelper(context: Context):
         val job_ID_COL_1 = "JobID"
         val job_Name_COL_2 = "JobName"
         val job_Location_COL_3 = "JobLocation"
-        val hoursTable = "Hours"
+        val shiftsTable = "Hours"
         val shift_ID_COL_1 = "ShiftID"
         val shift_Date_COL_2 = "ShiftDate"
         val job_ID_COL_3 = "JobID"
@@ -70,16 +70,18 @@ class DatabaseHelper(context: Context):
     fun insertShift(shiftID: Int, shiftDate: String, jobID: Int, start: String, end: String): Long{
         //First calculate the hours worked, from the entered Start and End time
         // Then push the data to SQLite
+        var hoursWorked = ""
+
         val db = this.writableDatabase
         val contentValues = ContentValues()
         contentValues.put(shift_ID_COL_1, shiftID)
-        contentValues.put(shift_Date_COL_2, shiftID)
-        contentValues.put(job_ID_COL_3, shiftID)
-        contentValues.put(start_Time_COL_4, shiftID)
-        contentValues.put(end_Time_COL_5, shiftID)
-        contentValues.put(hours_Worked_COL_6, shiftID)
+        contentValues.put(shift_Date_COL_2, shiftDate)
+        contentValues.put(job_ID_COL_3, jobID)
+        contentValues.put(start_Time_COL_4, start)
+        contentValues.put(end_Time_COL_5, end)
+        contentValues.put(hours_Worked_COL_6, hoursWorked)
 
-        return db.insert(hoursTable, null, contentValues)
+        return db.insert(shiftsTable, null, contentValues)
     }
 
     fun getJobs(): Cursor {
@@ -90,7 +92,7 @@ class DatabaseHelper(context: Context):
 
     fun getShiftsForjob(shiftID: Int): Cursor{
         val db = this.writableDatabase
-        val res = db.rawQuery("SELECT * FROM $hoursTable WHERE $job_ID_COL_3 = '$shiftID'", null)
+        val res = db.rawQuery("SELECT * FROM $shiftsTable WHERE $job_ID_COL_3 = '$shiftID'", null)
         return res
     }
 
