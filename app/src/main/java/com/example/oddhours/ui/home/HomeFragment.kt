@@ -29,7 +29,7 @@ class HomeFragment : Fragment() {
         return if (testList.isNotEmpty()) {
             inflater.inflate(R.layout.fragment_home, container, false)
         } else {
-            inflater.inflate(R.layout.no_jobs_view, container, false)
+            inflater.inflate(R.layout.no_jobs_home, container, false)
         }
     }
 
