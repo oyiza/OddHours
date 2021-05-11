@@ -7,4 +7,5 @@
     <string name="placeholder_job_location">Job Location</string>
     <string name="placeholder_job_information">Job Information</string>
     <string name="btn_add_hours">Add Hours</string>
+    <string name="txt_no_jobs">No Jobs Added Yet</string>
 </resources>
