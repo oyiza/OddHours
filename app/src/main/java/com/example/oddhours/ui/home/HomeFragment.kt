@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.oddhours.R
 import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.data.repository.JobRepository
+import com.example.oddhours.database.DatabaseHelper
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
@@ -33,9 +34,14 @@ class HomeFragment : Fragment() {
 
         val testList = generateDummyListUsingModels(10)
 
+        /**
+         *  Call getAllJobs() function in this class to get the JobModelList and pass it to adapter
+         *  getAllJobs() is directly passed into HomeAdapter below
+         */
+
         recyclerViewHome.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = HomeAdapter(testList);
+            adapter = HomeAdapter(getAllJobs());
         }
     }
 
@@ -65,6 +71,14 @@ class HomeFragment : Fragment() {
         }
 
         return list
+    }
+
+    fun getAllJobs(): List<JobModel>{
+        var db = DatabaseHelper(requireActivity())
+        var jr = JobRepository()
+        jr.jobModelList = db.getJobs()
+
+        return jr.jobModelList!!
     }
 
     companion object {
