@@ -19,29 +19,33 @@ class HomeFragment : Fragment() {
     private var layoutmanager: RecyclerView.LayoutManager? = null
     private var adapter: RecyclerView.Adapter<HomeAdapter.JobViewHolder>? = null
     private var jobRepository: JobRepository = JobRepository()
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
 
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return if (getAllJobs().isNotEmpty()) {
+            inflater.inflate(R.layout.fragment_home, container, false)
+        } else {
+            inflater.inflate(R.layout.no_jobs_home, container, false)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val testList = generateDummyListUsingModels(10)
-
         /**
          *  Call getAllJobs() function in this class to get the JobModelList and pass it to adapter
          *  getAllJobs() is directly passed into HomeAdapter below
          */
-
-        recyclerViewHome.apply {
-            layoutManager = LinearLayoutManager(activity)
-            adapter = HomeAdapter(getAllJobs());
+        if (getAllJobs().isEmpty()) {
+            // do nothing. layout is already inflated
+        } else {
+            recyclerViewHome.apply {
+                layoutManager = LinearLayoutManager(activity)
+                adapter = HomeAdapter(getAllJobs());
+            }
         }
     }
 
@@ -50,18 +54,7 @@ class HomeFragment : Fragment() {
      * when we eventually have the DB setup, we should have a helper function that grabs the data from the DB
      * and returns it in a List<JobModel>
      */
-//    private fun generateDummyList(size: Int): List<JobModel> {
-//        val list = ArrayList<JobModel>()
-//
-//        for (i in 1 until size+1) {
-//            val item = JobModel("Job number $i", "Location, LO", "This week: X hours")
-//            list += item
-//        }
-//
-//        return list
-//    }
-
-    private fun generateDummyListUsingModels(size: Int): List<JobModel> {
+    private fun generateDummyList(size: Int): List<JobModel> {
         Log.i(TAG, "generating dummy list...")
         val list = ArrayList<JobModel>()
 
@@ -82,6 +75,6 @@ class HomeFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "HomeAdapter"
+        private const val TAG = "HomeFragment"
     }
 }
