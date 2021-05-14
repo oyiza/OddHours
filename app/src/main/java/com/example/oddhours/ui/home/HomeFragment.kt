@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.oddhours.R
 import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.data.repository.JobRepository
+import com.example.oddhours.database.DatabaseHelper
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
@@ -18,15 +19,13 @@ class HomeFragment : Fragment() {
     private var layoutmanager: RecyclerView.LayoutManager? = null
     private var adapter: RecyclerView.Adapter<HomeAdapter.JobViewHolder>? = null
     private var jobRepository: JobRepository = JobRepository()
-    private var testList = generateDummyList(0)
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
 
-        return if (testList.isNotEmpty()) {
+        return if (getAllJobs().isNotEmpty()) {
             inflater.inflate(R.layout.fragment_home, container, false)
         } else {
             inflater.inflate(R.layout.no_jobs_home, container, false)
@@ -36,12 +35,16 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (testList.isEmpty()) {
+        /**
+         *  Call getAllJobs() function in this class to get the JobModelList and pass it to adapter
+         *  getAllJobs() is directly passed into HomeAdapter below
+         */
+        if (getAllJobs().isEmpty()) {
             // do nothing. layout is already inflated
         } else {
             recyclerViewHome.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = HomeAdapter(testList);
+                adapter = HomeAdapter(getAllJobs());
             }
         }
     }
@@ -61,6 +64,14 @@ class HomeFragment : Fragment() {
         }
 
         return list
+    }
+
+    fun getAllJobs(): List<JobModel>{
+        var db = DatabaseHelper(requireActivity())
+        var jr = JobRepository()
+        jr.jobModelList = db.getJobs()
+
+        return jr.jobModelList!!
     }
 
     companion object {

@@ -9,12 +9,12 @@ class JobRepository() {
     /**
      * store the list of jobs
      */
-    private var jobModelList: List<JobModel>? = null
+    var jobModelList: List<JobModel>? = null
 
     /**
      * store the list of shifts
      */
-    private var shiftsList: List<ShiftsModel>? = null
+    var shiftsList: List<ShiftsModel>? = null
 
     /**
      * TODO: this method should make use of the return object / values from DB (instead of taking in jobName and jobLocation)

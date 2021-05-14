@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.oddhours.data.model.JobModel
 
 class DatabaseHelper(context: Context):
     SQLiteOpenHelper(context, dbName, null, 1){
@@ -23,9 +24,6 @@ class DatabaseHelper(context: Context):
             "FOREIGN KEY($job_ID_COL_3) REFERENCES $jobTable($job_ID_COL_1));"
 
     val getJobs = "SELECT * FROM $jobTable"
-
-    //JobModel (JobId, JobName, JobLocation)
-    //ShiftsModel (ShiftID, ShiftDate, JobID, StartTime, EndTime, HoursWorked)
 
     companion object {
         val dbName = "oddHours"
@@ -57,14 +55,61 @@ class DatabaseHelper(context: Context):
         onCreate(db)
     }
 
-    fun insertJob(jobID: Int, jobName: String, jobLocation: String): Long{
+    /**
+     *  insertJob() - adds a new job to the database, jobID is assigned by default by SQLite
+     */
+    fun insertJob(newJob: JobModel): Long{
         val db = this.writableDatabase
         val contentValues = ContentValues()
-        contentValues.put(job_ID_COL_1, jobID)
-        contentValues.put(job_Name_COL_2, jobName)
-        contentValues.put(job_Location_COL_3, jobLocation)
+        contentValues.put(job_Name_COL_2, newJob.jobName)
+        contentValues.put(job_Location_COL_3, newJob.jobLocation)
 
         return db.insert(jobTable, null, contentValues)
+    }
+
+    /**
+     *  getJobs() - retrieves all the jobs in the Database and returns it as a JobModel List
+     */
+    fun getJobs(): List<JobModel> {
+        val db = this.writableDatabase
+        val res = db.rawQuery(getJobs, null)
+        val cursor = res
+        var listOfJobs: MutableList<JobModel> = mutableListOf()
+        if (cursor.count != 0) {
+            while (cursor.moveToNext()) {
+                var jobModel =
+                    JobModel(cursor.getInt(0), cursor.getString(1), cursor.getString(2))
+                listOfJobs.add(jobModel)
+            }
+        }
+        return listOfJobs
+    }
+
+    /**
+     *  checkJobNameAndJobLocationExists - validates whether the same name and location already exists or not
+     */
+    fun checkJobNameAndJobLocationExists(jobName: String, jobLocation: String): Boolean{
+        val db = this.writableDatabase
+        val res = db.rawQuery("SELECT $job_ID_COL_1 FROM $jobTable WHERE $job_Name_COL_2 = \"$jobName\" AND $job_Location_COL_3 = \"$jobLocation\"",null)
+        return res.count != 0
+    }
+
+    fun dropTable(){
+        val db = this.writableDatabase
+        db.execSQL("DROP TABLE IF EXISTS $jobTable")
+    }
+
+    /**
+     *  getJobID() - takes jobName & jobLocation as parameters to get a JobID
+     */
+    fun getJobID(jobName: String, jobLocation: String): Number{
+        val db = this.writableDatabase
+        val res = db.rawQuery("SELECT $job_ID_COL_1 FROM $jobTable WHERE $job_Name_COL_2 = \"$jobName\" AND $job_Location_COL_3 = \"$jobLocation\"",null)
+        var response = -1
+        while(res.moveToNext()){
+            response = res.getInt(0)
+        }
+        return response
     }
 
     fun insertShift(shiftID: Int, shiftDate: String, jobID: Int, start: String, end: String): Long{
@@ -82,12 +127,6 @@ class DatabaseHelper(context: Context):
         contentValues.put(hours_Worked_COL_6, hoursWorked)
 
         return db.insert(shiftsTable, null, contentValues)
-    }
-
-    fun getJobs(): Cursor {
-        val db = this.writableDatabase
-        val res = db.rawQuery(getJobs, null)
-        return res
     }
 
     fun getShiftsForjob(shiftID: Int): Cursor{
