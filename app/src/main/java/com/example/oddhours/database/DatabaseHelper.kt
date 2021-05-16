@@ -10,11 +10,11 @@ import com.example.oddhours.data.model.JobModel
 class DatabaseHelper(context: Context):
     SQLiteOpenHelper(context, dbName, null, 1){
 
-    val sqlCreateTable_job = "CREATE TABLE IF NOT EXISTS $jobTable (" +
+    private val sqlCreateTableJob = "CREATE TABLE IF NOT EXISTS $jobTable (" +
             "$job_ID_COL_1 INTEGER PRIMARY KEY, " +
             "$job_Name_COL_2 TEXT, " +
             "$job_Location_COL_3 TEXT);"
-    val sqlCreateTable_shifts = "CREATE TABLE IF NOT EXISTS $shiftsTable (" +
+    private val sqlCreateTableShifts = "CREATE TABLE IF NOT EXISTS $shiftsTable (" +
             "$shift_ID_COL_1 INTEGER PRIMARY KEY, " +
             "$shift_Date_COL_2 TEXT, " +
             "$job_ID_COL_3 INTEGER, " +
@@ -23,21 +23,21 @@ class DatabaseHelper(context: Context):
             "$hours_Worked_COL_6 TEXT, " +
             "FOREIGN KEY($job_ID_COL_3) REFERENCES $jobTable($job_ID_COL_1));"
 
-    val getJobs = "SELECT * FROM $jobTable"
+    private val getJobs = "SELECT * FROM $jobTable"
 
     companion object {
-        val dbName = "oddHours"
-        val jobTable = "Jobs"
-        val job_ID_COL_1 = "JobID"
-        val job_Name_COL_2 = "JobName"
-        val job_Location_COL_3 = "JobLocation"
-        val shiftsTable = "Shifts"
-        val shift_ID_COL_1 = "ShiftID"
-        val shift_Date_COL_2 = "ShiftDate"
-        val job_ID_COL_3 = "JobID"
-        val start_Time_COL_4 = "StartTime"
-        val end_Time_COL_5 = "EndTime"
-        val hours_Worked_COL_6 = "HoursWorked"
+        const val dbName = "oddHours"
+        const val jobTable = "Jobs"
+        const val job_ID_COL_1 = "JobID"
+        const val job_Name_COL_2 = "JobName"
+        const val job_Location_COL_3 = "JobLocation"
+        const val shiftsTable = "Shifts"
+        const val shift_ID_COL_1 = "ShiftID"
+        const val shift_Date_COL_2 = "ShiftDate"
+        const val job_ID_COL_3 = "JobID"
+        const val start_Time_COL_4 = "StartTime"
+        const val end_Time_COL_5 = "EndTime"
+        const val hours_Worked_COL_6 = "HoursWorked"
     }
 
     // Supported Data Types by SQLite
@@ -46,8 +46,8 @@ class DatabaseHelper(context: Context):
     // "YYYY-MM-DD" and "HH:MM:SS.SSS"
 
     override fun onCreate(db: SQLiteDatabase?) {
-        db!!.execSQL(sqlCreateTable_job)
-        db!!.execSQL(sqlCreateTable_shifts)
+        db!!.execSQL(sqlCreateTableJob)
+        db.execSQL(sqlCreateTableShifts)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -58,7 +58,7 @@ class DatabaseHelper(context: Context):
     /**
      *  insertJob() - adds a new job to the database, jobID is assigned by default by SQLite
      */
-    fun insertJob(newJob: JobModel): Long{
+    fun insertJob(newJob: JobModel): Long {
         val db = this.writableDatabase
         val contentValues = ContentValues()
         contentValues.put(job_Name_COL_2, newJob.jobName)
@@ -73,12 +73,12 @@ class DatabaseHelper(context: Context):
     fun getJobs(): List<JobModel> {
         val db = this.writableDatabase
         val res = db.rawQuery(getJobs, null)
-        val cursor = res
-        var listOfJobs: MutableList<JobModel> = mutableListOf()
-        if (cursor.count != 0) {
-            while (cursor.moveToNext()) {
-                var jobModel =
-                    JobModel(cursor.getInt(0), cursor.getString(1), cursor.getString(2))
+        val listOfJobs: MutableList<JobModel> = mutableListOf()
+        if (res.count != 0) {
+            while (res.moveToNext()) {
+                // TODO: maybe use jobRepo::addNewJob() here instead of actual jobModel?
+                val jobModel =
+                    JobModel(res.getInt(0), res.getString(1), res.getString(2))
                 listOfJobs.add(jobModel)
             }
         }
@@ -134,5 +134,4 @@ class DatabaseHelper(context: Context):
         val res = db.rawQuery("SELECT * FROM $shiftsTable WHERE $job_ID_COL_3 = '$shiftID'", null)
         return res
     }
-
 }

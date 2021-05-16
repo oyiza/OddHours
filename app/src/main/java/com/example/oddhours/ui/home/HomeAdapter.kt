@@ -1,5 +1,6 @@
 package com.example.oddhours.ui.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,7 @@ class HomeAdapter(private val jobList: List<JobModel>) : RecyclerView.Adapter<Ho
         // onClick listener for the add hours button
         holder.addHoursButton.setOnClickListener {
             // TODO: button click should lead to new add hours fragment or activity
+            Log.i(TAG, "clicked button of : ${holder.jobName.text}")
             Toast.makeText(
                 holder.itemView.context,
                 "You clicked button of : ${holder.jobName.text}",
@@ -42,9 +44,10 @@ class HomeAdapter(private val jobList: List<JobModel>) : RecyclerView.Adapter<Ho
 
         // onClick listener for the card - in case we want to click the card and open the job details
         holder.itemView.setOnClickListener{
+            Log.i(TAG, "clicked card: ${holder.jobName.text}")
             Toast.makeText(
                 holder.itemView.context,
-                "You clicked card number ${holder.jobName.text[holder.jobName.text.lastIndex]}",
+                "You clicked ${holder.jobName.text}'s card",
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -57,5 +60,9 @@ class HomeAdapter(private val jobList: List<JobModel>) : RecyclerView.Adapter<Ho
         val jobLocation: TextView = itemView.txtJobLocation
         val jobInfo: TextView = itemView.txtJobInfo
         val addHoursButton: Button = itemView.btnAddHours
+    }
+
+    companion object {
+        private const val TAG = "HomeAdapter"
     }
 }

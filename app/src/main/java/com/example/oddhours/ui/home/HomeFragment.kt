@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.oddhours.R
 import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.data.repository.JobRepository
@@ -16,16 +15,20 @@ import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
 
-    private var layoutmanager: RecyclerView.LayoutManager? = null
-    private var adapter: RecyclerView.Adapter<HomeAdapter.JobViewHolder>? = null
+//    private var layoutmanager: RecyclerView.LayoutManager? = null
+//    private var adapter: RecyclerView.Adapter<HomeAdapter.JobViewHolder>? = null
     private var jobRepository: JobRepository = JobRepository()
+    private var hasJobs = false
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+        // retrieve jobs from DB
+        getAllJobs()
 
-        return if (getAllJobs().isNotEmpty()) {
+        return if (hasJobs) {
             inflater.inflate(R.layout.fragment_home, container, false)
         } else {
             inflater.inflate(R.layout.no_jobs_home, container, false)
@@ -39,39 +42,24 @@ class HomeFragment : Fragment() {
          *  Call getAllJobs() function in this class to get the JobModelList and pass it to adapter
          *  getAllJobs() is directly passed into HomeAdapter below
          */
-        if (getAllJobs().isEmpty()) {
-            // do nothing. layout is already inflated
-        } else {
+        if (hasJobs) {
             recyclerViewHome.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = HomeAdapter(getAllJobs());
+                adapter = jobRepository.jobModelList?.let { HomeAdapter(it) }
+                // let's keep an eye on the above adapter call, if we experience any weird issues, we can revert to the below one
+//                adapter = HomeAdapter(getAllJobs())
             }
         }
     }
 
-    /**
-     * using a helper method to generate a dummy list for testing purposes.
-     * when we eventually have the DB setup, we should have a helper function that grabs the data from the DB
-     * and returns it in a List<JobModel>
-     */
-    private fun generateDummyList(size: Int): List<JobModel> {
-        Log.i(TAG, "generating dummy list...")
-        val list = ArrayList<JobModel>()
+    // TODO: ideally, this method should be in the JobRepository class and just called from our repository here
+    private fun getAllJobs(): List<JobModel> {
+        val db = DatabaseHelper(requireActivity())
+        jobRepository.jobModelList = db.getJobs()
+        Log.i(TAG, "jobModelList: " + println(jobRepository.jobModelList.toString()))
 
-        for (i in 1 until size+1) {
-            val item = jobRepository.buildJobList("Job number $i", "Location, LO")
-            list += item
-        }
-
-        return list
-    }
-
-    fun getAllJobs(): List<JobModel>{
-        var db = DatabaseHelper(requireActivity())
-        var jr = JobRepository()
-        jr.jobModelList = db.getJobs()
-
-        return jr.jobModelList!!
+        hasJobs = jobRepository.jobModelList!!.isNotEmpty()
+        return jobRepository.jobModelList!!
     }
 
     companion object {
