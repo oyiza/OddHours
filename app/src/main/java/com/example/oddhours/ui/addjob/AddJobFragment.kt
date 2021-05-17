@@ -37,6 +37,7 @@ class AddJobFragment : Fragment() {
             var location = locationTV.text.toString().toUpperCase()
             var newJob = JobModel(1, companyName, location)
 
+            // TODO: when job already exists, don't just return to homepage, allow user to edit before saving / canceling
             if(companyName != "" && location !="") {
                 if (!db.checkJobNameAndJobLocationExists(newJob.jobName, newJob.jobLocation)) {
                     var addJob = db.insertJob(newJob)
