@@ -43,8 +43,12 @@ class AddJobFragment : Fragment() {
                     var addJob = db.insertJob(newJob)
                     if (!addJob.equals(-1)) {
                         Toast.makeText(activity, "Successfully added job", Toast.LENGTH_LONG).show()
+                        findNavController().navigate(
+                            R.id.navigation_home
+                        )
                     } else {
                         Toast.makeText(activity, "Failed to add job", Toast.LENGTH_LONG).show()
+                        clearFields()
                     }
                 } else {
                     Toast.makeText(
@@ -52,15 +56,19 @@ class AddJobFragment : Fragment() {
                         "Job with this Name & Location exists already",
                         Toast.LENGTH_LONG
                     ).show()
+                    clearFields()
                 }
-
-                findNavController().navigate(
-                    R.id.navigation_home
-                )
             }
             else{
                 Toast.makeText(activity, "Please enter a name & location", Toast.LENGTH_LONG).show()
+                clearFields()
             }
         }
+    }
+
+    fun clearFields(){
+        companyTV.setText("")
+        locationTV.setText("")
+
     }
 }
