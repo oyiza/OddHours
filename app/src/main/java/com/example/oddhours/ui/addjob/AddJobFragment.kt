@@ -66,7 +66,7 @@ class AddJobFragment : Fragment() {
         }
     }
 
-    fun clearFields(){
+    private fun clearFields(){
         companyTV.setText("")
         locationTV.setText("")
 

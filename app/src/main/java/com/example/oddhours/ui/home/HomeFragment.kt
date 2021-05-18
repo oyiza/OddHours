@@ -28,7 +28,9 @@ class HomeFragment : Fragment() {
         jobRepository = JobRepository(requireActivity())
         jobRepository!!.buildJobList()
 
-        return if (jobRepository!!.jobModelList?.isNotEmpty() == true) {
+        hasJobs = jobRepository!!.jobModelList!!.isNotEmpty()
+
+        return if (hasJobs) {
             inflater.inflate(R.layout.fragment_home, container, false)
         } else {
             inflater.inflate(R.layout.no_jobs_home, container, false)
@@ -42,7 +44,7 @@ class HomeFragment : Fragment() {
          *  Call getAllJobs() function in this class to get the JobModelList and pass it to adapter
          *  getAllJobs() is directly passed into HomeAdapter below
          */
-        if (jobRepository!!.jobModelList?.isNotEmpty() == true) {
+        if (hasJobs) {
             recyclerViewHome.apply {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = jobRepository!!.jobModelList?.let { HomeAdapter(it) }
