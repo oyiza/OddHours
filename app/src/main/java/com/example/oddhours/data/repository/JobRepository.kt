@@ -43,7 +43,7 @@ class JobRepository(var context: Context) {
      */
     fun buildJobList(): List<JobModel> {
         Log.i(TAG, "buildJobList() started")
-        var db = DatabaseHelper(context!!)
+        val db = DatabaseHelper(context!!)
         jobModelList = db.getJobs()
         return jobModelList as List<JobModel>
     }
