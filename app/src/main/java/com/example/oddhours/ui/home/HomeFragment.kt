@@ -7,17 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.oddhours.R
-import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.data.repository.JobRepository
-import com.example.oddhours.database.DatabaseHelper
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
 
-//    private var layoutmanager: RecyclerView.LayoutManager? = null
-//    private var adapter: RecyclerView.Adapter<HomeAdapter.JobViewHolder>? = null
-    private var jobRepository: JobRepository = JobRepository()
+    private var layoutmanager: RecyclerView.LayoutManager? = null
+    private var adapter: RecyclerView.Adapter<HomeAdapter.JobViewHolder>? = null
+    private var jobRepository: JobRepository? = null
     private var hasJobs = false
 
     override fun onCreateView(
@@ -25,8 +24,11 @@ class HomeFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        // retrieve jobs from DB
-        getAllJobs()
+        // retrieve jobs
+        jobRepository = JobRepository(requireActivity())
+        jobRepository!!.buildJobList()
+
+        hasJobs = jobRepository!!.jobModelList!!.isNotEmpty()
 
         return if (hasJobs) {
             inflater.inflate(R.layout.fragment_home, container, false)
@@ -45,22 +47,26 @@ class HomeFragment : Fragment() {
         if (hasJobs) {
             recyclerViewHome.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = jobRepository.jobModelList?.let { HomeAdapter(it) }
+                adapter = jobRepository!!.jobModelList?.let { HomeAdapter(it) }
                 // let's keep an eye on the above adapter call, if we experience any weird issues, we can revert to the below one
 //                adapter = HomeAdapter(getAllJobs())
             }
         }
     }
+// TODO: ideally, this method should be in the JobRepository class and just called from our repository here
 
-    // TODO: ideally, this method should be in the JobRepository class and just called from our repository here
-    private fun getAllJobs(): List<JobModel> {
-        val db = DatabaseHelper(requireActivity())
-        jobRepository.jobModelList = db.getJobs()
-        Log.i(TAG, "jobModelList: " + println(jobRepository.jobModelList.toString()))
-
-        hasJobs = jobRepository.jobModelList!!.isNotEmpty()
-        return jobRepository.jobModelList!!
-    }
+    /**
+     * Leaving the getAllJobs function code below incase we ever need to reference it back or revert to this
+     * approach
+     */
+//    private fun getAllJobs(): List<JobModel> {
+//        val db = DatabaseHelper(requireActivity())
+//        jobRepository.jobModelList = db.getJobs()
+//        Log.i(TAG, "jobModelList: " + println(jobRepository.jobModelList.toString()))
+//
+//        hasJobs = jobRepository.jobModelList!!.isNotEmpty()
+//        return jobRepository.jobModelList!!
+//    }
 
     companion object {
         private const val TAG = "HomeFragment"
