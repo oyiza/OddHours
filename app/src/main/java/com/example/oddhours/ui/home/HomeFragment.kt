@@ -1,7 +1,6 @@
 package com.example.oddhours.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,7 +46,7 @@ class HomeFragment : Fragment() {
         if (hasJobs) {
             recyclerViewHome.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = jobRepository!!.jobModelList?.let { HomeAdapter(it) }
+                adapter = jobRepository!!.jobModelList?.let { HomeAdapter(it,requireActivity()) }
                 // let's keep an eye on the above adapter call, if we experience any weird issues, we can revert to the below one
 //                adapter = HomeAdapter(getAllJobs())
             }
