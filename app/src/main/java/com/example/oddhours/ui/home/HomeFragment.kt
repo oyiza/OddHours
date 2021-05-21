@@ -52,7 +52,6 @@ class HomeFragment : Fragment() {
             }
         }
     }
-// TODO: ideally, this method should be in the JobRepository class and just called from our repository here
 
     /**
      * Leaving the getAllJobs function code below incase we ever need to reference it back or revert to this

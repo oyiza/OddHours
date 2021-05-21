@@ -38,58 +38,48 @@ class HomeAdapter(private val jobList: List<JobModel>, val context: Context) : R
         holder.jobLocation.text = currentItem.jobLocation
         holder.jobInfo.text = currentItem.jobInfo
 
-        // this also works, but don't use this because it calls findViewById() under the hood over and over every time we need
-        // to bind viewHolder
-        // holder.itemView.txtJobName.text = currentItem.jobName
-
         // onClick listener for the add hours button
         holder.addHoursButton.setOnClickListener {
-            // TODO: button click should lead to new add hours fragment or activity
             Log.i(TAG, "clicked button of : ${holder.jobName.text}")
-            Toast.makeText(
-                holder.itemView.context,
-                "You clicked button of : ${holder.jobName.text}",
-                Toast.LENGTH_LONG
-            ).show()
 
             /**
              * below code is for popup dialog and the respective on button click listeners
              */
-                val mDialogView = LayoutInflater.from(context).inflate(R.layout.addshift, null)
-                val mBuilder = AlertDialog.Builder(context)
-                    .setView(mDialogView)
-                    .setTitle("Add a Shift")
-                val mAlertDialog = mBuilder.show()
+            val mDialogView = LayoutInflater.from(context).inflate(R.layout.addshift, null)
+            val mBuilder = AlertDialog.Builder(context)
+                .setView(mDialogView)
+                .setTitle("Add a Shift")
+            val mAlertDialog = mBuilder.show()
 
-                mDialogView.startTimeBTN.setOnClickListener{
-                    val cal = Calendar.getInstance()
-                    val timeSetListener = TimePickerDialog.OnTimeSetListener{
-                            timePicker, hour, minute ->
-                        cal.set(Calendar.HOUR_OF_DAY, hour)
-                        cal.set(Calendar.MINUTE, minute)
-                        mDialogView.startTimeTV.text = SimpleDateFormat("HH:mm").format(cal.time)
-                    }
-
-                    TimePickerDialog(context, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(
-                        Calendar.MINUTE), false).show()
+            mDialogView.startTimeBTN.setOnClickListener{
+                val cal = Calendar.getInstance()
+                val timeSetListener = TimePickerDialog.OnTimeSetListener{
+                        timePicker, hour, minute ->
+                    cal.set(Calendar.HOUR_OF_DAY, hour)
+                    cal.set(Calendar.MINUTE, minute)
+                    mDialogView.startTimeTV.text = SimpleDateFormat("HH:mm").format(cal.time)
                 }
 
-                mDialogView.endTimeBTN.setOnClickListener{
-                    val cal = Calendar.getInstance()
-                    val timeSetListener = TimePickerDialog.OnTimeSetListener{
-                            timePicker, hour, minute ->
-                        cal.set(Calendar.HOUR_OF_DAY, hour)
-                        cal.set(Calendar.MINUTE, minute)
-                        mDialogView.endTimeTV.text = SimpleDateFormat("HH:mm").format(cal.time)
-                    }
+                TimePickerDialog(context, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(
+                    Calendar.MINUTE), false).show()
+            }
 
-                    TimePickerDialog(context, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(
-                        Calendar.MINUTE), false).show()
+            mDialogView.endTimeBTN.setOnClickListener{
+                val cal = Calendar.getInstance()
+                val timeSetListener = TimePickerDialog.OnTimeSetListener{
+                        timePicker, hour, minute ->
+                    cal.set(Calendar.HOUR_OF_DAY, hour)
+                    cal.set(Calendar.MINUTE, minute)
+                    mDialogView.endTimeTV.text = SimpleDateFormat("HH:mm").format(cal.time)
                 }
 
-                mDialogView.cancelBTN.setOnClickListener{
-                    mAlertDialog.dismiss()
-                }
+                TimePickerDialog(context, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(
+                    Calendar.MINUTE), false).show()
+            }
+
+            mDialogView.cancelBTN.setOnClickListener{
+                mAlertDialog.dismiss()
+            }
         }
 
         // onClick listener for the card - in case we want to click the card and open the job details
@@ -98,8 +88,14 @@ class HomeAdapter(private val jobList: List<JobModel>, val context: Context) : R
             Toast.makeText(
                 holder.itemView.context,
                 "You clicked ${holder.jobName.text}'s card",
-                Toast.LENGTH_LONG
+                Toast.LENGTH_SHORT
             ).show()
+        }
+
+        // long click listener for the card
+        holder.itemView.setOnLongClickListener{
+            Toast.makeText(holder.itemView.context, "Long click detected on ${holder.jobName.text}", Toast.LENGTH_SHORT).show()
+            return@setOnLongClickListener true
         }
     }
 
