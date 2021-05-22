@@ -1,10 +1,9 @@
 package com.example.oddhours.data.repository
 
-import android.content.Context
 import android.util.Log
 import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.data.model.JobModel
-import com.example.oddhours.database.DatabaseHelper
+import com.example.oddhours.database.TableJobs
 
 /**
  * Now, JobRepository class will take context as a parameter
@@ -22,7 +21,7 @@ import com.example.oddhours.database.DatabaseHelper
  *  }
  */
 
-class JobRepository(var context: Context) {
+class JobRepository() {
     /**
      * store the list of jobs
      */
@@ -43,7 +42,7 @@ class JobRepository(var context: Context) {
      */
     fun buildJobList(): List<JobModel> {
         Log.i(TAG, "buildJobList() started")
-        val db = DatabaseHelper(context!!)
+        val db = TableJobs()
         jobModelList = db.getJobs()
         return jobModelList as List<JobModel>
     }
