@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.oddhours.R
 import com.example.oddhours.data.model.JobModel
-import com.example.oddhours.database.DatabaseHelper
+import com.example.oddhours.database.TableJobs
 import kotlinx.android.synthetic.main.fragment_addjob.*
 
 class AddJobFragment : Fragment() {
@@ -30,7 +30,7 @@ class AddJobFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var db = DatabaseHelper(requireActivity())
+        var dbRef = TableJobs()
 
         addjobBTN.setOnClickListener {
             var companyName = companyTV.text.toString().replace("'","\'").toUpperCase()
@@ -39,8 +39,8 @@ class AddJobFragment : Fragment() {
 
             // TODO: when job already exists, don't just return to homepage, allow user to edit before saving / canceling
             if(companyName != "" && location !="") {
-                if (!db.checkJobNameAndJobLocationExists(newJob.jobName, newJob.jobLocation)) {
-                    var addJob = db.insertJob(newJob)
+                if (!dbRef.checkJobNameAndJobLocationExists(newJob.jobName, newJob.jobLocation)) {
+                    var addJob = dbRef.insertJob(newJob)
                     if (!addJob.equals(-1)) {
                         Toast.makeText(activity, "Successfully added job", Toast.LENGTH_LONG).show()
                         findNavController().navigate(
