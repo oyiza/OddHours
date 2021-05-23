@@ -15,7 +15,7 @@ class HomeFragment : Fragment() {
 
     private var layoutmanager: RecyclerView.LayoutManager? = null
     private var adapter: RecyclerView.Adapter<HomeAdapter.JobViewHolder>? = null
-    private var jobRepository: JobRepository? = null
+    private var jobRepository = JobRepository()
     private var hasJobs = false
 
     override fun onCreateView(
@@ -24,7 +24,7 @@ class HomeFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         // retrieve jobs
-        jobRepository = JobRepository()
+//        jobRepository = JobRepository()
         jobRepository!!.buildJobList()
         hasJobs = jobRepository!!.jobModelList!!.isNotEmpty()
 
@@ -50,7 +50,6 @@ class HomeFragment : Fragment() {
             }
         }
     }
-// TODO: ideally, this method should be in the JobRepository class and just called from our repository here
 
     /**
      * Leaving the getAllJobs function code below incase we ever need to reference it back or revert to this
