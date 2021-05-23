@@ -6,7 +6,7 @@ import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.database.TableJobs
 
 /**
- * Now, JobRepository class will take context as a parameter
+ * JobRepository class could take context as a parameter
  * When we pass a parameter with val or var keyword, it actually becomes a property of the class
  * Its not just a parameter anymore, if you pass a parameter without val or var keyword, then you have to
  * explicitly define a property

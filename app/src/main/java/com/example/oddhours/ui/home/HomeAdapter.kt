@@ -19,6 +19,7 @@ import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.database.TableJobs
 import com.example.oddhours.database.TableShifts
 import kotlinx.android.synthetic.main.addshift.view.*
+import kotlinx.android.synthetic.main.edit_delete_job.view.*
 import kotlinx.android.synthetic.main.job_row.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -69,13 +70,7 @@ class HomeAdapter(private val jobList: List<JobModel>, val context: Context) : R
 
         // onClick listener for the add hours button
         holder.addHoursButton.setOnClickListener {
-            // TODO: button click should lead to new add hours fragment or activity
             Log.i(TAG, "clicked button of : ${holder.jobName.text}")
-            Toast.makeText(
-                holder.itemView.context,
-                "You clicked button of : ${holder.jobName.text}",
-                Toast.LENGTH_SHORT
-            ).show()
 
             val clickedJobID = TableJobs().getJobID(holder.jobName.text.toString(), holder.jobLocation.text.toString())
 
@@ -101,7 +96,7 @@ class HomeAdapter(private val jobList: List<JobModel>, val context: Context) : R
                     c.set(Calendar.MONTH, monthOfYear)
                     c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                     dateForDb = sdf.format(c.time).toString()
-                    mDialogView.shiftDateTV.setText(sdf.format(c.time))
+                    mDialogView.shiftDateTV.text = sdf.format(c.time)
                 }, year, month, day)
                 dpd.datePicker.maxDate = c.timeInMillis
                 dpd.show()
@@ -193,6 +188,31 @@ class HomeAdapter(private val jobList: List<JobModel>, val context: Context) : R
         // long click listener for the card
         holder.itemView.setOnLongClickListener{
             Toast.makeText(holder.itemView.context, "Long click detected on ${holder.jobName.text}", Toast.LENGTH_SHORT).show()
+            // TODO: praise
+            val mDialogView = LayoutInflater.from(context).inflate(R.layout.edit_delete_job, null)
+            val mBuilder = AlertDialog.Builder(context)
+                .setView(mDialogView)
+            val mAlertDialog = mBuilder.show()
+
+            // onClick listener for save button
+            mDialogView.btnEditJob.setOnClickListener{
+                Toast.makeText(
+                    holder.itemView.context,
+                    "You clicked edit button for ${holder.jobName.text}",
+                    Toast.LENGTH_SHORT
+                ).show()
+                mAlertDialog.dismiss()
+            }
+
+            // onClick listener for delete button
+            mDialogView.btnDeleteJob.setOnClickListener{
+                Toast.makeText(
+                    holder.itemView.context,
+                    "You clicked delete button for ${holder.jobName.text}",
+                    Toast.LENGTH_SHORT
+                ).show()
+                mAlertDialog.dismiss()
+            }
             return@setOnLongClickListener true
         }
     }

@@ -4,7 +4,7 @@ import android.content.ContentValues
 import com.example.oddhours.data.model.ShiftsModel
 
 class TableShifts {
-    val db = DatabaseHelper.database
+    private val db = DatabaseHelper.database
     private val getShifts = "SELECT * FROM ${DatabaseHelper.shiftsTable}"
 
     fun insertShift(newShift: ShiftsModel): Long{

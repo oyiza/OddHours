@@ -1,11 +1,18 @@
 <resources>
+    <!-- text -->
     <string name="app_name">OddHours</string>
     <string name="title_home">Home</string>
     <string name="title_add_job">Add Job</string>
     <string name="title_notifications">Notify</string>
+    <string name="txt_no_jobs">No Jobs Added Yet</string>
+    <string name="txt_edit_job">Edit Job</string>
+    <string name="txt_delete_job">Delete Job</string>
+
+    <!-- buttons -->
+    <string name="btn_add_hours">Add Hours</string>
+
+    <!-- placeholders -->
     <string name="placeholder_job_name">Job Name</string>
     <string name="placeholder_job_location">Job Location</string>
     <string name="placeholder_job_information">Job Information</string>
-    <string name="btn_add_hours">Add Hours</string>
-    <string name="txt_no_jobs">No Jobs Added Yet</string>
 </resources>
