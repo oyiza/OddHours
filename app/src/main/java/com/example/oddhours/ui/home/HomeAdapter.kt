@@ -1,5 +1,6 @@
 package com.example.oddhours.ui.home
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
@@ -58,16 +59,13 @@ class HomeAdapter(private val jobList: List<JobModel>, val context: Context) : R
         return JobViewHolder(itemView)
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
         val currentItem = jobList[position]
 
         holder.jobName.text = currentItem.jobName
         holder.jobLocation.text = currentItem.jobLocation
         holder.jobInfo.text = currentItem.jobInfo
-
-        // this also works, but don't use this because it calls findViewById() under the hood over and over every time we need
-        // to bind viewHolder
-        // holder.itemView.txtJobName.text = currentItem.jobName
 
         // onClick listener for the add hours button
         holder.addHoursButton.setOnClickListener {
@@ -76,10 +74,10 @@ class HomeAdapter(private val jobList: List<JobModel>, val context: Context) : R
             Toast.makeText(
                 holder.itemView.context,
                 "You clicked button of : ${holder.jobName.text}",
-                Toast.LENGTH_LONG
+                Toast.LENGTH_SHORT
             ).show()
 
-            var clickedJobID = TableJobs().getJobID(holder.jobName.text.toString(), holder.jobLocation.text.toString())
+            val clickedJobID = TableJobs().getJobID(holder.jobName.text.toString(), holder.jobLocation.text.toString())
 
             /**
              * below code is for popup dialog and the respective on button click listeners
@@ -97,17 +95,17 @@ class HomeAdapter(private val jobList: List<JobModel>, val context: Context) : R
              */
 
             mDialogView.shiftDateBTN.setOnClickListener{
-                    val dpd = DatePickerDialog(context, { view, year, monthOfYear, dayOfMonth ->
-                        // Display Selected date in TextView
-                        c.set(Calendar.YEAR, year)
-                        c.set(Calendar.MONTH, monthOfYear)
-                        c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                        dateForDb = sdf.format(c.time).toString()
-                        mDialogView.shiftDateTV.setText(sdf.format(c.time))
-                    }, year, month, day)
-                    dpd.datePicker.maxDate = c.timeInMillis
-                    dpd.show()
-                }
+                val dpd = DatePickerDialog(context, { view, year, monthOfYear, dayOfMonth ->
+                    // Display Selected date in TextView
+                    c.set(Calendar.YEAR, year)
+                    c.set(Calendar.MONTH, monthOfYear)
+                    c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    dateForDb = sdf.format(c.time).toString()
+                    mDialogView.shiftDateTV.setText(sdf.format(c.time))
+                }, year, month, day)
+                dpd.datePicker.maxDate = c.timeInMillis
+                dpd.show()
+            }
 
             /**
              *  Start Time Button onclicklistener
@@ -116,19 +114,19 @@ class HomeAdapter(private val jobList: List<JobModel>, val context: Context) : R
              */
 
             mDialogView.startTimeBTN.setOnClickListener{
-                    val timeSetListener = TimePickerDialog.OnTimeSetListener{
-                            timePicker, hour, minute ->
-                        c.set(Calendar.HOUR_OF_DAY, hour)
-                        c.set(Calendar.MINUTE, minute)
-                        startTimeHour = hour
-                        startTimeMin = minute
-                        mDialogView.startTimeTV.text = SimpleDateFormat("HH:mm").format(c.time)
-                        startTimeForDb = SimpleDateFormat("HH:mm").format(c.time)
-                    }
-
-                    TimePickerDialog(context, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(
-                        Calendar.MINUTE), false).show()
+                val timeSetListener = TimePickerDialog.OnTimeSetListener{
+                        timePicker, hour, minute ->
+                    c.set(Calendar.HOUR_OF_DAY, hour)
+                    c.set(Calendar.MINUTE, minute)
+                    startTimeHour = hour
+                    startTimeMin = minute
+                    mDialogView.startTimeTV.text = SimpleDateFormat("HH:mm").format(c.time)
+                    startTimeForDb = SimpleDateFormat("HH:mm").format(c.time)
                 }
+
+                TimePickerDialog(context, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(
+                    Calendar.MINUTE), false).show()
+            }
 
             /**
              * End Time Button on click listener
@@ -137,18 +135,18 @@ class HomeAdapter(private val jobList: List<JobModel>, val context: Context) : R
              */
 
             mDialogView.endTimeBTN.setOnClickListener{
-                    val timeSetListener = TimePickerDialog.OnTimeSetListener{
-                            timePicker, hour, minute ->
-                        c.set(Calendar.HOUR_OF_DAY, hour)
-                        c.set(Calendar.MINUTE, minute)
-                        endTimeHour = hour
-                        endTimeMin = minute
-                        mDialogView.endTimeTV.text = SimpleDateFormat("HH:mm").format(c.time)
-                        endTimeForDb = SimpleDateFormat("HH:mm").format(c.time)
-                    }
-                    TimePickerDialog(context, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(
-                        Calendar.MINUTE), false).show()
+                val timeSetListener = TimePickerDialog.OnTimeSetListener{
+                        timePicker, hour, minute ->
+                    c.set(Calendar.HOUR_OF_DAY, hour)
+                    c.set(Calendar.MINUTE, minute)
+                    endTimeHour = hour
+                    endTimeMin = minute
+                    mDialogView.endTimeTV.text = SimpleDateFormat("HH:mm").format(c.time)
+                    endTimeForDb = SimpleDateFormat("HH:mm").format(c.time)
                 }
+                TimePickerDialog(context, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(
+                    Calendar.MINUTE), false).show()
+            }
 
             /**
              *  Save Button onclick listener
@@ -157,28 +155,29 @@ class HomeAdapter(private val jobList: List<JobModel>, val context: Context) : R
              *      - calculateHours() function returns a string
              */
 
-                mDialogView.saveBTN.setOnClickListener {
-                    if(endTimeHour > startTimeHour){
-                        var totalTimeWorked = calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
-                        var shiftsModel = ShiftsModel(1,dateForDb,clickedJobID,startTimeForDb,endTimeForDb,totalTimeWorked )
-                        var insertShift = TableShifts().insertShift(shiftsModel)
-                        println("PRINTING ALL SHIFTS")
-                        println("---------------------")
-                        println(TableShifts().getShifts())
-                        mAlertDialog.dismiss()
-                    }
-                    else{
-                        Toast.makeText(
-                            holder.itemView.context,
-                            "End Time is earlier then Start Time",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
-
-                mDialogView.cancelBTN.setOnClickListener{
+            mDialogView.saveBTN.setOnClickListener {
+                if(endTimeHour > startTimeHour){
+                    val totalTimeWorked = calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
+                    // TODO: shiftRepository class for creating new shifts?
+                    val shiftsModel = ShiftsModel(1,dateForDb,clickedJobID,startTimeForDb,endTimeForDb,totalTimeWorked )
+                    var insertShift = TableShifts().insertShift(shiftsModel)
+                    println("PRINTING ALL SHIFTS")
+                    println("---------------------")
+                    println(TableShifts().getShifts())
                     mAlertDialog.dismiss()
                 }
+                else{
+                    Toast.makeText(
+                        holder.itemView.context,
+                        "End Time is earlier then Start Time",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
+            mDialogView.cancelBTN.setOnClickListener{
+                mAlertDialog.dismiss()
+            }
         }
 
         // onClick listener for the card - in case we want to click the card and open the job details
@@ -187,17 +186,24 @@ class HomeAdapter(private val jobList: List<JobModel>, val context: Context) : R
             Toast.makeText(
                 holder.itemView.context,
                 "You clicked ${holder.jobName.text}'s card",
-                Toast.LENGTH_LONG
+                Toast.LENGTH_SHORT
             ).show()
+        }
+
+        // long click listener for the card
+        holder.itemView.setOnLongClickListener{
+            Toast.makeText(holder.itemView.context, "Long click detected on ${holder.jobName.text}", Toast.LENGTH_SHORT).show()
+            return@setOnLongClickListener true
         }
     }
 
     override fun getItemCount() = jobList.size
 
+    // TODO: another chunk to be moved into shiftRepository class perhaps?
     fun calculateTotalHours(stHour: Int, stMin: Int, etHour: Int, etMin: Int): String{
-        var hoursWorked = etHour - stHour
-        var minutesWorked: Int
-        var totalTimeWorked: String
+        val hoursWorked = etHour - stHour
+        val minutesWorked: Int
+        val totalTimeWorked: String
 
         if(etMin > stMin) {
             minutesWorked = etMin - stMin
