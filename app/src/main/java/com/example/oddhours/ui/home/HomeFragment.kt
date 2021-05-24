@@ -1,10 +1,12 @@
 package com.example.oddhours.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.oddhours.R
@@ -25,8 +27,12 @@ class HomeFragment : Fragment() {
     ): View? {
         // retrieve jobs
 //        jobRepository = JobRepository()
-        jobRepository!!.buildJobList()
-        hasJobs = jobRepository!!.jobModelList!!.isNotEmpty()
+        try {
+            jobRepository!!.buildJobList()
+            hasJobs = jobRepository!!.jobModelList!!.isNotEmpty()
+        } catch (e: Exception) {
+            Log.e(TAG, e.printStackTrace().toString())
+        }
 
         return if (hasJobs) {
             inflater.inflate(R.layout.fragment_home, container, false)
@@ -38,15 +44,12 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /**
-         *  Call getAllJobs() function in this class to get the JobModelList and pass it to adapter
-         *  getAllJobs() is directly passed into HomeAdapter below
-         */
         if (hasJobs) {
             recyclerViewHome.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = jobRepository!!.jobModelList?.let { HomeAdapter(it,requireActivity()) }
+                adapter = jobRepository!!.jobModelList?.let { HomeAdapter(it, requireActivity(), view.findNavController()) }
                 // let's keep an eye on the above adapter call, if we experience any weird issues, we can revert to the below one
+                // adapter = HomeAdapter(getAllJobs())
             }
         }
     }
