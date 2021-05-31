@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
         /**
-         * Calling initDatabase function to create the Databasehelper singleton
+         * Calling initDatabase function to create the DatabaseHelper singleton
          */
         DatabaseHelper.initDatabase(this)
 
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications))
+                R.id.navigation_home, R.id.navigation_addjob, R.id.navigation_notifications))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }

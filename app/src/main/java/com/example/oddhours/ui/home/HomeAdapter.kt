@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,14 +13,18 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.oddhours.R
 import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.data.model.ShiftsModel
+import com.example.oddhours.data.repository.JobRepository
 import com.example.oddhours.database.TableJobs
 import com.example.oddhours.database.TableShifts
+import com.example.oddhours.utils.Constants
 import kotlinx.android.synthetic.main.addshift.view.*
 import kotlinx.android.synthetic.main.edit_delete_job.view.*
+import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.job_row.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,10 +34,13 @@ import java.util.*
  * context is required for the Alert Dialog
  */
 
-class HomeAdapter(private val jobList: List<JobModel>, val context: Context) : RecyclerView.Adapter<HomeAdapter.JobViewHolder>() {
+// TODO: changed jobList property to var (so on delete we can update UI) - we need to check that this doesn't cause any issues
+class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val navController: NavController) : RecyclerView.Adapter<HomeAdapter.JobViewHolder>() {
 
-    val MyFormat = "MM/dd/yyyy"
-    val sdf = SimpleDateFormat(MyFormat, Locale.CANADA)
+    private var jobRepository = JobRepository()
+
+    private val myFormat = "MM/dd/yyyy"
+    private val sdf = SimpleDateFormat(myFormat, Locale.CANADA)
 
     /**
      *  The 3 variables below are used for insert these values in SQLite
@@ -183,37 +191,70 @@ class HomeAdapter(private val jobList: List<JobModel>, val context: Context) : R
                 "You clicked ${holder.jobName.text}'s card",
                 Toast.LENGTH_SHORT
             ).show()
+            Log.d(TAG, "clicked position is $position")
         }
 
         // long click listener for the card
         holder.itemView.setOnLongClickListener{
             Toast.makeText(holder.itemView.context, "Long click detected on ${holder.jobName.text}", Toast.LENGTH_SHORT).show()
-            // TODO: praise
+
             val mDialogView = LayoutInflater.from(context).inflate(R.layout.edit_delete_job, null)
             val mBuilder = AlertDialog.Builder(context)
                 .setView(mDialogView)
+                .setTitle(holder.jobName.text)
             val mAlertDialog = mBuilder.show()
 
-            // onClick listener for save button
+            // onClick listener for edit button
             mDialogView.btnEditJob.setOnClickListener{
-                Toast.makeText(
-                    holder.itemView.context,
-                    "You clicked edit button for ${holder.jobName.text}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                // TODO: openAddJob fragment and pass in jobName and jobLocation
                 mAlertDialog.dismiss()
+                openAddJobFragment(holder.jobName, holder.jobLocation)
             }
 
             // onClick listener for delete button
             mDialogView.btnDeleteJob.setOnClickListener{
-                Toast.makeText(
-                    holder.itemView.context,
-                    "You clicked delete button for ${holder.jobName.text}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                mAlertDialog.dismiss()
+                // HomeFragment::jobRepository instead of local jobRepository field here ??
+                // maybe say like 'are you sure?' before deleting it lol
+                // TODO: wrap in try catch? custom exception needed (JobNotFoundException)
+                val isDeleted = jobRepository.deleteJob(holder.jobName.text as String, holder.jobLocation.text as String)
+                if (isDeleted) {
+                    Toast.makeText(
+                        holder.itemView.context,
+                        "Successfully deleted ${holder.jobName.text}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    mAlertDialog.dismiss()
+                    jobList = removeItemFromUI(jobList, position)
+                    notifyDataSetChanged()
+                } else {
+                    Log.i(TAG, "Error, not able to delete job")
+                    mAlertDialog.dismiss()
+                }
             }
             return@setOnLongClickListener true
+        }
+    }
+
+    private fun removeItemFromUI(list: List<JobModel>, position: Int): List<JobModel> {
+        Log.i(TAG, "removeItem() called: position is $position")
+        val result = list.toMutableList()
+        result.removeAt(position)
+        return result.toList()
+    }
+
+    private fun openAddJobFragment(jobName: TextView, jobLocation: TextView) {
+        try {
+            val jobNameToEdit = jobName.text.toString()
+            val jobLocationToEdit = jobLocation.text.toString()
+            val args: Bundle = Bundle()
+            args.putBoolean(Constants.CURRENTLY_EDITING_JOB, true)
+            args.putString(Constants.JOB_NAME, jobNameToEdit)
+            args.putString(Constants.JOB_LOCATION, jobLocationToEdit)
+            navController.navigate(R.id.navigation_addjob, args)
+        } catch (e: IllegalArgumentException) {
+            Log.e(TAG, e.printStackTrace().toString())
+        } catch (e: Exception) {
+            Log.e(TAG, e.printStackTrace().toString())
         }
     }
 

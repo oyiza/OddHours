@@ -1,8 +1,8 @@
 package com.example.oddhours.data.repository
 
 import android.util.Log
-import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.data.model.JobModel
+import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.database.TableJobs
 
 /**
@@ -22,9 +22,7 @@ import com.example.oddhours.database.TableJobs
  */
 
 class JobRepository() {
-    /**
-     * store the list of jobs
-     */
+
     var jobModelList: List<JobModel>? = null
 
     /**
@@ -35,10 +33,7 @@ class JobRepository() {
 //    var context: Context? = null
 
     /**
-     * TODO: this method should make use of the return object / values from DB (instead of taking in jobName and jobLocation)
-     * and create all the jobs then probably store it in jobModelList for the current app session. this should be called from
-     * MainActivity after we connect to the DB and query it to get all current jobs the user has stored. the return list is
-     * what we feed into the recyclerview adapter!
+     * @return list of jobs from the DB
      */
     fun buildJobList(): List<JobModel> {
         Log.i(TAG, "buildJobList() started")
@@ -60,6 +55,22 @@ class JobRepository() {
      */
     fun addNewJob(jobName: String, jobLocation: String, jobInfo: String): JobModel {
         return JobModel(1, jobName, jobLocation, jobInfo)
+    }
+
+    fun getJobID(jobName: String, jobLocation: String): Int {
+        val db = TableJobs()
+        return db.getJobID(jobName, jobLocation)
+    }
+
+    fun editJob(jobName: String, jobLocation: String, jobIdToEdit: Int): Boolean {
+        val db = TableJobs()
+        return db.editJob(jobName, jobLocation, jobIdToEdit)
+    }
+
+    fun deleteJob(jobName: String, jobLocation: String): Boolean {
+        val db = TableJobs()
+        // TODO: any other validation we want to do here?
+        return db.deleteJob(jobName, jobLocation)
     }
 
     companion object {

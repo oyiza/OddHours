@@ -20,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/txt_edit_job"
+                android:text="@string/btn_edit_job"
                 android:layout_marginEnd="1dp"/>
 
             <Button
@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/txt_delete_job"
+                android:text="@string/btn_delete_job"
                 android:layout_marginStart="1dp"/>
         </LinearLayout>
 

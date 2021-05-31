@@ -30,7 +30,7 @@
                 android:layout_height="42dp"
                 android:layout_margin="15dp"
                 android:background="@drawable/rounded_corners"
-                android:hint="Company Name"
+                android:hint="@string/placeholder_job_name"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textColorHint="#656565"
@@ -47,7 +47,7 @@
                 android:layout_height="42dp"
                 android:layout_margin="15dp"
                 android:background="@drawable/rounded_corners"
-                android:hint="Location"
+                android:hint="@string/placeholder_job_location"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textColorHint="#656565"
@@ -60,18 +60,28 @@
                 app:layout_constraintVertical_bias="0.204" />
 
             <Button
-                android:id="@+id/addjobBTN"
+                android:id="@+id/addJobBTN"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20sp"
-                android:text="Add Job"
-                android:onClick="btnClicked"
+                android:text="@string/btn_add_job"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/locationTV"
-                tools:ignore="OnClick" />
+                app:layout_constraintTop_toBottomOf="@+id/locationTV" />
+
+            <Button
+                android:id="@+id/editJobBTN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20sp"
+                android:text="@string/btn_edit_job"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/locationTV" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

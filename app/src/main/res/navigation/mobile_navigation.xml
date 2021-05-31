@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_addjob"
         android:name="com.example.oddhours.ui.addjob.AddJobFragment"
         android:label="@string/title_add_job"
         tools:layout="@layout/fragment_addjob" />
