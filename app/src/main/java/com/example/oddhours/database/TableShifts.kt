@@ -19,7 +19,6 @@ class TableShifts {
     }
 
     fun getShifts(): List<ShiftsModel>{
-        val contentValues = ContentValues()
         val res = db!!.rawQuery(getShifts, null)
         val listOfShifts: MutableList<ShiftsModel> = mutableListOf()
         if(res.count != 0){
@@ -31,4 +30,17 @@ class TableShifts {
         return listOfShifts
     }
 
+    fun getShiftsForJobID(jobId: Int): MutableList<ShiftsModel>{
+        val res = db!!.rawQuery(
+            "SELECT * FROM ${DatabaseHelper.shiftsTable} WHERE ${DatabaseHelper.job_ID_COL_3} = $jobId",null)
+        val listOfShifts: MutableList<ShiftsModel> = mutableListOf<ShiftsModel>()
+        if(res.count != 0){
+            while(res.moveToNext()){
+                val shiftsModel = ShiftsModel(res.getInt(0),res.getString(1),res.getInt(2),res.getString(3),res.getString(4),res.getString(5))
+                listOfShifts.add(shiftsModel)
+            }
+            return listOfShifts
+        }
+        return listOfShifts
+    }
 }

@@ -40,7 +40,6 @@ class AddJobFragment : Fragment() {
     @SuppressLint("DefaultLocale")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val dbRef = TableJobs()
 
         val args = arguments
         var jobIdToEdit: Int? = null
@@ -90,9 +89,8 @@ class AddJobFragment : Fragment() {
 
             // TODO: when typing, navbar is still visible. small issue but might need correcting
             if (companyName != "" && location !="") {
-                if (!dbRef.checkJobNameAndJobLocationExists(newJob.jobName, newJob.jobLocation)) {
-                    // TODO: should add job be done through the repository instead of the database class? now that we're implementing a singleton db
-                    val addJob = dbRef.insertJob(newJob)
+                if (!jobRepository.checkJobNameAndJobLocationExists(newJob.jobName, newJob.jobLocation)) {
+                    val addJob = jobRepository.addNewJob(newJob)
                     if (!addJob.equals(-1)) {
                         Toast.makeText(activity, "Successfully added job. Press and hold job card for more options.", Toast.LENGTH_LONG).show()
                         // TODO: hide keyboard before navigating to home page

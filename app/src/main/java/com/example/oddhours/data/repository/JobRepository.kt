@@ -1,9 +1,12 @@
 package com.example.oddhours.data.repository
 
 import android.util.Log
+import com.example.oddhours.data.model.JobInfoModel
 import com.example.oddhours.data.model.JobModel
+import com.example.oddhours.data.model.ShiftsListModel
 import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.database.TableJobs
+import com.example.oddhours.database.TableShifts
 
 /**
  * JobRepository class could take context as a parameter
@@ -24,14 +27,8 @@ import com.example.oddhours.database.TableJobs
 class JobRepository() {
 
     var jobModelList: List<JobModel>? = null
-
-    /**
-     * store the list of shifts
-     */
-    var shiftsList: List<ShiftsModel>? = null
-
-//    var context: Context? = null
-
+    val dbJobs = TableJobs()
+    val dbShifts = TableShifts()
     /**
      * @return list of jobs from the DB
      */
@@ -53,24 +50,56 @@ class JobRepository() {
     /**
      * TODO: add a new job to the DB (and possibly to jobModelList). might need to double check the return type
      */
-    fun addNewJob(jobName: String, jobLocation: String, jobInfo: String): JobModel {
-        return JobModel(1, jobName, jobLocation, jobInfo)
+    fun addNewJob(newJob: JobModel): Long {
+        return dbJobs.insertJob(newJob)
     }
 
     fun getJobID(jobName: String, jobLocation: String): Int {
-        val db = TableJobs()
-        return db.getJobID(jobName, jobLocation)
+        return dbJobs.getJobID(jobName, jobLocation)
+    }
+
+    fun getAllJobIDs(): List<Int>{
+        return dbJobs.getAllJobID()
     }
 
     fun editJob(jobName: String, jobLocation: String, jobIdToEdit: Int): Boolean {
-        val db = TableJobs()
-        return db.editJob(jobName, jobLocation, jobIdToEdit)
+        return dbJobs.editJob(jobName, jobLocation, jobIdToEdit)
     }
 
     fun deleteJob(jobName: String, jobLocation: String): Boolean {
-        val db = TableJobs()
         // TODO: any other validation we want to do here?
-        return db.deleteJob(jobName, jobLocation)
+        return dbJobs.deleteJob(jobName, jobLocation)
+    }
+
+    fun checkJobNameAndJobLocationExists(jobName: String, jobLocation: String): Boolean{
+        return dbJobs.checkJobNameAndJobLocationExists(jobName,jobLocation)
+    }
+
+    fun insertShift(newShift: ShiftsModel): Long{
+        return dbShifts.insertShift(newShift)
+    }
+
+    fun getShiftsForUIList(): MutableList<ShiftsListModel> {
+        val jobIDList = getAllJobIDs()
+
+        var jobInfoModel: JobInfoModel
+        var shiftsListForAdapter = mutableListOf<ShiftsListModel>()
+        var shiftsFromJobId: MutableList<ShiftsModel>
+        var shiftsListModel: ShiftsListModel
+
+        /**
+         * Looping through each jobId and getting shifts and adding to the List of ShiftsListModel
+         */
+        for(i in jobIDList){
+            shiftsFromJobId = dbShifts.getShiftsForJobID(i)
+            if(shiftsFromJobId.size != 0){
+                jobInfoModel = dbJobs.getJobNameAndLocation(i)
+                shiftsListModel = ShiftsListModel(jobInfoModel,shiftsFromJobId)
+                shiftsListForAdapter.add(shiftsListModel)
+            }
+        }
+
+        return shiftsListForAdapter
     }
 
     companion object {

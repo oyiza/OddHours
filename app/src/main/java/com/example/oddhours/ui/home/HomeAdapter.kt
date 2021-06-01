@@ -110,6 +110,8 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
                 dpd.show()
             }
 
+            dateForDb = sdf.format(c.time).toString()
+
             /**
              *  Start Time Button onclicklistener
              *   - sets the 24 hour view to false so the user can use AM/PM options
@@ -163,10 +165,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
                     val totalTimeWorked = calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
                     // TODO: shiftRepository class for creating new shifts?
                     val shiftsModel = ShiftsModel(1,dateForDb,clickedJobID,startTimeForDb,endTimeForDb,totalTimeWorked )
-                    var insertShift = TableShifts().insertShift(shiftsModel)
-                    println("PRINTING ALL SHIFTS")
-                    println("---------------------")
-                    println(TableShifts().getShifts())
+                    jobRepository.insertShift(shiftsModel)
                     mAlertDialog.dismiss()
                 }
                 else{
