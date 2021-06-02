@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.shifts_row.view.*
 class ParentAdapter(private val allShifts: List<ShiftsListModel>, val context: Context, val navController: NavController): RecyclerView.Adapter<ParentAdapter.ViewHolder>() {
     class ViewHolder(itemView: View, val context: Context): RecyclerView.ViewHolder(itemView){
         fun bindShifts(item: ShiftsListModel){
-            itemView.jobTV.text = item.jobInfo.jobTitle + ", "+item.jobInfo.jobLocation
+            itemView.jobTV.text = item.jobInfo.jobName + ", "+item.jobInfo.jobLocation
             itemView.shiftsRV.apply{
                 layoutManager = LinearLayoutManager(shiftsRV.context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = ChildAdapter(item.shifts,context)

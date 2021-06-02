@@ -18,13 +18,15 @@
         tools:layout="@layout/fragment_addjob" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.oddhours.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
-    <fragment
         android:id="@+id/shifts"
         android:name="com.example.oddhours.ui.shifts.ShiftsFragment"
         android:label="Shifts"
         tools:layout="@layout/fragment_shifts" />
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.example.oddhours.ui.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications" />
+
 </navigation>
