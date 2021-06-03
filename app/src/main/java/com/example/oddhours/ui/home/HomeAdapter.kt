@@ -19,8 +19,6 @@ import com.example.oddhours.R
 import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.data.repository.JobRepository
-import com.example.oddhours.database.TableJobs
-import com.example.oddhours.database.TableShifts
 import com.example.oddhours.utils.Constants
 import kotlinx.android.synthetic.main.addshift.view.*
 import kotlinx.android.synthetic.main.edit_delete_job.view.*
@@ -80,7 +78,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
         holder.addHoursButton.setOnClickListener {
             Log.i(TAG, "clicked button of : ${holder.jobName.text}")
 
-            val clickedJobID = TableJobs().getJobID(holder.jobName.text.toString(), holder.jobLocation.text.toString())
+            val clickedJobID = jobRepository.getJobID(holder.jobName.text.toString(), holder.jobLocation.text.toString())
 
             /**
              * below code is for popup dialog and the respective on button click listeners
@@ -163,7 +161,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
             mDialogView.saveBTN.setOnClickListener {
                 if(endTimeHour > startTimeHour){
                     val totalTimeWorked = calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
-                    // TODO: shiftRepository class for creating new shifts?
+                    // TODO: shiftRepository or jobRepository class for creating new shifts? praise
                     val shiftsModel = ShiftsModel(1,dateForDb,clickedJobID,startTimeForDb,endTimeForDb,totalTimeWorked )
                     jobRepository.insertShift(shiftsModel)
                     mAlertDialog.dismiss()
@@ -215,7 +213,8 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
                 // HomeFragment::jobRepository instead of local jobRepository field here ??
                 // maybe say like 'are you sure?' before deleting it lol
                 // TODO: wrap in try catch? custom exception needed (JobNotFoundException)
-                val isDeleted = jobRepository.deleteJob(holder.jobName.text as String, holder.jobLocation.text as String)
+                val jobModel = jobRepository.buildJobModel(holder.jobName.text as String, holder.jobLocation.text as String)
+                val isDeleted = jobRepository.deleteJob(jobModel)
                 if (isDeleted) {
                     Toast.makeText(
                         holder.itemView.context,

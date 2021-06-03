@@ -79,7 +79,6 @@ class DatabaseHelper private constructor(context: Context) :
 //        val listOfJobs: MutableList<JobModel> = mutableListOf()
 //        if (res.count != 0) {
 //            while (res.moveToNext()) {
-//                // TODO: maybe use jobRepo::addNewJob() here instead of actual jobModel?
 //                val jobModel =
 //                    JobModel(res.getInt(0), res.getString(1), res.getString(2))
 //                listOfJobs.add(jobModel)

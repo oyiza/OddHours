@@ -1,17 +1,16 @@
 package com.example.oddhours.ui.shifts
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.oddhours.R
 import com.example.oddhours.data.model.ShiftsListModel
 import com.example.oddhours.data.repository.JobRepository
 import kotlinx.android.synthetic.main.fragment_shifts.*
-import java.lang.Exception
 
 
 class ShiftsFragment : Fragment() {
@@ -19,6 +18,7 @@ class ShiftsFragment : Fragment() {
     private var jobRepository = JobRepository()
     private lateinit var shiftsForAdapter: List<ShiftsListModel>
 
+    // TODO: shifts fragment has 'back' arrow button at the top left that quits the application when clicked
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

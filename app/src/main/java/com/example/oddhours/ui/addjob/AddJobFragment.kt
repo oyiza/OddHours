@@ -14,9 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.oddhours.R
-import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.data.repository.JobRepository
-import com.example.oddhours.database.TableJobs
 import com.example.oddhours.utils.Constants
 import kotlinx.android.synthetic.main.fragment_addjob.*
 
@@ -54,12 +52,14 @@ class AddJobFragment : Fragment() {
             editJobBTN.visibility = View.GONE
         }
 
+        // TODO: when editing jobs, editJobBTN is hidden by keyboard
         // onClick listener for editJobBTN
         editJobBTN.setOnClickListener {
             if (jobIdToEdit != null) {
                 val companyName = companyTV.text.toString()
                 val location = locationTV.text.toString()
-                val isEdited = jobRepository.editJob(companyName, location, jobIdToEdit)
+                val jobModel = jobRepository.buildJobModel(companyName, location)
+                val isEdited = jobRepository.editJob(jobModel, jobIdToEdit)
                 if (isEdited) {
                     Toast.makeText(
                         activity,
@@ -79,13 +79,12 @@ class AddJobFragment : Fragment() {
             }
         }
 
-        // TODO: on the first entry of a job into the db, the keyboard covers the addJobBTN completely
         // onClick listener for addJobBTN
         addJobBTN.setOnClickListener {
             // TODO: why are we doing .replace() here and not for location?
             val companyName = companyTV.text.toString().replace("'","\'").toUpperCase()
             val location = locationTV.text.toString().toUpperCase()
-            val newJob = JobModel(1, companyName, location)
+            val newJob = jobRepository.buildJobModel(companyName, location)
 
             // TODO: when typing, navbar is still visible. small issue but might need correcting
             if (companyName != "" && location !="") {
@@ -93,7 +92,6 @@ class AddJobFragment : Fragment() {
                     val addJob = jobRepository.addNewJob(newJob)
                     if (!addJob.equals(-1)) {
                         Toast.makeText(activity, "Successfully added job. Press and hold job card for more options.", Toast.LENGTH_LONG).show()
-                        // TODO: hide keyboard before navigating to home page
                         hideKeyboard()
                         findNavController().navigate(
                             R.id.navigation_home

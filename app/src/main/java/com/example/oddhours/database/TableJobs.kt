@@ -46,8 +46,7 @@ class TableJobs {
     }
 
     /**
-     *  getJobID - returns the job id when user clicks on Add Hours to add a new shift
-     *
+     *  @return the job id corresponding to jobName and jobLocation
      */
     fun getJobID(jobName: String, jobLocation: String): Int {
         val res = db!!.rawQuery (
@@ -82,16 +81,16 @@ class TableJobs {
         return listOfJobIds
     }
 
-    fun editJob(jobName: String, jobLocation: String, jobIdToEdit: Int): Boolean {
+    fun editJob(jobModel: JobModel, jobIdToEdit: Int): Boolean {
         val res = db!!.rawQuery(
-            "UPDATE ${DatabaseHelper.jobTable} SET ${DatabaseHelper.job_Name_COL_2} = \"$jobName\", ${DatabaseHelper.job_Location_COL_3} = \"$jobLocation\" WHERE ${DatabaseHelper.job_ID_COL_1} = $jobIdToEdit",
-        null
+            "UPDATE ${DatabaseHelper.jobTable} SET ${DatabaseHelper.job_Name_COL_2} = \"${jobModel.jobName}\", ${DatabaseHelper.job_Location_COL_3} = \"${jobModel.jobLocation}\" WHERE ${DatabaseHelper.job_ID_COL_1} = $jobIdToEdit",
+            null
         )
         return res.count > -1
     }
 
-    fun deleteJob(jobName: String, jobLocation: String): Boolean {
-        val whereClause = "${DatabaseHelper.job_Name_COL_2} = \"$jobName\" AND ${DatabaseHelper.job_Location_COL_3} = \"$jobLocation\""
+    fun deleteJob(jobModel: JobModel): Boolean {
+        val whereClause = "${DatabaseHelper.job_Name_COL_2} = \"${jobModel.jobName}\" AND ${DatabaseHelper.job_Location_COL_3} = \"${jobModel.jobLocation}\""
         val res = db!!.delete(DatabaseHelper.jobTable, whereClause, null)
         return res > 0
     }

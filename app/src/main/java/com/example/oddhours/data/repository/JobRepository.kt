@@ -46,7 +46,7 @@ class JobRepository() {
     }
 
     /**
-     * TODO: add a new job to the DB (and possibly to jobModelList). might need to double check the return type
+     * after adding the job to DB, we relocate to homeFragment where the recyclerView is built again from the DB, updating the jobRepository list
      */
     fun addNewJob(newJob: JobModel): Long {
         return dbJobs.insertJob(newJob)
@@ -56,19 +56,20 @@ class JobRepository() {
         return dbJobs.getJobID(jobName, jobLocation)
     }
 
+    // TODO: praise - this method does exactly what buildJobList() does.. is there a way to use just one method?
     fun getAllJobs(): List<JobModel>{
         return dbJobs.getAllJobs()
     }
 
-    fun editJob(jobName: String, jobLocation: String, jobIdToEdit: Int): Boolean {
-        return dbJobs.editJob(jobName, jobLocation, jobIdToEdit)
+    fun editJob(jobModel: JobModel, jobIdToEdit: Int): Boolean {
+        return dbJobs.editJob(jobModel, jobIdToEdit)
     }
 
-    fun deleteJob(jobName: String, jobLocation: String): Boolean {
-        // TODO: any other validation we want to do here?
-        return dbJobs.deleteJob(jobName, jobLocation)
+    fun deleteJob(jobModel: JobModel): Boolean {
+        return dbJobs.deleteJob(jobModel)
     }
 
+    // TODO: could rename this to a simple check that job doesn't exist in db
     fun checkJobNameAndJobLocationExists(jobName: String, jobLocation: String): Boolean{
         return dbJobs.checkJobNameAndJobLocationExists(jobName,jobLocation)
     }
@@ -78,9 +79,9 @@ class JobRepository() {
     }
 
     fun getShiftsForUIList(): MutableList<ShiftsListModel> {
-        val jobModelList = getAllJobs()
+        val jobModelList = getAllJobs() // TODO: praise - could just use jobRepository.jobModelList here?
 
-        var shiftsListForAdapter = mutableListOf<ShiftsListModel>()
+        val shiftsListForAdapter = mutableListOf<ShiftsListModel>()
         var shiftsFromJobId: MutableList<ShiftsModel>
         var shiftsListModel: ShiftsListModel
 
@@ -95,6 +96,15 @@ class JobRepository() {
             }
         }
         return shiftsListForAdapter
+    }
+
+    fun buildJobModel(jobName: String, jobLocation: String): JobModel {
+        return JobModel(1, jobName, jobLocation)
+    }
+
+    private fun getJobFromDb(jobName: String, jobLocation: String): JobModel {
+        val jobId = getJobID(jobName, jobLocation)
+        return JobModel(jobId, jobName, jobLocation)
     }
 
     companion object {
