@@ -78,7 +78,7 @@ class JobRepository() {
     }
 
     fun getShiftsForUIList(): MutableList<ShiftsListModel> {
-        val jobIDList = getAllJobs()
+        val jobModelList = getAllJobs()
 
         var shiftsListForAdapter = mutableListOf<ShiftsListModel>()
         var shiftsFromJobId: MutableList<ShiftsModel>
@@ -87,10 +87,10 @@ class JobRepository() {
         /**
          * Looping through each jobId and getting shifts and adding to the List of ShiftsListModel
          */
-        for(i in jobIDList){
-            shiftsFromJobId = dbShifts.getShiftsForJobID(i.jobID)
+        for(job in jobModelList){
+            shiftsFromJobId = dbShifts.getShiftsForJobID(job.jobID)
             if(shiftsFromJobId.size != 0){
-                shiftsListModel = ShiftsListModel(i,shiftsFromJobId)
+                shiftsListModel = ShiftsListModel(job,shiftsFromJobId)
                 shiftsListForAdapter.add(shiftsListModel)
             }
         }
