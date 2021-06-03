@@ -1,7 +1,6 @@
 package com.example.oddhours.data.repository
 
 import android.util.Log
-import com.example.oddhours.data.model.JobInfoModel
 import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.data.model.ShiftsListModel
 import com.example.oddhours.data.model.ShiftsModel
@@ -23,12 +22,11 @@ import com.example.oddhours.database.TableShifts
  *      }
  *  }
  */
-
 class JobRepository() {
 
     var jobModelList: List<JobModel>? = null
-    val dbJobs = TableJobs()
-    val dbShifts = TableShifts()
+    private val dbJobs = TableJobs()
+    private val dbShifts = TableShifts()
     /**
      * @return list of jobs from the DB
      */
@@ -58,8 +56,8 @@ class JobRepository() {
         return dbJobs.getJobID(jobName, jobLocation)
     }
 
-    fun getAllJobIDs(): List<Int>{
-        return dbJobs.getAllJobID()
+    fun getAllJobs(): List<JobModel>{
+        return dbJobs.getAllJobs()
     }
 
     fun editJob(jobName: String, jobLocation: String, jobIdToEdit: Int): Boolean {
@@ -80,9 +78,8 @@ class JobRepository() {
     }
 
     fun getShiftsForUIList(): MutableList<ShiftsListModel> {
-        val jobIDList = getAllJobIDs()
+        val jobModelList = getAllJobs()
 
-        var jobInfoModel: JobInfoModel
         var shiftsListForAdapter = mutableListOf<ShiftsListModel>()
         var shiftsFromJobId: MutableList<ShiftsModel>
         var shiftsListModel: ShiftsListModel
@@ -90,15 +87,13 @@ class JobRepository() {
         /**
          * Looping through each jobId and getting shifts and adding to the List of ShiftsListModel
          */
-        for(i in jobIDList){
-            shiftsFromJobId = dbShifts.getShiftsForJobID(i)
+        for(job in jobModelList){
+            shiftsFromJobId = dbShifts.getShiftsForJobID(job.jobID)
             if(shiftsFromJobId.size != 0){
-                jobInfoModel = dbJobs.getJobNameAndLocation(i)
-                shiftsListModel = ShiftsListModel(jobInfoModel,shiftsFromJobId)
+                shiftsListModel = ShiftsListModel(job,shiftsFromJobId)
                 shiftsListForAdapter.add(shiftsListModel)
             }
         }
-
         return shiftsListForAdapter
     }
 

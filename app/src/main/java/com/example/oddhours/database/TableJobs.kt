@@ -1,13 +1,12 @@
 package com.example.oddhours.database
 
 import android.content.ContentValues
-import android.provider.ContactsContract
-import com.example.oddhours.data.model.JobInfoModel
 import com.example.oddhours.data.model.JobModel
 
 class TableJobs {
 
     private val getJobs = "SELECT * FROM ${DatabaseHelper.jobTable}"
+    private val db = DatabaseHelper.database
 
     // TODO: close cursors - https://youtu.be/CzGNaiSoh7E?t=1910
     fun insertJob(newJob: JobModel): Long {
@@ -22,7 +21,6 @@ class TableJobs {
      *  getJobs() - retrieves all the jobs in the Database and returns it as a JobModel List
      */
     fun getJobs(): List<JobModel> {
-        val db = DatabaseHelper.database
         val res = db!!.rawQuery(getJobs, null)
         val listOfJobs: MutableList<JobModel> = mutableListOf()
         if (res.count != 0) {
@@ -40,7 +38,6 @@ class TableJobs {
      *  checkJobNameAndJobLocationExists - validates whether the same name and location already exists or not
      */
     fun checkJobNameAndJobLocationExists(jobName: String, jobLocation: String): Boolean {
-        val db = DatabaseHelper.database
         val res = db!!.rawQuery (
             "SELECT ${DatabaseHelper.job_ID_COL_1} FROM ${DatabaseHelper.jobTable} WHERE ${DatabaseHelper.job_Name_COL_2} = \"$jobName\" AND ${DatabaseHelper.job_Location_COL_3} = \"$jobLocation\"",
             null
@@ -53,7 +50,6 @@ class TableJobs {
      *
      */
     fun getJobID(jobName: String, jobLocation: String): Int {
-        val db = DatabaseHelper.database
         val res = db!!.rawQuery (
             "SELECT ${DatabaseHelper.job_ID_COL_1} FROM ${DatabaseHelper.jobTable} WHERE ${DatabaseHelper.job_Name_COL_2} = \"$jobName\" AND ${DatabaseHelper.job_Location_COL_3} = \"$jobLocation\"",
             null
@@ -70,42 +66,23 @@ class TableJobs {
     /**
      * getAllJobID - returns a list of all the Job IDs in the database
      */
-    fun getAllJobID(): List<Int>{
-        val db = DatabaseHelper.database
-        var listOfJobIds = mutableListOf<Int>()
+    fun getAllJobs(): List<JobModel>{
+        var listOfJobIds = mutableListOf<JobModel>()
         val res = db!!.rawQuery(
-            "SELECT ${DatabaseHelper.job_ID_COL_1} FROM ${DatabaseHelper.jobTable}",null
+            "SELECT * FROM ${DatabaseHelper.jobTable}",null
         )
+        var jobModel: JobModel
         if(res.count != 0){
             while(res.moveToNext()){
-                listOfJobIds.add(res.getInt(0))
+                jobModel = JobModel(res.getInt(0), res.getString(1), res.getString(2))
+                listOfJobIds.add(jobModel)
             }
             return listOfJobIds
         }
         return listOfJobIds
     }
 
-    /**
-     *  getJobNameAndLocation - return job name & location for a given job id when building shifts list
-     */
-    fun getJobNameAndLocation(jobId: Int): JobInfoModel{
-        val db = DatabaseHelper.database
-        val res = db!!.rawQuery(
-            "SELECT ${DatabaseHelper.job_Name_COL_2}, ${DatabaseHelper.job_Location_COL_3} FROM ${DatabaseHelper.jobTable} WHERE ${DatabaseHelper.job_ID_COL_1} = $jobId", null
-        )
-        var jobInfoModel = JobInfoModel("","")
-        if (res.count != 0) {
-            while (res.moveToNext()) {
-                jobInfoModel.jobTitle = res.getString(0)
-                jobInfoModel.jobLocation = res.getString(1)
-                return jobInfoModel
-            }
-        }
-        return jobInfoModel
-    }
-
     fun editJob(jobName: String, jobLocation: String, jobIdToEdit: Int): Boolean {
-        val db = DatabaseHelper.database
         val res = db!!.rawQuery(
             "UPDATE ${DatabaseHelper.jobTable} SET ${DatabaseHelper.job_Name_COL_2} = \"$jobName\", ${DatabaseHelper.job_Location_COL_3} = \"$jobLocation\" WHERE ${DatabaseHelper.job_ID_COL_1} = $jobIdToEdit",
         null
@@ -114,7 +91,6 @@ class TableJobs {
     }
 
     fun deleteJob(jobName: String, jobLocation: String): Boolean {
-        val db = DatabaseHelper.database
         val whereClause = "${DatabaseHelper.job_Name_COL_2} = \"$jobName\" AND ${DatabaseHelper.job_Location_COL_3} = \"$jobLocation\""
         val res = db!!.delete(DatabaseHelper.jobTable, whereClause, null)
         return res > 0
