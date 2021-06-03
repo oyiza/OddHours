@@ -64,22 +64,23 @@ class TableJobs {
 
     /**
      * getAllJobID - returns a list of all the Job IDs in the database
+     * TODO: this method does same as getJobs().. delete this same time as JobRepository.kt::getAllJobs() which is also commented out at the moment
      */
-    fun getAllJobs(): List<JobModel>{
-        var listOfJobIds = mutableListOf<JobModel>()
-        val res = db!!.rawQuery(
-            "SELECT * FROM ${DatabaseHelper.jobTable}",null
-        )
-        var jobModel: JobModel
-        if(res.count != 0){
-            while(res.moveToNext()){
-                jobModel = JobModel(res.getInt(0), res.getString(1), res.getString(2))
-                listOfJobIds.add(jobModel)
-            }
-            return listOfJobIds
-        }
-        return listOfJobIds
-    }
+//    fun getAllJobs(): List<JobModel>{
+//        var listOfJobIds = mutableListOf<JobModel>()
+//        val res = db!!.rawQuery(
+//            "SELECT * FROM ${DatabaseHelper.jobTable}",null
+//        )
+//        var jobModel: JobModel
+//        if(res.count != 0){
+//            while(res.moveToNext()){
+//                jobModel = JobModel(res.getInt(0), res.getString(1), res.getString(2))
+//                listOfJobIds.add(jobModel)
+//            }
+//            return listOfJobIds
+//        }
+//        return listOfJobIds
+//    }
 
     fun editJob(jobModel: JobModel, jobIdToEdit: Int): Boolean {
         val res = db!!.rawQuery(

@@ -56,10 +56,10 @@ class JobRepository() {
         return dbJobs.getJobID(jobName, jobLocation)
     }
 
-    // TODO: praise - this method does exactly what buildJobList() does.. is there a way to use just one method?
-    fun getAllJobs(): List<JobModel>{
-        return dbJobs.getAllJobs()
-    }
+    // TODO: this method does exactly what buildJobList() does.. if no need for this we can remove it then
+//    fun getAllJobs(): List<JobModel>{
+//        return dbJobs.getAllJobs()
+//    }
 
     fun editJob(jobModel: JobModel, jobIdToEdit: Int): Boolean {
         return dbJobs.editJob(jobModel, jobIdToEdit)
@@ -79,7 +79,7 @@ class JobRepository() {
     }
 
     fun getShiftsForUIList(): MutableList<ShiftsListModel> {
-        val jobModelList = getAllJobs() // TODO: praise - could just use jobRepository.jobModelList here?
+        val jobModelList = buildJobList()
 
         val shiftsListForAdapter = mutableListOf<ShiftsListModel>()
         var shiftsFromJobId: MutableList<ShiftsModel>
