@@ -17,7 +17,6 @@ import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.oddhours.R
 import com.example.oddhours.data.model.JobModel
-import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.data.repository.JobRepository
 import com.example.oddhours.utils.Constants
 import kotlinx.android.synthetic.main.addshift.view.*
@@ -31,8 +30,6 @@ import java.util.*
  * HomeAdapter now also takes in the context as a parameter in the constructor
  * context is required for the Alert Dialog
  */
-
-// TODO: changed jobList property to var (so on delete we can update UI) - we need to check that this doesn't cause any issues
 class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val navController: NavController) : RecyclerView.Adapter<HomeAdapter.JobViewHolder>() {
 
     private var jobRepository = JobRepository()
@@ -159,14 +156,13 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
              */
 
             mDialogView.saveBTN.setOnClickListener {
-                if(endTimeHour > startTimeHour){
-                    val totalTimeWorked = calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
-                    // TODO: shiftRepository or jobRepository class for creating new shifts? praise
-                    val shiftsModel = ShiftsModel(1,dateForDb,clickedJobID,startTimeForDb,endTimeForDb,totalTimeWorked )
+                if (endTimeHour > startTimeHour) {
+                    val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
+                    val shiftsModel = jobRepository.buildShiftsModel(1, dateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
                     jobRepository.insertShift(shiftsModel)
                     mAlertDialog.dismiss()
                 }
-                else{
+                else {
                     Toast.makeText(
                         holder.itemView.context,
                         "End Time is earlier then Start Time",
@@ -203,14 +199,12 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
 
             // onClick listener for edit button
             mDialogView.btnEditJob.setOnClickListener{
-                // TODO: openAddJob fragment and pass in jobName and jobLocation
                 mAlertDialog.dismiss()
                 openAddJobFragment(holder.jobName, holder.jobLocation)
             }
 
             // onClick listener for delete button
             mDialogView.btnDeleteJob.setOnClickListener{
-                // HomeFragment::jobRepository instead of local jobRepository field here ??
                 // maybe say like 'are you sure?' before deleting it lol
                 // TODO: wrap in try catch? custom exception needed (JobNotFoundException)
                 val jobModel = jobRepository.buildJobModel(holder.jobName.text as String, holder.jobLocation.text as String)
@@ -233,6 +227,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
         }
     }
 
+    // TODO: this might have to go to jobRepository too
     private fun removeItemFromUI(list: List<JobModel>, position: Int): List<JobModel> {
         Log.i(TAG, "removeItem() called: position is $position")
         val result = list.toMutableList()
@@ -257,23 +252,6 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
     }
 
     override fun getItemCount() = jobList.size
-
-    // TODO: another chunk to be moved into shiftRepository class perhaps?
-    fun calculateTotalHours(stHour: Int, stMin: Int, etHour: Int, etMin: Int): String{
-        val hoursWorked = etHour - stHour
-        val minutesWorked: Int
-        val totalTimeWorked: String
-
-        if(etMin > stMin) {
-            minutesWorked = etMin - stMin
-            totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
-        }
-        else{
-            minutesWorked = stMin - etMin
-            totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
-        }
-        return totalTimeWorked
-    }
 
     class JobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val jobName: TextView = itemView.txtJobName

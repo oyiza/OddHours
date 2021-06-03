@@ -38,14 +38,6 @@ class JobRepository() {
     }
 
     /**
-     * TODO: this method will be responsible for calculating total hours in the current week cycle for a specific job
-     * might be smart to pass in something else as parameter instead of jobName (to make lookup faster)
-     */
-    private fun getTotalHoursForWeek(jobName: String): String {
-        return "This week: X hours"
-    }
-
-    /**
      * after adding the job to DB, we relocate to homeFragment where the recyclerView is built again from the DB, updating the jobRepository list
      */
     fun addNewJob(newJob: JobModel): Long {
@@ -69,9 +61,8 @@ class JobRepository() {
         return dbJobs.deleteJob(jobModel)
     }
 
-    // TODO: could rename this to a simple check that job doesn't exist in db
-    fun checkJobNameAndJobLocationExists(jobName: String, jobLocation: String): Boolean{
-        return dbJobs.checkJobNameAndJobLocationExists(jobName,jobLocation)
+    fun checkJobExists(jobName: String, jobLocation: String): Boolean{
+        return dbJobs.checkJobExists(jobName,jobLocation)
     }
 
     fun insertShift(newShift: ShiftsModel): Long{
@@ -98,10 +89,38 @@ class JobRepository() {
         return shiftsListForAdapter
     }
 
+    fun buildShiftsModel(
+        shiftID: Int,
+        dateForDb: String,
+        clickedJobID: Int,
+        startTimeForDb: String,
+        endTimeForDb: String,
+        totalTimeWorked: String
+    ): ShiftsModel {
+        return ShiftsModel(shiftID, dateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked)
+    }
+
+    fun calculateTotalHours(startTimeHour: Int, startTimeMin: Int, endTimeHour: Int, endTimeMin: Int): String{
+        val hoursWorked = endTimeHour - startTimeHour
+        val minutesWorked: Int
+        val totalTimeWorked: String
+
+        if(endTimeMin > startTimeMin) {
+            minutesWorked = endTimeMin - startTimeMin
+            totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
+        }
+        else{
+            minutesWorked = startTimeMin - endTimeMin
+            totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
+        }
+        return totalTimeWorked
+    }
+
     fun buildJobModel(jobName: String, jobLocation: String): JobModel {
         return JobModel(1, jobName, jobLocation)
     }
 
+    // potentially to retrieve jobs from db if we need that functionality
     private fun getJobFromDb(jobName: String, jobLocation: String): JobModel {
         val jobId = getJobID(jobName, jobLocation)
         return JobModel(jobId, jobName, jobLocation)

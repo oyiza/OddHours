@@ -1,6 +1,7 @@
 package com.example.oddhours.ui.shifts
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,7 @@ class ShiftsFragment : Fragment() {
         try{
             shiftsForAdapter = jobRepository.getShiftsForUIList()
         }catch (e: Exception){
-            println(e)
+            Log.e(TAG, e.printStackTrace().toString())
         }
         return inflater.inflate(R.layout.fragment_shifts, container, false)
     }
@@ -39,5 +40,9 @@ class ShiftsFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = shiftsForAdapter.let { ParentAdapter(it, requireActivity(), view.findNavController()) }
         }
+    }
+
+    companion object {
+        private const val TAG = "HomeFragment"
     }
 }
