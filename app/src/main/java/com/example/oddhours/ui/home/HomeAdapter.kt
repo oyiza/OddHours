@@ -17,6 +17,7 @@ import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.oddhours.R
 import com.example.oddhours.data.model.JobModel
+import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.data.repository.JobRepository
 import com.example.oddhours.utils.Constants
 import kotlinx.android.synthetic.main.addshift.view.*
@@ -158,7 +159,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
             mDialogView.saveBTN.setOnClickListener {
                 if (endTimeHour > startTimeHour) {
                     val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
-                    val shiftsModel = jobRepository.buildShiftsModel(1, dateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
+                    val shiftsModel = ShiftsModel(1, dateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
                     jobRepository.insertShift(shiftsModel)
                     mAlertDialog.dismiss()
                 }
@@ -207,7 +208,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
             mDialogView.btnDeleteJob.setOnClickListener{
                 // maybe say like 'are you sure?' before deleting it lol
                 // TODO: wrap in try catch? custom exception needed (JobNotFoundException)
-                val jobModel = jobRepository.buildJobModel(holder.jobName.text as String, holder.jobLocation.text as String)
+                val jobModel = JobModel(1, holder.jobName.text as String, holder.jobLocation.text as String)
                 val isDeleted = jobRepository.deleteJob(jobModel)
                 if (isDeleted) {
                     Toast.makeText(

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.oddhours.R
+import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.data.repository.JobRepository
 import com.example.oddhours.utils.Constants
 import kotlinx.android.synthetic.main.fragment_addjob.*
@@ -58,7 +59,7 @@ class AddJobFragment : Fragment() {
             if (jobIdToEdit != null) {
                 val companyName = companyTV.text.toString()
                 val location = locationTV.text.toString()
-                val jobModel = jobRepository.buildJobModel(companyName, location)
+                val jobModel = JobModel(1, companyName, location)
                 val isEdited = jobRepository.editJob(jobModel, jobIdToEdit)
                 if (isEdited) {
                     Toast.makeText(
@@ -84,7 +85,7 @@ class AddJobFragment : Fragment() {
             // TODO: why are we doing .replace() here and not for location?
             val companyName = companyTV.text.toString().replace("'","\'").toUpperCase()
             val location = locationTV.text.toString().toUpperCase()
-            val newJob = jobRepository.buildJobModel(companyName, location)
+            val newJob = JobModel(1, companyName, location)
 
             // TODO: when typing, navbar is still visible. small issue but might need correcting
             if (companyName != "" && location !="") {

@@ -89,17 +89,6 @@ class JobRepository() {
         return shiftsListForAdapter
     }
 
-    fun buildShiftsModel(
-        shiftID: Int,
-        dateForDb: String,
-        clickedJobID: Int,
-        startTimeForDb: String,
-        endTimeForDb: String,
-        totalTimeWorked: String
-    ): ShiftsModel {
-        return ShiftsModel(shiftID, dateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked)
-    }
-
     fun calculateTotalHours(startTimeHour: Int, startTimeMin: Int, endTimeHour: Int, endTimeMin: Int): String{
         val hoursWorked = endTimeHour - startTimeHour
         val minutesWorked: Int
@@ -114,10 +103,6 @@ class JobRepository() {
             totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
         }
         return totalTimeWorked
-    }
-
-    fun buildJobModel(jobName: String, jobLocation: String): JobModel {
-        return JobModel(1, jobName, jobLocation)
     }
 
     // potentially to retrieve jobs from db if we need that functionality
