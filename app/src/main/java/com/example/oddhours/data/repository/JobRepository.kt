@@ -38,15 +38,7 @@ class JobRepository() {
     }
 
     /**
-     * TODO: this method will be responsible for calculating total hours in the current week cycle for a specific job
-     * might be smart to pass in something else as parameter instead of jobName (to make lookup faster)
-     */
-    private fun getTotalHoursForWeek(jobName: String): String {
-        return "This week: X hours"
-    }
-
-    /**
-     * TODO: add a new job to the DB (and possibly to jobModelList). might need to double check the return type
+     * after adding the job to DB, we relocate to homeFragment where the recyclerView is built again from the DB, updating the jobRepository list
      */
     fun addNewJob(newJob: JobModel): Long {
         return dbJobs.insertJob(newJob)
@@ -56,21 +48,21 @@ class JobRepository() {
         return dbJobs.getJobID(jobName, jobLocation)
     }
 
-    fun getAllJobs(): List<JobModel>{
-        return dbJobs.getAllJobs()
+    // TODO: this method does exactly what buildJobList() does.. if no need for this we can remove it then
+//    fun getAllJobs(): List<JobModel>{
+//        return dbJobs.getAllJobs()
+//    }
+
+    fun editJob(jobModel: JobModel, jobIdToEdit: Int): Boolean {
+        return dbJobs.editJob(jobModel, jobIdToEdit)
     }
 
-    fun editJob(jobName: String, jobLocation: String, jobIdToEdit: Int): Boolean {
-        return dbJobs.editJob(jobName, jobLocation, jobIdToEdit)
+    fun deleteJob(jobModel: JobModel): Boolean {
+        return dbJobs.deleteJob(jobModel)
     }
 
-    fun deleteJob(jobName: String, jobLocation: String): Boolean {
-        // TODO: any other validation we want to do here?
-        return dbJobs.deleteJob(jobName, jobLocation)
-    }
-
-    fun checkJobNameAndJobLocationExists(jobName: String, jobLocation: String): Boolean{
-        return dbJobs.checkJobNameAndJobLocationExists(jobName,jobLocation)
+    fun checkJobExists(jobName: String, jobLocation: String): Boolean{
+        return dbJobs.checkJobExists(jobName,jobLocation)
     }
 
     fun insertShift(newShift: ShiftsModel): Long{
@@ -78,9 +70,9 @@ class JobRepository() {
     }
 
     fun getShiftsForUIList(): MutableList<ShiftsListModel> {
-        val jobModelList = getAllJobs()
+        val jobModelList = buildJobList()
 
-        var shiftsListForAdapter = mutableListOf<ShiftsListModel>()
+        val shiftsListForAdapter = mutableListOf<ShiftsListModel>()
         var shiftsFromJobId: MutableList<ShiftsModel>
         var shiftsListModel: ShiftsListModel
 
@@ -95,6 +87,28 @@ class JobRepository() {
             }
         }
         return shiftsListForAdapter
+    }
+
+    fun calculateTotalHours(startTimeHour: Int, startTimeMin: Int, endTimeHour: Int, endTimeMin: Int): String{
+        val hoursWorked = endTimeHour - startTimeHour
+        val minutesWorked: Int
+        val totalTimeWorked: String
+
+        if(endTimeMin > startTimeMin) {
+            minutesWorked = endTimeMin - startTimeMin
+            totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
+        }
+        else{
+            minutesWorked = startTimeMin - endTimeMin
+            totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
+        }
+        return totalTimeWorked
+    }
+
+    // potentially to retrieve jobs from db if we need that functionality
+    private fun getJobFromDb(jobName: String, jobLocation: String): JobModel {
+        val jobId = getJobID(jobName, jobLocation)
+        return JobModel(jobId, jobName, jobLocation)
     }
 
     companion object {

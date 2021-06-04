@@ -34,10 +34,7 @@ class TableJobs {
         return listOfJobs
     }
 
-    /**
-     *  checkJobNameAndJobLocationExists - validates whether the same name and location already exists or not
-     */
-    fun checkJobNameAndJobLocationExists(jobName: String, jobLocation: String): Boolean {
+    fun checkJobExists(jobName: String, jobLocation: String): Boolean {
         val res = db!!.rawQuery (
             "SELECT ${DatabaseHelper.job_ID_COL_1} FROM ${DatabaseHelper.jobTable} WHERE ${DatabaseHelper.job_Name_COL_2} = \"$jobName\" AND ${DatabaseHelper.job_Location_COL_3} = \"$jobLocation\"",
             null
@@ -46,8 +43,7 @@ class TableJobs {
     }
 
     /**
-     *  getJobID - returns the job id when user clicks on Add Hours to add a new shift
-     *
+     *  @return the job id corresponding to jobName and jobLocation
      */
     fun getJobID(jobName: String, jobLocation: String): Int {
         val res = db!!.rawQuery (
@@ -65,33 +61,34 @@ class TableJobs {
 
     /**
      * getAllJobID - returns a list of all the Job IDs in the database
+     * TODO: this method does same as getJobs().. delete this same time as JobRepository.kt::getAllJobs() which is also commented out at the moment
      */
-    fun getAllJobs(): List<JobModel>{
-        var listOfJobIds = mutableListOf<JobModel>()
-        val res = db!!.rawQuery(
-            "SELECT * FROM ${DatabaseHelper.jobTable}",null
-        )
-        var jobModel: JobModel
-        if(res.count != 0){
-            while(res.moveToNext()){
-                jobModel = JobModel(res.getInt(0), res.getString(1), res.getString(2))
-                listOfJobIds.add(jobModel)
-            }
-            return listOfJobIds
-        }
-        return listOfJobIds
-    }
+//    fun getAllJobs(): List<JobModel>{
+//        var listOfJobIds = mutableListOf<JobModel>()
+//        val res = db!!.rawQuery(
+//            "SELECT * FROM ${DatabaseHelper.jobTable}",null
+//        )
+//        var jobModel: JobModel
+//        if(res.count != 0){
+//            while(res.moveToNext()){
+//                jobModel = JobModel(res.getInt(0), res.getString(1), res.getString(2))
+//                listOfJobIds.add(jobModel)
+//            }
+//            return listOfJobIds
+//        }
+//        return listOfJobIds
+//    }
 
-    fun editJob(jobName: String, jobLocation: String, jobIdToEdit: Int): Boolean {
+    fun editJob(jobModel: JobModel, jobIdToEdit: Int): Boolean {
         val res = db!!.rawQuery(
-            "UPDATE ${DatabaseHelper.jobTable} SET ${DatabaseHelper.job_Name_COL_2} = \"$jobName\", ${DatabaseHelper.job_Location_COL_3} = \"$jobLocation\" WHERE ${DatabaseHelper.job_ID_COL_1} = $jobIdToEdit",
-        null
+            "UPDATE ${DatabaseHelper.jobTable} SET ${DatabaseHelper.job_Name_COL_2} = \"${jobModel.jobName}\", ${DatabaseHelper.job_Location_COL_3} = \"${jobModel.jobLocation}\" WHERE ${DatabaseHelper.job_ID_COL_1} = $jobIdToEdit",
+            null
         )
         return res.count > -1
     }
 
-    fun deleteJob(jobName: String, jobLocation: String): Boolean {
-        val whereClause = "${DatabaseHelper.job_Name_COL_2} = \"$jobName\" AND ${DatabaseHelper.job_Location_COL_3} = \"$jobLocation\""
+    fun deleteJob(jobModel: JobModel): Boolean {
+        val whereClause = "${DatabaseHelper.job_Name_COL_2} = \"${jobModel.jobName}\" AND ${DatabaseHelper.job_Location_COL_3} = \"${jobModel.jobLocation}\""
         val res = db!!.delete(DatabaseHelper.jobTable, whereClause, null)
         return res > 0
     }
