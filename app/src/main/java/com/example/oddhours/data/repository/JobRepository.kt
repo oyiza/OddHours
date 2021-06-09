@@ -61,11 +61,11 @@ class JobRepository() {
         return dbJobs.deleteJob(jobModel)
     }
 
-    fun checkJobExists(jobName: String, jobLocation: String): Boolean{
+    fun checkJobExists(jobName: String, jobLocation: String): Boolean {
         return dbJobs.checkJobExists(jobName,jobLocation)
     }
 
-    fun insertShift(newShift: ShiftsModel): Long{
+    fun insertShift(newShift: ShiftsModel): Long {
         return dbShifts.insertShift(newShift)
     }
 
@@ -79,9 +79,9 @@ class JobRepository() {
         /**
          * Looping through each jobId and getting shifts and adding to the List of ShiftsListModel
          */
-        for(job in jobModelList){
+        for (job in jobModelList) {
             shiftsFromJobId = dbShifts.getShiftsForJobID(job.jobID)
-            if(shiftsFromJobId.size != 0){
+            if (shiftsFromJobId.size != 0) {
                 shiftsListModel = ShiftsListModel(job,shiftsFromJobId)
                 shiftsListForAdapter.add(shiftsListModel)
             }
@@ -89,16 +89,16 @@ class JobRepository() {
         return shiftsListForAdapter
     }
 
-    fun calculateTotalHours(startTimeHour: Int, startTimeMin: Int, endTimeHour: Int, endTimeMin: Int): String{
+    fun calculateTotalHours(startTimeHour: Int, startTimeMin: Int, endTimeHour: Int, endTimeMin: Int): String {
         val hoursWorked = endTimeHour - startTimeHour
         val minutesWorked: Int
         val totalTimeWorked: String
 
-        if(endTimeMin > startTimeMin) {
+        if (endTimeMin > startTimeMin) {
             minutesWorked = endTimeMin - startTimeMin
             totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
         }
-        else{
+        else {
             minutesWorked = startTimeMin - endTimeMin
             totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
         }

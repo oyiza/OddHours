@@ -5,12 +5,20 @@
     <string name="txt_no_jobs">No Jobs Added Yet</string>
     <string name="title_notifications">Notify</string>
     <string name="app_name">OddHours</string>
+    <string name="initial_date_value">00/00/0000</string>
+    <string name="initial_time_value">00:00</string>
 
     <!-- buttons -->
     <string name="btn_add_hours">Add Hours</string>
     <string name="btn_add_job">Add Job</string>
     <string name="btn_delete_job">Delete Job</string>
     <string name="btn_edit_job">Edit Job</string>
+    <string name="btn_start_time">Start Time</string>
+    <string name="btn_end_time">End Time</string>
+    <string name="btn_start_date">Start Date</string>
+    <string name="btn_end_date">End Date</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_save">Save</string>
 
     <!-- placeholders -->
     <string name="placeholder_job_information">Job Information</string>

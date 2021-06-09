@@ -41,7 +41,8 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
     /**
      *  The 3 variables below are used for insert these values in SQLite
      */
-    var dateForDb = ""
+    var startDateForDb = ""
+    var endDateForDb = ""
     var startTimeForDb = ""
     var endTimeForDb = ""
 
@@ -81,32 +82,33 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
             /**
              * below code is for popup dialog and the respective on button click listeners
              */
-                val mDialogView = LayoutInflater.from(context).inflate(R.layout.addshift, null)
-                val mBuilder = AlertDialog.Builder(context)
-                    .setView(mDialogView)
-                    .setTitle("Add a Shift")
-                val mAlertDialog = mBuilder.show()
-                mDialogView.shiftDateTV.text = "${month+1}/${day}/${year}"
+            val mDialogView = LayoutInflater.from(context).inflate(R.layout.addshift, null)
+            val mBuilder = AlertDialog.Builder(context)
+                .setView(mDialogView)
+                .setTitle("Add a Shift")
+            val mAlertDialog = mBuilder.show()
+            mDialogView.shiftStartDateTV.text = "${month+1}/${day}/${year}"
+            mDialogView.shiftEndDateTV.text = "${month+1}/${day}/${year}"
 
             /**
-             * Shift Date Button onclicklistener
+             * Shift Start Date Button onclicklistener
              *  - sets the maxDate to today's date, so that the user cannot pick a future date
              */
 
-            mDialogView.shiftDateBTN.setOnClickListener{
+            mDialogView.shiftStartDateBTN.setOnClickListener{
                 val dpd = DatePickerDialog(context, { view, year, monthOfYear, dayOfMonth ->
                     // Display Selected date in TextView
                     c.set(Calendar.YEAR, year)
                     c.set(Calendar.MONTH, monthOfYear)
                     c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    dateForDb = sdf.format(c.time).toString()
-                    mDialogView.shiftDateTV.text = sdf.format(c.time)
+                    startDateForDb = sdf.format(c.time).toString()
+                    mDialogView.shiftStartDateTV.text = sdf.format(c.time)
                 }, year, month, day)
                 dpd.datePicker.maxDate = c.timeInMillis
                 dpd.show()
             }
 
-            dateForDb = sdf.format(c.time).toString()
+            startDateForDb = sdf.format(c.time).toString()
 
             /**
              *  Start Time Button onclicklistener
@@ -127,6 +129,24 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
 
                 TimePickerDialog(context, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(
                     Calendar.MINUTE), false).show()
+            }
+
+            /**
+             * Shift End Date Button onclicklistener
+             *  - sets the maxDate to today's date, so that the user cannot pick a future date
+             */
+
+            mDialogView.shiftEndDateBTN.setOnClickListener{
+                val dpd = DatePickerDialog(context, { view, year, monthOfYear, dayOfMonth ->
+                    // Display Selected date in TextView
+                    c.set(Calendar.YEAR, year)
+                    c.set(Calendar.MONTH, monthOfYear)
+                    c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    endDateForDb = sdf.format(c.time).toString()
+                    mDialogView.shiftEndDateTV.text = sdf.format(c.time)
+                }, year, month, day)
+                dpd.datePicker.maxDate = c.timeInMillis
+                dpd.show()
             }
 
             /**
@@ -156,10 +176,11 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
              *      - calculateHours() function returns a string
              */
 
+            // TODO: praise
             mDialogView.saveBTN.setOnClickListener {
                 if (endTimeHour > startTimeHour) {
                     val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
-                    val shiftsModel = ShiftsModel(1, dateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
+                    val shiftsModel = ShiftsModel(1, startDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
                     jobRepository.insertShift(shiftsModel)
                     mAlertDialog.dismiss()
                 }
