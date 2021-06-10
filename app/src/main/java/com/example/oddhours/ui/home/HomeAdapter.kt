@@ -107,7 +107,6 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
                 dpd.datePicker.maxDate = c.timeInMillis
                 dpd.show()
             }
-
             startDateForDb = sdf.format(c.time).toString()
 
             /**
@@ -148,6 +147,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
                 dpd.datePicker.maxDate = c.timeInMillis
                 dpd.show()
             }
+            endDateForDb = sdf.format(c.time).toString()
 
             /**
              * End Time Button on click listener
@@ -176,11 +176,10 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
              *      - calculateHours() function returns a string
              */
 
-            // TODO: praise
             mDialogView.saveBTN.setOnClickListener {
                 if (endTimeHour > startTimeHour) {
                     val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
-                    val shiftsModel = ShiftsModel(1, startDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
+                    val shiftsModel = ShiftsModel(1, startDateForDb, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
                     jobRepository.insertShift(shiftsModel)
                     mAlertDialog.dismiss()
                 }

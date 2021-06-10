@@ -70,7 +70,7 @@ class JobRepository() {
     }
 
     fun getShiftsForUIList(): MutableList<ShiftsListModel> {
-        val jobModelList = buildJobList()
+        val jobModelList = buildJobList() // TODO: maybe at this point we don't need to call buildJobList()? just use the jobModelList?
 
         val shiftsListForAdapter = mutableListOf<ShiftsListModel>()
         var shiftsFromJobId: MutableList<ShiftsModel>
