@@ -39,7 +39,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
     private val sdf = SimpleDateFormat(myFormat, Locale.CANADA)
 
     /**
-     *  The 3 variables below are used for insert these values in SQLite
+     *  The 4 variables below are used to insert these values in SQLite
      */
     var startDateForDb = ""
     var endDateForDb = ""
@@ -47,7 +47,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
     var endTimeForDb = ""
 
     /**
-     *  The 4 variables below are used for calculating the hours and min worked
+     *  The 4 variables below are used for calculating the hours and min worked (together with the dates above - if they're different)
      */
     var startTimeHour = 0
     var startTimeMin = 0
@@ -79,6 +79,11 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
 
             val clickedJobID = jobRepository.getJobID(holder.jobName.text.toString(), holder.jobLocation.text.toString())
 
+            // TODO: at the beginning, startDate and endDate are always the same because of similar initialization
+            val startDate = Calendar.getInstance()
+            val endDate = Calendar.getInstance()
+            val today = Calendar.getInstance()
+
             /**
              * below code is for popup dialog and the respective on button click listeners
              */
@@ -87,8 +92,9 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
                 .setView(mDialogView)
                 .setTitle("Add a Shift")
             val mAlertDialog = mBuilder.show()
-            mDialogView.shiftStartDateTV.text = "${month+1}/${day}/${year}"
-            mDialogView.shiftEndDateTV.text = "${month+1}/${day}/${year}"
+            // not showing date text so we force the user to click on the date buttons - this sets the startDate and endDate correctly for us
+//            mDialogView.shiftStartDateTV.text = sdf.format(c.time)
+//            mDialogView.shiftEndDateTV.text = sdf.format(c.time)
 
             /**
              * Shift Start Date Button onclicklistener
@@ -101,13 +107,17 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
                     c.set(Calendar.YEAR, year)
                     c.set(Calendar.MONTH, monthOfYear)
                     c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    startDateForDb = sdf.format(c.time).toString()
+                    startDateForDb = sdf.format(c.time).toString() // "06/14/2021"
                     mDialogView.shiftStartDateTV.text = sdf.format(c.time)
+                    startDate.set(year, monthOfYear, dayOfMonth)
+                    // DEBUG TODO: remove this eventually
+                    // Log.d(TAG, "startDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
+                    // Log.d(TAG, "$startDate")
                 }, year, month, day)
-                dpd.datePicker.maxDate = c.timeInMillis
+                // TODO: there should be some logic here to move around the maxDate and minDate for the datepicker
+                dpd.datePicker.maxDate = today.timeInMillis
                 dpd.show()
             }
-            startDateForDb = sdf.format(c.time).toString()
 
             /**
              *  Start Time Button onclicklistener
@@ -141,13 +151,16 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
                     c.set(Calendar.YEAR, year)
                     c.set(Calendar.MONTH, monthOfYear)
                     c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    endDateForDb = sdf.format(c.time).toString()
+                    endDateForDb = sdf.format(c.time).toString() // "06/14/2021"
                     mDialogView.shiftEndDateTV.text = sdf.format(c.time)
+                    endDate.set(year, monthOfYear, dayOfMonth)
+                    // DEBUG TODO: remove this eventually
+                    // Log.d(TAG, "endDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
+                    // Log.d(TAG, "$endDate")
                 }, year, month, day)
-                dpd.datePicker.maxDate = c.timeInMillis
+                dpd.datePicker.maxDate = today.timeInMillis
                 dpd.show()
             }
-            endDateForDb = sdf.format(c.time).toString()
 
             /**
              * End Time Button on click listener
@@ -171,29 +184,50 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
 
             /**
              *  Save Button onclick listener
-             *   - First verifies that user selected the End Time that is ahead of Start Time
-             *   - Next, calculateTotalHours() function calculates the overall hours+min worked in the shift
+             *   - decides what type of shift we're calculating (same day / overnight)
+             *   - verifies that user selected an End Time that is ahead of Start Time if same day shift
+             *   - then calculateTotalHours() function calculates the overall hours+min worked in the shift
              *      - calculateHours() function returns a string
              */
 
             mDialogView.saveBTN.setOnClickListener {
-                if (endTimeHour > startTimeHour) {
-                    val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
-                    val shiftsModel = ShiftsModel(1, startDateForDb, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
-                    jobRepository.insertShift(shiftsModel)
-                    mAlertDialog.dismiss()
-                }
-                else {
-                    Toast.makeText(
-                        holder.itemView.context,
-                        "End Time is earlier then Start Time",
-                        Toast.LENGTH_LONG
-                    ).show()
+                if (allButtonsClicked(mDialogView)) {
+                    when {
+                        getShiftType(endDate, startDate) == Constants.OVERNIGHT_SHIFT -> {
+                            Log.d(TAG, "overnight shift")
+                            val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour + 24, endTimeMin)
+                            val shiftsModel = ShiftsModel(1, startDateForDb, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
+                            jobRepository.insertShift(shiftsModel)
+                            mAlertDialog.dismiss()
+                        }
+                        getShiftType(endDate, startDate) == Constants.DAY_SHIFT -> {
+                            Log.d(TAG, "day shift")
+                            if (endTimeHour > startTimeHour) {
+                                val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
+                                val shiftsModel = ShiftsModel(1, startDateForDb, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
+                                jobRepository.insertShift(shiftsModel)
+                                mAlertDialog.dismiss()
+                            }
+                            else {
+                                Toast.makeText(
+                                        holder.itemView.context,
+                                        "End Time is earlier than Start Time",
+                                        Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                        getShiftType(endDate, startDate) == Constants.INVALID_SHIFT_RANGE -> {
+                            Toast.makeText(context, "Please choose dates one day apart max!", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                } else {
+                    Toast.makeText(context, "Please fill in all missing information", Toast.LENGTH_SHORT).show()
                 }
             }
 
             mDialogView.cancelBTN.setOnClickListener{
-                mAlertDialog.dismiss()
+                mAlertDialog.cancel()
+                // mAlertDialog.dismiss()
             }
         }
 
@@ -248,7 +282,61 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
         }
     }
 
-    // TODO: this might have to go to jobRepository too
+    private fun allButtonsClicked(mDialogView: View): Boolean {
+        val startDateText = mDialogView.shiftStartDateTV.text
+        val startTimeText = mDialogView.startTimeTV.text
+        val endDateText = mDialogView.shiftEndDateTV.text
+        val endTimeText = mDialogView.endTimeTV.text
+
+        val initialDateValue = "--/--/----"
+        val initialTimeValue = "--:--"
+
+        if (startDateText.equals(initialDateValue) || startTimeText.equals(initialTimeValue) ||
+                endDateText.equals(initialDateValue) || endTimeText.equals(initialTimeValue)) {
+            return false
+        }
+        return true
+    }
+
+    // TODO: could we move this to jobRepository?
+    private fun getShiftType(endDate: Calendar, startDate: Calendar): Int {
+        val endDateDay = endDate.get(Calendar.DAY_OF_MONTH)
+        val endDateMonth = endDate.get(Calendar.MONTH)
+//        val endDateYear = endDate.get(Calendar.YEAR)
+        val endDateDayOfWeek = endDate.get(Calendar.DAY_OF_WEEK)
+
+        val startDateDay = startDate.get(Calendar.DAY_OF_MONTH)
+        val startDateMonth = startDate.get(Calendar.MONTH)
+//        val startDateYear = startDate.get(Calendar.YEAR)
+        val startDateDayOfWeek = startDate.get(Calendar.DAY_OF_WEEK)
+
+        // below variables help fix issue when startDate and endDate are at the end of the 7 day cycle and it's either
+        // the same month or a different month. we want to ensure the overlap is still exactly one day
+        val oneDayOverlapSameMonth = endDateDay - startDateDay == 1
+        val oneDayOverlapDiffMonth = (startDateDayOfWeek == 7 && endDateDayOfWeek == 1) && (endDateMonth - startDateMonth == 1)
+        val oneDayOverlap = oneDayOverlapSameMonth || oneDayOverlapDiffMonth
+
+        // DEBUG LOGS (uncomment following log lines for more information in logcat
+        // Log.d(TAG, "startDateDay: $startDateDay")
+        // Log.d(TAG, "startDateMonth: $startDateMonth")
+        // Log.d(TAG, "endDateDay: $endDateDay")
+        // Log.d(TAG, "endDateMonth: $endDateMonth")
+        // Log.d(TAG, "endDateDayOfWeek: $endDateDayOfWeek, startDateDayOfWeek: $startDateDayOfWeek")
+        // Log.d(TAG, "----------------------------------------------------------------------------")
+
+        if (((startDateDayOfWeek == 7 && endDateDayOfWeek == 1) && oneDayOverlap)
+                || ((endDateDayOfWeek == startDateDayOfWeek + 1) && oneDayOverlap)) {
+            // overnight shift
+            return Constants.OVERNIGHT_SHIFT
+        } else if (endDateDayOfWeek == startDateDayOfWeek) {
+            // day shift
+            return Constants.DAY_SHIFT
+        }
+
+        return Constants.INVALID_SHIFT_RANGE
+    }
+
+    // TODO: this might have to go to jobRepository too only if it's needed in another fragment / activity
     private fun removeItemFromUI(list: List<JobModel>, position: Int): List<JobModel> {
         Log.i(TAG, "removeItem() called: position is $position")
         val result = list.toMutableList()

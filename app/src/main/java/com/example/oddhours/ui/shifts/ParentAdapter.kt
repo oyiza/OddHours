@@ -17,7 +17,7 @@ class ParentAdapter(private val allShifts: List<ShiftsListModel>, val context: C
             itemView.jobTV.text = item.jobInfo.jobName + ", "+item.jobInfo.jobLocation
             itemView.shiftsRV.apply{
                 layoutManager = LinearLayoutManager(shiftsRV.context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = ChildAdapter(item.shifts,context)
+                adapter = ChildAdapter(item.shifts.asReversed(), context)
             }
         }
     }

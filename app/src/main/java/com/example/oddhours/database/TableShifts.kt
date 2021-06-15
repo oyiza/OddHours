@@ -33,11 +33,11 @@ class TableShifts {
 
     fun getShiftsForJobID(jobId: Int): MutableList<ShiftsModel> {
         val res = db!!.rawQuery(
-            "SELECT * FROM ${DatabaseHelper.shiftsTable} WHERE ${DatabaseHelper.job_ID_COL_4} = $jobId",null)
+                "SELECT * FROM ${DatabaseHelper.shiftsTable} WHERE ${DatabaseHelper.job_ID_COL_4} = $jobId", null)
         val listOfShifts: MutableList<ShiftsModel> = mutableListOf<ShiftsModel>()
         if (res.count != 0) {
             while (res.moveToNext()) {
-                val shiftsModel = ShiftsModel(res.getInt(0) ,res.getString(1) ,res.getString(2) ,res.getInt(3) ,res.getString(4), res.getString(5), res.getString(6))
+                val shiftsModel = ShiftsModel(res.getInt(0), res.getString(1), res.getString(2), res.getInt(3), res.getString(4), res.getString(5), res.getString(6))
                 listOfShifts.add(shiftsModel)
             }
             return listOfShifts
