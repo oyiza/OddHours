@@ -43,6 +43,6 @@ class ShiftsFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "HomeFragment"
+        private const val TAG = "ShiftsFragment"
     }
 }

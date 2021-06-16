@@ -288,6 +288,8 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
         val endDateText = mDialogView.shiftEndDateTV.text
         val endTimeText = mDialogView.endTimeTV.text
 
+        // TODO: there should be a better way to compare with initial_date_value variable in strings.xml
+        // e.g: val string: String = getString(R.string.hello)
         val initialDateValue = "--/--/----"
         val initialTimeValue = "--:--"
 
