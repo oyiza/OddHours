@@ -12,7 +12,8 @@ import kotlinx.android.synthetic.main.shifts_detail.view.*
 class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Context): RecyclerView.Adapter<ChildAdapter.ViewHolder>() {
     class ViewHolder(itemView: View, val context: Context): RecyclerView.ViewHolder(itemView) {
         fun bindShifts(items: ShiftsModel){
-            itemView.shiftID.text = items.shiftDate
+            itemView.shiftID.text = items.shiftStartDate
+            itemView.shiftEndDate.text = items.shiftEndDate
             itemView.shiftStart.text = items.startTime
             itemView.shiftEnd.text = items.endTime
             itemView.hoursWorked.text = items.hoursWorked
