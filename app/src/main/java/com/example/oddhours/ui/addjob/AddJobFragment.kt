@@ -57,8 +57,8 @@ class AddJobFragment : Fragment() {
         // onClick listener for editJobBTN
         editJobBTN.setOnClickListener {
             if (jobIdToEdit != null) {
-                val companyName = companyTV.text.toString()
-                val location = locationTV.text.toString()
+                val companyName = companyTV.text.toString().replace("'","\'").toUpperCase()
+                val location = locationTV.text.toString().toUpperCase()
                 val jobModel = JobModel(1, companyName, location)
                 val isEdited = jobRepository.editJob(jobModel, jobIdToEdit)
                 if (isEdited) {

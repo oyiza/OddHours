@@ -261,8 +261,8 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
             // onClick listener for delete button
             mDialogView.btnDeleteJob.setOnClickListener{
                 // maybe say like 'are you sure?' before deleting it lol
-                // TODO: wrap in try catch? custom exception needed (JobNotFoundException)
                 val jobModel = JobModel(1, holder.jobName.text as String, holder.jobLocation.text as String)
+                // TODO: wrap delete method in try catch? regular and custom exception needed (JobNotFoundException)
                 val isDeleted = jobRepository.deleteJob(jobModel)
                 if (isDeleted) {
                     Toast.makeText(

@@ -58,7 +58,19 @@ class JobRepository() {
     }
 
     fun deleteJob(jobModel: JobModel): Boolean {
+        // delete associated shifts
+        val jobID = dbJobs.getJobID(jobModel.jobName, jobModel.jobLocation)
+        deleteShiftsForJob(jobID)
+
         return dbJobs.deleteJob(jobModel)
+    }
+
+    private fun deleteShiftsForJob(jobID: Int) {
+        if (dbShifts.deleteShiftsForJob(jobID)) {
+            Log.d(TAG, "shifts deleted for job with ID: $jobID")
+        } else {
+            Log.d(TAG, "something went wrong and shifts were not deleted for job with ID: $jobID")
+        }
     }
 
     fun checkJobExists(jobName: String, jobLocation: String): Boolean {
@@ -81,7 +93,7 @@ class JobRepository() {
          */
         for (job in jobModelList) {
             shiftsFromJobId = dbShifts.getShiftsForJobID(job.jobID)
-            if (shiftsFromJobId.size != 0) {
+            if (shiftsFromJobId.size > 0) {
                 shiftsListModel = ShiftsListModel(job,shiftsFromJobId)
                 shiftsListForAdapter.add(shiftsListModel)
             }
@@ -103,12 +115,6 @@ class JobRepository() {
             totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
         }
         return totalTimeWorked
-    }
-
-    // potentially to retrieve jobs from db if we need that functionality
-    private fun getJobFromDb(jobName: String, jobLocation: String): JobModel {
-        val jobId = getJobID(jobName, jobLocation)
-        return JobModel(jobId, jobName, jobLocation)
     }
 
     companion object {
