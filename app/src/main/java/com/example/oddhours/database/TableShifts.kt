@@ -44,4 +44,10 @@ class TableShifts {
         }
         return listOfShifts
     }
+
+    fun deleteShiftsForJob(jobId: Int): Boolean {
+        val whereClause = "${DatabaseHelper.job_ID_COL_4} = $jobId"
+        val res = db!!.delete(DatabaseHelper.shiftsTable, whereClause, null)
+        return res > 0
+    }
 }
