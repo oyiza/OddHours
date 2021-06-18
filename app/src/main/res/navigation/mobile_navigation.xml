@@ -15,7 +15,7 @@
         android:id="@+id/navigation_addjob"
         android:name="com.example.oddhours.ui.addjob.AddJobFragment"
         android:label="@string/title_add_job"
-        tools:layout="@layout/fragment_addjob" />
+        tools:layout="@layout/fragment_add_job" />
 
     <fragment
         android:id="@+id/shifts"

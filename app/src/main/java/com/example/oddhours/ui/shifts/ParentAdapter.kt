@@ -9,20 +9,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.oddhours.R
 import com.example.oddhours.data.model.ShiftsListModel
-import kotlinx.android.synthetic.main.shifts_row.view.*
+import kotlinx.android.synthetic.main.item_shifts.view.*
 
 class ParentAdapter(private val allShifts: List<ShiftsListModel>, val context: Context, val navController: NavController): RecyclerView.Adapter<ParentAdapter.ViewHolder>() {
     class ViewHolder(itemView: View, val context: Context): RecyclerView.ViewHolder(itemView){
         fun bindShifts(item: ShiftsListModel){
-            itemView.jobTV.text = item.jobInfo.jobName + ", "+item.jobInfo.jobLocation
-            itemView.shiftsRV.apply{
-                layoutManager = LinearLayoutManager(shiftsRV.context, LinearLayoutManager.HORIZONTAL, false)
+            itemView.jobTitleTV.text = item.jobInfo.jobName + ", "+item.jobInfo.jobLocation
+            itemView.childRV.apply{
+                layoutManager = LinearLayoutManager(childRV.context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = ChildAdapter(item.shifts.asReversed(), context)
             }
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParentAdapter.ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.shifts_row, parent, false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_shifts, parent, false)
         return ViewHolder(v, context)
     }
 

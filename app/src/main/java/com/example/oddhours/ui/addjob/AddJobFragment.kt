@@ -17,7 +17,8 @@ import com.example.oddhours.R
 import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.data.repository.JobRepository
 import com.example.oddhours.utils.Constants
-import kotlinx.android.synthetic.main.fragment_addjob.*
+import kotlinx.android.synthetic.main.dialog_edit_delete_job.*
+import kotlinx.android.synthetic.main.fragment_add_job.*
 
 class AddJobFragment : Fragment() {
 
@@ -32,7 +33,7 @@ class AddJobFragment : Fragment() {
     ): View? {
         dashboardViewModel =
             ViewModelProvider(this).get(AddJobViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_addjob, container, false)
+        val root = inflater.inflate(R.layout.fragment_add_job, container, false)
         return root
     }
 
@@ -50,12 +51,12 @@ class AddJobFragment : Fragment() {
             locationTV.setText(args.getString(Constants.JOB_LOCATION))
         } else { // we're attempting to add a new job
             Log.d(TAG, "args is null or empty")
-            editJobBTN.visibility = View.GONE
+            saveEditedJobBTN.visibility = View.GONE
         }
 
         // TODO: when editing jobs, editJobBTN is hidden by keyboard
         // onClick listener for editJobBTN
-        editJobBTN.setOnClickListener {
+        saveEditedJobBTN.setOnClickListener {
             if (jobIdToEdit != null) {
                 val companyName = companyTV.text.toString().replace("'","\'").toUpperCase()
                 val location = locationTV.text.toString().toUpperCase()

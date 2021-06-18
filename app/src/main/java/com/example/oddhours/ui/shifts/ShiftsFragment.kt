@@ -36,7 +36,7 @@ class ShiftsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerViewShifts.apply {
+        parentRV.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = shiftsForAdapter.let { ParentAdapter(it, requireActivity(), view.findNavController()) }
         }

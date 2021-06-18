@@ -20,10 +20,10 @@ import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.data.repository.JobRepository
 import com.example.oddhours.utils.Constants
-import kotlinx.android.synthetic.main.addshift.view.*
-import kotlinx.android.synthetic.main.edit_delete_job.view.*
+import kotlinx.android.synthetic.main.dialog_add_shift.view.*
+import kotlinx.android.synthetic.main.dialog_edit_delete_job.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.job_row.view.*
+import kotlinx.android.synthetic.main.item_job.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -60,7 +60,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
     val day = c.get(Calendar.DAY_OF_MONTH)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.job_row, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_job, parent, false)
 
         return JobViewHolder(itemView)
     }
@@ -87,7 +87,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
             /**
              * below code is for popup dialog and the respective on button click listeners
              */
-            val mDialogView = LayoutInflater.from(context).inflate(R.layout.addshift, null)
+            val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_shift, null)
             val mBuilder = AlertDialog.Builder(context)
                 .setView(mDialogView)
                 .setTitle("Add a Shift")
@@ -246,20 +246,20 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
         holder.itemView.setOnLongClickListener{
             Toast.makeText(holder.itemView.context, "Long click detected on ${holder.jobName.text}", Toast.LENGTH_SHORT).show()
 
-            val mDialogView = LayoutInflater.from(context).inflate(R.layout.edit_delete_job, null)
+            val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_delete_job, null)
             val mBuilder = AlertDialog.Builder(context)
                 .setView(mDialogView)
                 .setTitle(holder.jobName.text)
             val mAlertDialog = mBuilder.show()
 
             // onClick listener for edit button
-            mDialogView.btnEditJob.setOnClickListener{
+            mDialogView.editJobBTN.setOnClickListener{
                 mAlertDialog.dismiss()
                 openAddJobFragment(holder.jobName, holder.jobLocation)
             }
 
             // onClick listener for delete button
-            mDialogView.btnDeleteJob.setOnClickListener{
+            mDialogView.deleteJobBTN.setOnClickListener{
                 // maybe say like 'are you sure?' before deleting it lol
                 val jobModel = JobModel(1, holder.jobName.text as String, holder.jobLocation.text as String)
                 // TODO: wrap delete method in try catch? regular and custom exception needed (JobNotFoundException)
@@ -365,10 +365,10 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
     override fun getItemCount() = jobList.size
 
     class JobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val jobName: TextView = itemView.txtJobName
-        val jobLocation: TextView = itemView.txtJobLocation
-        val jobInfo: TextView = itemView.txtJobInfo
-        val addHoursButton: Button = itemView.btnAddHours
+        val jobName: TextView = itemView.jobNameTV
+        val jobLocation: TextView = itemView.jobLocationTV
+        val jobInfo: TextView = itemView.jobInfoTV
+        val addHoursButton: Button = itemView.addHoursBTN
     }
 
     companion object {
