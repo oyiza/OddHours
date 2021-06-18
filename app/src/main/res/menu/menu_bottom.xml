@@ -3,22 +3,22 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_home"
         android:title="@string/title_home" />
 
     <item
         android:id="@+id/navigation_addjob"
-        android:icon="@drawable/ic_baseline_add_24"
+        android:icon="@drawable/ic_add"
         android:title="@string/title_add_job" />
 
     <item
         android:id="@+id/shifts"
-        android:icon="@drawable/shifts_list"
+        android:icon="@drawable/ic_list"
         android:title="Shifts" />
 
     <item
         android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/ic_notifications"
         android:title="@string/title_notifications" />
 
 </menu>
