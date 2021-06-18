@@ -18,7 +18,7 @@
         android:padding="16dp" >
 
         <TextView
-            android:id="@+id/jobNameTV"
+            android:id="@+id/jobNameTv"
             android:layout_width="156dp"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -26,31 +26,31 @@
             android:text="@string/placeholder_job_name" />
 
         <TextView
-            android:id="@+id/jobLocationTV"
+            android:id="@+id/jobLocationTv"
             android:layout_width="203dp"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:gravity="end"
-            android:layout_toEndOf="@+id/jobNameTV"
+            android:layout_toEndOf="@+id/jobNameTv"
             android:text="@string/placeholder_job_location" />
 
         <TextView
-            android:id="@+id/jobInfoTV"
+            android:id="@+id/jobInfoTv"
             android:layout_width="231dp"
             android:layout_height="36dp"
             android:textSize="14sp"
-            android:layout_below="@+id/jobNameTV"
+            android:layout_below="@+id/jobNameTv"
             android:layout_marginTop="1dp"
             android:text="@string/placeholder_job_information" />
 
         <Button
-            android:id="@+id/addHoursBTN"
+            android:id="@+id/addHoursBtn"
             android:layout_width="126dp"
             android:layout_height="34dp"
-            android:layout_below="@+id/jobLocationTV"
+            android:layout_below="@+id/jobLocationTv"
             android:layout_marginStart="2dp"
             android:layout_marginTop="3dp"
-            android:layout_toEndOf="@+id/jobInfoTV"
+            android:layout_toEndOf="@+id/jobInfoTv"
             android:text="@string/btn_add_hours"
             android:textSize="12sp" />
 

@@ -16,7 +16,7 @@
             android:padding="8dp">
 
             <Button
-                android:id="@+id/editJobBTN"
+                android:id="@+id/editJobBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -24,7 +24,7 @@
                 android:layout_marginEnd="1dp"/>
 
             <Button
-                android:id="@+id/deleteJobBTN"
+                android:id="@+id/deleteJobBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

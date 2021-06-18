@@ -23,7 +23,7 @@
             android:padding="8dp">
 
             <Button
-                android:id="@+id/shiftStartDateBTN"
+                android:id="@+id/shiftStartDateBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -32,7 +32,7 @@
                 app:backgroundTint="#80D8FF" />
 
             <TextView
-                android:id="@+id/shiftStartDateTV"
+                android:id="@+id/shiftStartDateTv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -52,14 +52,14 @@
             android:padding="8dp">
 
             <Button
-                android:id="@+id/startTimeBTN"
+                android:id="@+id/startTimeBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/btn_start_time" />
 
             <TextView
-                android:id="@+id/startTimeTV"
+                android:id="@+id/startTimeTv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -78,7 +78,7 @@
             android:padding="8dp">
 
             <Button
-                android:id="@+id/shiftEndDateBTN"
+                android:id="@+id/shiftEndDateBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -87,7 +87,7 @@
                 app:backgroundTint="#80D8FF" />
 
             <TextView
-                android:id="@+id/shiftEndDateTV"
+                android:id="@+id/shiftEndDateTv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -107,14 +107,14 @@
             android:padding="8dp">
 
             <Button
-                android:id="@+id/endTimeBTN"
+                android:id="@+id/endTimeBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/btn_end_time" />
 
             <TextView
-                android:id="@+id/endTimeTV"
+                android:id="@+id/endTimeTv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -132,7 +132,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/cancelBTN"
+                android:id="@+id/cancelBtn"
                 android:layout_width="23dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -142,7 +142,7 @@
                 app:backgroundTint="#FF8A80" />
 
             <Button
-                android:id="@+id/saveBTN"
+                android:id="@+id/saveBtn"
                 android:layout_width="23dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
