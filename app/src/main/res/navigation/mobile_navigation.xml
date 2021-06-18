@@ -18,7 +18,7 @@
         tools:layout="@layout/fragment_add_job" />
 
     <fragment
-        android:id="@+id/shiftsFragment"
+        android:id="@+id/navigationShiftsFragment"
         android:name="com.example.oddhours.ui.shifts.ShiftsFragment"
         android:label="Shifts"
         tools:layout="@layout/fragment_shifts" />
