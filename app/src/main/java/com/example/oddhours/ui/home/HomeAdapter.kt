@@ -101,14 +101,14 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
              *  - sets the maxDate to today's date, so that the user cannot pick a future date
              */
 
-            mDialogView.shiftStartDateBTN.setOnClickListener{
+            mDialogView.shiftStartDateBtn.setOnClickListener{
                 val dpd = DatePickerDialog(context, { view, year, monthOfYear, dayOfMonth ->
                     // Display Selected date in TextView
                     c.set(Calendar.YEAR, year)
                     c.set(Calendar.MONTH, monthOfYear)
                     c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                     startDateForDb = sdf.format(c.time).toString() // "06/14/2021"
-                    mDialogView.shiftStartDateTV.text = sdf.format(c.time)
+                    mDialogView.shiftStartDateTv.text = sdf.format(c.time)
                     startDate.set(year, monthOfYear, dayOfMonth)
                     // DEBUG TODO: remove this eventually
                     // Log.d(TAG, "startDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
@@ -125,14 +125,14 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
              *   - however, the time is displayed in 24-hour format
              */
 
-            mDialogView.startTimeBTN.setOnClickListener{
+            mDialogView.startTimeBtn.setOnClickListener{
                 val timeSetListener = TimePickerDialog.OnTimeSetListener{
                         timePicker, hour, minute ->
                     c.set(Calendar.HOUR_OF_DAY, hour)
                     c.set(Calendar.MINUTE, minute)
                     startTimeHour = hour
                     startTimeMin = minute
-                    mDialogView.startTimeTV.text = SimpleDateFormat("HH:mm").format(c.time)
+                    mDialogView.startTimeTv.text = SimpleDateFormat("HH:mm").format(c.time)
                     startTimeForDb = SimpleDateFormat("HH:mm").format(c.time)
                 }
 
@@ -145,14 +145,14 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
              *  - sets the maxDate to today's date, so that the user cannot pick a future date
              */
 
-            mDialogView.shiftEndDateBTN.setOnClickListener{
+            mDialogView.shiftEndDateBtn.setOnClickListener{
                 val dpd = DatePickerDialog(context, { view, year, monthOfYear, dayOfMonth ->
                     // Display Selected date in TextView
                     c.set(Calendar.YEAR, year)
                     c.set(Calendar.MONTH, monthOfYear)
                     c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                     endDateForDb = sdf.format(c.time).toString() // "06/14/2021"
-                    mDialogView.shiftEndDateTV.text = sdf.format(c.time)
+                    mDialogView.shiftEndDateTv.text = sdf.format(c.time)
                     endDate.set(year, monthOfYear, dayOfMonth)
                     // DEBUG TODO: remove this eventually
                     // Log.d(TAG, "endDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
@@ -168,14 +168,14 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
              *  - however, the time is displayed in 24-hour format
              */
 
-            mDialogView.endTimeBTN.setOnClickListener{
+            mDialogView.endTimeBtn.setOnClickListener{
                 val timeSetListener = TimePickerDialog.OnTimeSetListener{
                         timePicker, hour, minute ->
                     c.set(Calendar.HOUR_OF_DAY, hour)
                     c.set(Calendar.MINUTE, minute)
                     endTimeHour = hour
                     endTimeMin = minute
-                    mDialogView.endTimeTV.text = SimpleDateFormat("HH:mm").format(c.time)
+                    mDialogView.endTimeTv.text = SimpleDateFormat("HH:mm").format(c.time)
                     endTimeForDb = SimpleDateFormat("HH:mm").format(c.time)
                 }
                 TimePickerDialog(context, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(
@@ -190,7 +190,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
              *      - calculateHours() function returns a string
              */
 
-            mDialogView.saveBTN.setOnClickListener {
+            mDialogView.saveBtn.setOnClickListener {
                 if (allButtonsClicked(mDialogView)) {
                     when {
                         getShiftType(endDate, startDate) == Constants.OVERNIGHT_SHIFT -> {
@@ -225,7 +225,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
                 }
             }
 
-            mDialogView.cancelBTN.setOnClickListener{
+            mDialogView.cancelBtn.setOnClickListener{
                 mAlertDialog.cancel()
                 // mAlertDialog.dismiss()
             }
@@ -253,13 +253,13 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
             val mAlertDialog = mBuilder.show()
 
             // onClick listener for edit button
-            mDialogView.editJobBTN.setOnClickListener{
+            mDialogView.editJobBtn.setOnClickListener{
                 mAlertDialog.dismiss()
                 openAddJobFragment(holder.jobName, holder.jobLocation)
             }
 
             // onClick listener for delete button
-            mDialogView.deleteJobBTN.setOnClickListener{
+            mDialogView.deleteJobBtn.setOnClickListener{
                 // maybe say like 'are you sure?' before deleting it lol
                 val jobModel = JobModel(1, holder.jobName.text as String, holder.jobLocation.text as String)
                 // TODO: wrap delete method in try catch? regular and custom exception needed (JobNotFoundException)
@@ -283,10 +283,10 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
     }
 
     private fun allButtonsClicked(mDialogView: View): Boolean {
-        val startDateText = mDialogView.shiftStartDateTV.text
-        val startTimeText = mDialogView.startTimeTV.text
-        val endDateText = mDialogView.shiftEndDateTV.text
-        val endTimeText = mDialogView.endTimeTV.text
+        val startDateText = mDialogView.shiftStartDateTv.text
+        val startTimeText = mDialogView.startTimeTv.text
+        val endDateText = mDialogView.shiftEndDateTv.text
+        val endTimeText = mDialogView.endTimeTv.text
 
         // TODO: there should be a better way to compare with initial_date_value variable in strings.xml
         // e.g: val string: String = getString(R.string.hello)
@@ -354,7 +354,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
             args.putBoolean(Constants.CURRENTLY_EDITING_JOB, true)
             args.putString(Constants.JOB_NAME, jobNameToEdit)
             args.putString(Constants.JOB_LOCATION, jobLocationToEdit)
-            navController.navigate(R.id.navigation_addjob, args)
+            navController.navigate(R.id.navigationAddJobFragment, args)
         } catch (e: IllegalArgumentException) {
             Log.e(TAG, e.printStackTrace().toString())
         } catch (e: Exception) {
@@ -365,10 +365,10 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
     override fun getItemCount() = jobList.size
 
     class JobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val jobName: TextView = itemView.jobNameTV
-        val jobLocation: TextView = itemView.jobLocationTV
-        val jobInfo: TextView = itemView.jobInfoTV
-        val addHoursButton: Button = itemView.addHoursBTN
+        val jobName: TextView = itemView.jobNameTv
+        val jobLocation: TextView = itemView.jobLocationTv
+        val jobInfo: TextView = itemView.jobInfoTv
+        val addHoursButton: Button = itemView.addHoursBtn
     }
 
     companion object {

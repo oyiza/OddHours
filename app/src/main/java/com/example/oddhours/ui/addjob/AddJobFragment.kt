@@ -17,7 +17,6 @@ import com.example.oddhours.R
 import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.data.repository.JobRepository
 import com.example.oddhours.utils.Constants
-import kotlinx.android.synthetic.main.dialog_edit_delete_job.*
 import kotlinx.android.synthetic.main.fragment_add_job.*
 
 class AddJobFragment : Fragment() {
@@ -46,20 +45,20 @@ class AddJobFragment : Fragment() {
         if (args != null && !args.isEmpty && args.getBoolean(Constants.CURRENTLY_EDITING_JOB)) { // we're currently editing a job
             Log.d(TAG, args.toString())
             jobIdToEdit = jobRepository.getJobID(args.getString(Constants.JOB_NAME)!!, args.getString(Constants.JOB_LOCATION)!!)
-            addJobBTN.visibility = View.GONE
-            companyTV.setText(args.getString(Constants.JOB_NAME))
-            locationTV.setText(args.getString(Constants.JOB_LOCATION))
+            addJobBtn.visibility = View.GONE
+            companyTv.setText(args.getString(Constants.JOB_NAME))
+            locationTv.setText(args.getString(Constants.JOB_LOCATION))
         } else { // we're attempting to add a new job
             Log.d(TAG, "args is null or empty")
-            saveEditedJobBTN.visibility = View.GONE
+            saveEditedJobBtn.visibility = View.GONE
         }
 
         // TODO: when editing jobs, editJobBTN is hidden by keyboard
         // onClick listener for editJobBTN
-        saveEditedJobBTN.setOnClickListener {
+        saveEditedJobBtn.setOnClickListener {
             if (jobIdToEdit != null) {
-                val companyName = companyTV.text.toString().replace("'","\'").toUpperCase()
-                val location = locationTV.text.toString().toUpperCase()
+                val companyName = companyTv.text.toString().replace("'","\'").toUpperCase()
+                val location = locationTv.text.toString().toUpperCase()
                 val jobModel = JobModel(1, companyName, location)
                 val isEdited = jobRepository.editJob(jobModel, jobIdToEdit)
                 if (isEdited) {
@@ -70,7 +69,7 @@ class AddJobFragment : Fragment() {
                     ).show()
                     hideKeyboard()
                     findNavController().navigate(
-                        R.id.navigation_home
+                        R.id.navigationHomeFragment
                     )
                 } else {
                     Log.i(TAG, "Error, not able to edit job")
@@ -82,10 +81,10 @@ class AddJobFragment : Fragment() {
         }
 
         // onClick listener for addJobBTN
-        addJobBTN.setOnClickListener {
+        addJobBtn.setOnClickListener {
             // TODO: why are we doing .replace() here and not for location?
-            val companyName = companyTV.text.toString().replace("'","\'").toUpperCase()
-            val location = locationTV.text.toString().toUpperCase()
+            val companyName = companyTv.text.toString().replace("'","\'").toUpperCase()
+            val location = locationTv.text.toString().toUpperCase()
             val newJob = JobModel(1, companyName, location)
 
             // TODO: when typing, navbar is still visible. small issue but might need correcting
@@ -96,7 +95,7 @@ class AddJobFragment : Fragment() {
                         Toast.makeText(activity, "Successfully added job. Press and hold job card for more options.", Toast.LENGTH_LONG).show()
                         hideKeyboard()
                         findNavController().navigate(
-                            R.id.navigation_home
+                            R.id.navigationHomeFragment
                         )
                     } else {
                         Toast.makeText(activity, "Failed to add job", Toast.LENGTH_LONG).show()
@@ -119,8 +118,8 @@ class AddJobFragment : Fragment() {
     }
 
     private fun clearFields(){
-        companyTV.setText("")
-        locationTV.setText("")
+        companyTv.setText("")
+        locationTv.setText("")
     }
 
     fun Fragment.hideKeyboard() {

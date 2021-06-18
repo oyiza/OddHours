@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (hasJobs) {
-            homeRV.apply {
+            homeRv.apply {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = jobRepository!!.jobModelList?.let { HomeAdapter(it, requireActivity(), view.findNavController()) }
                 // let's keep an eye on the above adapter call, if we experience any weird issues, we can revert to the below one
