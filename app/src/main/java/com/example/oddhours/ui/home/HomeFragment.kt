@@ -37,7 +37,7 @@ class HomeFragment : Fragment() {
         return if (hasJobs) {
             inflater.inflate(R.layout.fragment_home, container, false)
         } else {
-            inflater.inflate(R.layout.no_jobs_home, container, false)
+            inflater.inflate(R.layout.item_no_job, container, false)
         }
     }
 
@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (hasJobs) {
-            recyclerViewHome.apply {
+            homeRv.apply {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = jobRepository!!.jobModelList?.let { HomeAdapter(it, requireActivity(), view.findNavController()) }
                 // let's keep an eye on the above adapter call, if we experience any weird issues, we can revert to the below one

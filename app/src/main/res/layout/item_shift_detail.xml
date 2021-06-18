@@ -26,7 +26,7 @@
             android:focusable="true">
 
             <TextView
-                android:id="@+id/shiftID"
+                android:id="@+id/shiftStartTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#FFFFFF"
@@ -36,7 +36,7 @@
                 android:textSize="16sp" />
 
             <ImageView
-                android:id="@+id/imageView1"
+                android:id="@+id/arrow1Iv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
@@ -45,7 +45,7 @@
                 android:contentDescription="@string/arrow" />
 
             <TextView
-                android:id="@+id/shiftEndDate"
+                android:id="@+id/shiftEndTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#FFFFFF"
@@ -66,7 +66,7 @@
 
 
             <TextView
-                android:id="@+id/shiftStart"
+                android:id="@+id/shiftStartHourTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -75,7 +75,7 @@
                 android:textSize="16sp" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/arrow2Iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
@@ -84,7 +84,7 @@
                 tools:ignore="VectorDrawableCompat" />
 
             <TextView
-                android:id="@+id/shiftEnd"
+                android:id="@+id/shiftEndHourTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -94,7 +94,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/hoursWorked"
+            android:id="@+id/hoursWorkedTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/hours_worked"

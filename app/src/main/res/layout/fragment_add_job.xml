@@ -11,7 +11,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_corners"
+        android:background="@drawable/background_rounded_corners"
         android:padding="0sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,11 +25,11 @@
             android:background="#3D3A3A">
 
             <EditText
-                android:id="@+id/companyTV"
+                android:id="@+id/companyTv"
                 android:layout_width="235dp"
                 android:layout_height="42dp"
                 android:layout_margin="15dp"
-                android:background="@drawable/rounded_corners"
+                android:background="@drawable/background_rounded_corners"
                 android:hint="@string/placeholder_job_name"
                 android:textAlignment="center"
                 android:textColor="#000000"
@@ -42,11 +42,11 @@
                 app:layout_constraintVertical_bias="0.2" />
 
             <EditText
-                android:id="@+id/locationTV"
+                android:id="@+id/locationTv"
                 android:layout_width="156dp"
                 android:layout_height="42dp"
                 android:layout_margin="15dp"
-                android:background="@drawable/rounded_corners"
+                android:background="@drawable/background_rounded_corners"
                 android:hint="@string/placeholder_job_location"
                 android:textAlignment="center"
                 android:textColor="#000000"
@@ -56,11 +56,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/companyTV"
+                app:layout_constraintTop_toBottomOf="@+id/companyTv"
                 app:layout_constraintVertical_bias="0.204" />
 
             <Button
-                android:id="@+id/addJobBTN"
+                android:id="@+id/addJobBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20sp"
@@ -69,10 +69,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/locationTV" />
+                app:layout_constraintTop_toBottomOf="@+id/locationTv" />
 
             <Button
-                android:id="@+id/editJobBTN"
+                android:id="@+id/saveEditedJobBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20sp"
@@ -81,7 +81,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/locationTV" />
+                app:layout_constraintTop_toBottomOf="@+id/locationTv" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
