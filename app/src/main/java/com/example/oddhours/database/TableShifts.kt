@@ -50,4 +50,24 @@ class TableShifts {
         val res = db!!.delete(DatabaseHelper.shiftsTable, whereClause, null)
         return res > 0
     }
+
+    fun getShiftID(startDate: String, endDate: String, startHour: String, endHour: String): Int{
+        val res = db!!.rawQuery (
+            "SELECT ${DatabaseHelper.shift_ID_COL_1} FROM ${DatabaseHelper.shiftsTable} WHERE ${DatabaseHelper.shift_Start_Date_COL_2} = \"$startDate\" AND ${DatabaseHelper.shift_End_Date_COL_3} = \"$endDate\" AND ${DatabaseHelper.start_Time_COL_5} = \"$startHour\" AND ${DatabaseHelper.end_Time_COL_6} = \"$endHour\"",
+            null
+        )
+        if (res.count != 0) {
+            while (res.moveToNext()) {
+                println("CLICKED ON A SHIFT, SHIFT ID is ${res.getInt(0)}")
+                return res.getInt(0)
+            }
+        }
+        return 0
+    }
+
+    fun deleteIndividualShift(shiftId: Int): Boolean{
+        val whereClause = "${DatabaseHelper.shift_ID_COL_1} = $shiftId"
+        val res = db!!.delete(DatabaseHelper.shiftsTable, whereClause, null)
+        return res > 0
+    }
 }
