@@ -31,7 +31,7 @@ import java.util.*
  * HomeAdapter now also takes in the context as a parameter in the constructor
  * context is required for the Alert Dialog
  */
-class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val navController: NavController) : RecyclerView.Adapter<HomeAdapter.JobViewHolder>() {
+class HomeAdapter(private var jobList: List<JobModel>, val context: Context, private val navController: NavController) : RecyclerView.Adapter<HomeAdapter.JobViewHolder>() {
 
     private var jobRepository = JobRepository()
 
@@ -198,6 +198,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
                             val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour + 24, endTimeMin)
                             val shiftsModel = ShiftsModel(1, startDateForDb, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
                             jobRepository.insertShift(shiftsModel)
+                            Toast.makeText(context, "⏲ Successfully added overnight shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
                             mAlertDialog.dismiss()
                         }
                         getShiftType(endDate, startDate) == Constants.DAY_SHIFT -> {
@@ -206,12 +207,13 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, val
                                 val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
                                 val shiftsModel = ShiftsModel(1, startDateForDb, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
                                 jobRepository.insertShift(shiftsModel)
+                                Toast.makeText(context, "⏲ Successfully added day shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
                                 mAlertDialog.dismiss()
                             }
                             else {
                                 Toast.makeText(
                                         holder.itemView.context,
-                                        "End Time is earlier than Start Time",
+                                        "End Time is earlier than Start Time.. Readjust times and try again",
                                         Toast.LENGTH_LONG
                                 ).show()
                             }
