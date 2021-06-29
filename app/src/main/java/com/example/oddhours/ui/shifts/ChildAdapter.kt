@@ -51,7 +51,6 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
 
             mDialogView.deleteShiftBtn.setOnClickListener {
                 val shiftModel = ShiftsModel(1, holder.itemView.shiftStartTv.text as String, holder.itemView.shiftEndTv.text as String, 1, holder.itemView.shiftStartHourTv.text as String, holder.itemView.shiftEndHourTv.text as String, "")
-                // TODO: wrap delete method in try catch? regular and custom exception needed (JobNotFoundException)
                 val isDeleted = jobRepository.deleteIndividualShift(shiftModel)
                 if (isDeleted) {
                     Toast.makeText(
@@ -68,6 +67,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                         navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
                     }
                 } else {
+                    Toast.makeText(context, "Unable to delete selected shift, something went wrong.", Toast.LENGTH_SHORT).show()
                     Log.i(TAG, "Error, not able to delete shift")
                     mDialog.dismiss()
                 }

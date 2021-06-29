@@ -72,10 +72,9 @@ class AddJobFragment : Fragment() {
                         R.id.navigationHomeFragment
                     )
                 } else {
-                    Log.i(TAG, "Error, not able to edit job")
+                    Log.i(TAG, "Error, not able to edit $companyName")
                 }
             } else {
-                // TODO: throw exception here? (JobNotFoundException)
                 Log.e(TAG, "job to edit has null ID")
             }
         }
