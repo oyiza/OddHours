@@ -73,6 +73,11 @@ class JobRepository() {
         }
     }
 
+    fun deleteIndividualShift(shiftsModel: ShiftsModel): Boolean{
+        val shiftID = dbShifts.getShiftID(shiftsModel.shiftStartDate, shiftsModel.shiftEndDate, shiftsModel.startTime, shiftsModel.endTime)
+        return dbShifts.deleteIndividualShift(shiftID)
+    }
+
     fun checkJobExists(jobName: String, jobLocation: String): Boolean {
         return dbJobs.checkJobExists(jobName,jobLocation)
     }

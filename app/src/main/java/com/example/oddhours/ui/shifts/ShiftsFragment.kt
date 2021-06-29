@@ -19,7 +19,6 @@ class ShiftsFragment : Fragment() {
     private var jobRepository = JobRepository()
     private lateinit var shiftsForAdapter: List<ShiftsListModel>
 
-    // TODO: shifts fragment has 'back' arrow button at the top left that quits the application when clicked
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
