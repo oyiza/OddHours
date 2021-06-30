@@ -203,7 +203,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                         }
                         getShiftType(endDate, startDate) == Constants.DAY_SHIFT -> {
                             Log.d(TAG, "day shift")
-                            if (endTimeHour > startTimeHour) {
+                            if (checkShiftDuration(endTimeHour, startTimeHour, endTimeMin, startTimeMin)) {
                                 val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
                                 val shiftsModel = ShiftsModel(1, startDateForDb, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
                                 jobRepository.insertShift(shiftsModel)
@@ -281,6 +281,14 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
             }
             return@setOnLongClickListener true
         }
+    }
+
+    private fun checkShiftDuration(endTimeHour: Int, startTimeHour: Int, endTimeMin: Int, startTimeMin: Int): Boolean {
+        val validHours = endTimeHour > startTimeHour
+        val equalHours = endTimeHour == startTimeHour
+        val validMinutes = equalHours && (endTimeMin > startTimeMin)
+
+        return validHours || validMinutes
     }
 
     private fun allButtonsClicked(mDialogView: View): Boolean {

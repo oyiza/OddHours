@@ -107,17 +107,26 @@ class JobRepository() {
     }
 
     fun calculateTotalHours(startTimeHour: Int, startTimeMin: Int, endTimeHour: Int, endTimeMin: Int): String {
-        val hoursWorked = endTimeHour - startTimeHour
+        val hoursWorked: Int
         val minutesWorked: Int
         val totalTimeWorked: String
 
-        if (endTimeMin > startTimeMin) {
-            minutesWorked = endTimeMin - startTimeMin
-            totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
-        }
-        else {
-            minutesWorked = startTimeMin - endTimeMin
-            totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
+        when {
+            endTimeMin > startTimeMin -> {
+                hoursWorked = endTimeHour - startTimeHour
+                minutesWorked = endTimeMin - startTimeMin
+                totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
+            }
+            endTimeMin < startTimeMin -> {
+                hoursWorked = (endTimeHour - startTimeHour) - 1
+                minutesWorked = (endTimeMin - startTimeMin) + 60
+                totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
+            }
+            else -> { // minutes are equal = 0
+                hoursWorked = endTimeHour - startTimeHour
+                minutesWorked = startTimeMin - endTimeMin
+                totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
+            }
         }
         return totalTimeWorked
     }
