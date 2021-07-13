@@ -5,6 +5,13 @@ object Constants {
     const val JOB_NAME = "name"
     const val JOB_LOCATION = "location"
 
+    const val CURRENTLY_EDITING_SHIFT = "currently_editing_shift"
+    const val SHIFT_START_DATE = "startdate"
+    const val SHIFT_START_TIME = "startTime"
+    const val SHIFT_END_DATE = "enddate"
+    const val SHIFT_END_TIME = "endTime"
+
+
     const val OVERNIGHT_SHIFT = 1
     const val DAY_SHIFT = 2
     const val INVALID_SHIFT_RANGE = 0
