@@ -173,13 +173,9 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                                 jobRepository.editShift(shiftsModel, editShiftID)
                                 Toast.makeText(context, "⏲ Successfully edited shift", Toast.LENGTH_LONG).show()
                                 mAlertDialog.dismiss()
-                                shiftsList = removeItemFromUI(shiftsList, position)
+//                                shiftsList = removeItemFromUI(shiftsList, position)
                                 notifyDataSetChanged()
-                                if (shiftsList.isEmpty()) { // we've removed the last item
-                                    // ideally, we want to notify the parent adapter that we're deleting the last shift for current job and tell it to reload data
-                                    Log.d(TAG, "deleted the last item")
-                                    navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
-                                }
+                                navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
                             }
                             getShiftType(endDate, startDate) == Constants.DAY_SHIFT -> {
                                 Log.d(TAG, "day shift")
@@ -199,11 +195,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                                 }
                                 shiftsList = removeItemFromUI(shiftsList, position)
                                 notifyDataSetChanged()
-                                if (shiftsList.isEmpty()) { // we've removed the last item
-                                    // ideally, we want to notify the parent adapter that we're deleting the last shift for current job and tell it to reload data
-                                    Log.d(TAG, "deleted the last item")
-                                    navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
-                                }
+                                navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
                             }
                             getShiftType(endDate, startDate) == Constants.INVALID_SHIFT_RANGE -> {
                                 Toast.makeText(context, "Please choose dates one day apart max!", Toast.LENGTH_LONG).show()
