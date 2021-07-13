@@ -96,16 +96,6 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                     .setTitle("Edit Shift")
                 val mAlertDialog = mBuilder.show()
 
-                /**
-                 * Below, populating the dialog with shift info
-                 *      I was having issues with displaying the StartTime & EndTime
-                 *      So, for the moment I am leaving it as it is and only filling up the dates
-                 */
-
-                mDialogView.shiftStartDateTv.text = holder.itemView.shiftStartTv.text!!
-                mDialogView.shiftEndDateTv.text = holder.itemView.shiftEndTv.text!!
-
-
                 mDialogView.shiftStartDateBtn.setOnClickListener{
                     val dpd = DatePickerDialog(context, { view, year, monthOfYear, dayOfMonth ->
                         // Display Selected date in TextView
@@ -181,7 +171,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                                 val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour + 24, endTimeMin)
                                 val shiftsModel = ShiftsModel(editShiftID, startDateForDb, endDateForDb, 0, startTimeForDb, endTimeForDb, totalTimeWorked )
                                 jobRepository.editShift(shiftsModel, editShiftID)
-                                Toast.makeText(context, "⏲ Successfully edited shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, "⏲ Successfully edited shift", Toast.LENGTH_LONG).show()
                                 mAlertDialog.dismiss()
                                 shiftsList = removeItemFromUI(shiftsList, position)
                                 notifyDataSetChanged()
@@ -197,7 +187,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                                     val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
                                     val shiftsModel = ShiftsModel(editShiftID, startDateForDb, endDateForDb, 0, startTimeForDb, endTimeForDb, totalTimeWorked )
                                     jobRepository.editShift(shiftsModel, editShiftID)
-                                    Toast.makeText(context, "⏲ Successfully edite shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(context, "⏲ Successfully edited shift.", Toast.LENGTH_LONG).show()
                                     mAlertDialog.dismiss()
                                 }
                                 else {
