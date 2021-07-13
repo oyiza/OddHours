@@ -51,9 +51,26 @@ class TableShifts {
         return res > 0
     }
 
+    fun editShift(shiftModel: ShiftsModel, shiftIdtoEdit: Int): Boolean{
+        val res = db!!.rawQuery(
+            "UPDATE ${DatabaseHelper.shiftsTable} SET " +
+                    "${DatabaseHelper.shift_Start_Date_COL_2} = \"${shiftModel.shiftStartDate}\"," +
+                    "${DatabaseHelper.shift_End_Date_COL_3} = \"${shiftModel.shiftEndDate}\", " +
+                    "${DatabaseHelper.start_Time_COL_5} = \"${shiftModel.startTime}\"," +
+                    "${DatabaseHelper.end_Time_COL_6} = \"${shiftModel.endTime}\", " +
+                    "${DatabaseHelper.hours_Worked_COL_7} = \"${shiftModel.hoursWorked}\"" +
+                    "WHERE ${DatabaseHelper.shift_ID_COL_1} = $shiftIdtoEdit", null)
+        return res.count > -1
+    }
+
     fun getShiftID(startDate: String, endDate: String, startHour: String, endHour: String): Int{
         val res = db!!.rawQuery (
-            "SELECT ${DatabaseHelper.shift_ID_COL_1} FROM ${DatabaseHelper.shiftsTable} WHERE ${DatabaseHelper.shift_Start_Date_COL_2} = \"$startDate\" AND ${DatabaseHelper.shift_End_Date_COL_3} = \"$endDate\" AND ${DatabaseHelper.start_Time_COL_5} = \"$startHour\" AND ${DatabaseHelper.end_Time_COL_6} = \"$endHour\"",
+            "SELECT ${DatabaseHelper.shift_ID_COL_1} FROM " +
+                    "${DatabaseHelper.shiftsTable} " +
+                    "WHERE ${DatabaseHelper.shift_Start_Date_COL_2} = \"$startDate\" " +
+                    "AND ${DatabaseHelper.shift_End_Date_COL_3} = \"$endDate\" " +
+                    "AND ${DatabaseHelper.start_Time_COL_5} = \"$startHour\" " +
+                    "AND ${DatabaseHelper.end_Time_COL_6} = \"$endHour\"",
             null
         )
         if (res.count != 0) {

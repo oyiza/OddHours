@@ -31,6 +31,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
 
     private val myFormat = "MM/dd/yyyy"
     private val sdf = SimpleDateFormat(myFormat, Locale.CANADA)
+    private var editShiftID = -1
 
     /**
      *  The 4 variables below are used to insert these values in SQLite
@@ -78,16 +79,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
 
             mDialogView.editShiftBtn.setOnClickListener{
                 mDialog.dismiss()
-                openShiftsFragment(holder.itemView.shiftStartTv,holder.itemView.shiftEndTv, holder.itemView.shiftStartHourTv, holder.itemView.shiftEndHourTv)
-
-                println("PRINTING FROM CHILD ADAPTER")
-                println(holder.itemView.shiftStartTv.text)
-                println(holder.itemView.shiftEndTv.text)
-                println(holder.itemView.shiftStartHourTv.text)
-                println(holder.itemView.shiftEndHourTv.text)
-
-                var temp = holder.itemView.shiftStartHourTv
-
+                editShiftID = getShiftID(holder.itemView.shiftStartTv.text as String, holder.itemView.shiftEndTv.text as String, holder.itemView.shiftStartHourTv.text as String, holder.itemView.shiftEndHourTv.text as String)
 
                 // TODO: at the beginning, startDate and endDate are always the same because of similar initialization
                 val startDate = Calendar.getInstance()
@@ -187,18 +179,25 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                             getShiftType(endDate, startDate) == Constants.OVERNIGHT_SHIFT -> {
                                 Log.d(TAG, "overnight shift")
                                 val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour + 24, endTimeMin)
-                                val shiftsModel = ShiftsModel(1, startDateForDb, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
-                                jobRepository.insertShift(shiftsModel)
-                                Toast.makeText(context, "⏲ Successfully added overnight shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
+                                val shiftsModel = ShiftsModel(editShiftID, startDateForDb, endDateForDb, 0, startTimeForDb, endTimeForDb, totalTimeWorked )
+                                jobRepository.editShift(shiftsModel, editShiftID)
+                                Toast.makeText(context, "⏲ Successfully edited shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
                                 mAlertDialog.dismiss()
+                                shiftsList = removeItemFromUI(shiftsList, position)
+                                notifyDataSetChanged()
+                                if (shiftsList.isEmpty()) { // we've removed the last item
+                                    // ideally, we want to notify the parent adapter that we're deleting the last shift for current job and tell it to reload data
+                                    Log.d(TAG, "deleted the last item")
+                                    navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
+                                }
                             }
                             getShiftType(endDate, startDate) == Constants.DAY_SHIFT -> {
                                 Log.d(TAG, "day shift")
                                 if (checkShiftDuration(endTimeHour, startTimeHour, endTimeMin, startTimeMin)) {
                                     val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
-                                    val shiftsModel = ShiftsModel(1, startDateForDb, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
-                                    jobRepository.insertShift(shiftsModel)
-                                    Toast.makeText(context, "⏲ Successfully added day shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
+                                    val shiftsModel = ShiftsModel(editShiftID, startDateForDb, endDateForDb, 0, startTimeForDb, endTimeForDb, totalTimeWorked )
+                                    jobRepository.editShift(shiftsModel, editShiftID)
+                                    Toast.makeText(context, "⏲ Successfully edite shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
                                     mAlertDialog.dismiss()
                                 }
                                 else {
@@ -207,6 +206,13 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                                         "End Time is earlier than Start Time.. Readjust times and try again",
                                         Toast.LENGTH_LONG
                                     ).show()
+                                }
+                                shiftsList = removeItemFromUI(shiftsList, position)
+                                notifyDataSetChanged()
+                                if (shiftsList.isEmpty()) { // we've removed the last item
+                                    // ideally, we want to notify the parent adapter that we're deleting the last shift for current job and tell it to reload data
+                                    Log.d(TAG, "deleted the last item")
+                                    navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
                                 }
                             }
                             getShiftType(endDate, startDate) == Constants.INVALID_SHIFT_RANGE -> {
@@ -319,32 +325,8 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
         return Constants.INVALID_SHIFT_RANGE
     }
 
-    private fun openShiftsFragment(shiftStartDate: TextView, shiftEndDate: TextView, shiftStartTime: TextView, shiftEndTime: TextView){
-        Toast.makeText(context, "Oops!. Edit functionality is not implemented. Please delete the shift and re-enter it again.", Toast.LENGTH_LONG).show()
-        try {
-//            val shiftStartDate = shiftStartDate.text.toString()
-//            val shiftStartTime = shiftStartTime.text.toString()
-//            val shiftEndDate = shiftEndDate.text.toString()
-//            val shiftEndTime = shiftEndTime.text.toString()
-//            val args: Bundle = Bundle()
-//            args.putBoolean(Constants.CURRENTLY_EDITING_SHIFT, true)
-//            args.putString(Constants.SHIFT_START_DATE, shiftStartDate)
-//            args.putString(Constants.SHIFT_START_TIME, shiftStartTime)
-//            args.putString(Constants.SHIFT_END_DATE, shiftEndDate)
-//            args.putString(Constants.SHIFT_END_TIME, shiftEndTime)
-//            navController.navigate(R.id.navigationShiftsFragment, args)
-
-            /**
-             * Get Shift ID
-             */
-            var shiftIdToEdit = jobRepository.getShiftID(shiftStartDate.toString(), shiftEndDate.toString(), shiftStartTime.toString(), shiftEndTime.toString())
-
-
-        } catch (e: IllegalArgumentException) {
-            Log.e(TAG, e.printStackTrace().toString())
-        } catch (e: Exception) {
-            Log.e(TAG, e.printStackTrace().toString())
-        }
+    private fun getShiftID(shiftStartDate: String, shiftEndDate: String, shiftStartTime: String, shiftEndTime: String): Int{
+        return jobRepository.getShiftID(shiftStartDate, shiftEndDate, shiftStartTime, shiftEndTime)
     }
 
     private fun removeItemFromUI(list: List<ShiftsModel>, position: Int): List<ShiftsModel> {

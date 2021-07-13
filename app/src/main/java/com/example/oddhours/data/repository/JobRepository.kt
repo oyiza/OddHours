@@ -65,6 +65,22 @@ class JobRepository() {
         return dbJobs.deleteJob(jobModel)
     }
 
+    fun getShiftID(shiftStartDate: String, shiftEndDate: String, shiftStartTime: String, shiftEndTime: String): Int {
+        return dbShifts.getShiftID(shiftStartDate, shiftEndDate, shiftStartTime, shiftEndTime)
+    }
+
+    fun editShift(shiftsModel: ShiftsModel, shiftIdtoEdit: Int): Boolean{
+
+        println("Inside edit shift in Job Repository")
+        println(shiftsModel.shiftID)
+        println(shiftsModel.shiftStartDate)
+        println(shiftsModel.shiftEndDate)
+        println(shiftsModel.startTime)
+        println(shiftsModel.endTime)
+
+        return dbShifts.editShift(shiftsModel, shiftIdtoEdit)
+    }
+
     private fun deleteShiftsForJob(jobID: Int) {
         if (dbShifts.deleteShiftsForJob(jobID)) {
             Log.d(TAG, "shifts deleted for job with ID: $jobID")
