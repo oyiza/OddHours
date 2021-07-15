@@ -31,8 +31,6 @@
     <string name="placeholder_job_information">Job Information</string>
     <string name="placeholder_job_location">Job Location</string>
     <string name="placeholder_job_name">Job Name</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--  images / anything else  -->
     <string name="arrow">arrow</string>

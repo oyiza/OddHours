@@ -79,7 +79,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
 
             val clickedJobID = jobRepository.getJobID(holder.jobName.text.toString(), holder.jobLocation.text.toString())
 
-            // TODO: at the beginning, startDate and endDate are always the same because of similar initialization
+            // NOTE: at the beginning, startDate and endDate are always the same because of similar initialization
             val startDate = Calendar.getInstance()
             val endDate = Calendar.getInstance()
             val today = Calendar.getInstance()
@@ -262,7 +262,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
 
             // onClick listener for delete button
             mDialogView.deleteJobBtn.setOnClickListener{
-                // TODO: maybe add some confirmation before deleting the job, say like 'are you sure?' before deleting it
+                // TODO: maybe add some confirmation before deleting the job, say like 'are you sure?' before deleting it or have the button red so user is warned
                 val jobModel = JobModel(1, holder.jobName.text as String, holder.jobLocation.text as String)
                 val isDeleted = jobRepository.deleteJob(jobModel)
                 if (isDeleted) {

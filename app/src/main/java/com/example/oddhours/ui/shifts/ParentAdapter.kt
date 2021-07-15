@@ -15,7 +15,7 @@ class ParentAdapter(private val allShifts: List<ShiftsListModel>, val context: C
 
     class ViewHolder(itemView: View, val context: Context, private val navController: NavController): RecyclerView.ViewHolder(itemView) {
         fun bindShifts(item: ShiftsListModel){
-            itemView.jobTitleTv.text = item.jobInfo.jobName + ", "+item.jobInfo.jobLocation
+            itemView.jobTitleTv.text = item.jobModel.jobName + ", "+item.jobModel.jobLocation
             itemView.childRv.apply{
                 layoutManager = LinearLayoutManager(childRv.context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = ChildAdapter(item.shifts.asReversed(), context, navController)

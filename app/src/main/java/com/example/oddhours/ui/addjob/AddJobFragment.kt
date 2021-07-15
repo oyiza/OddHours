@@ -53,8 +53,8 @@ class AddJobFragment : Fragment() {
             saveEditedJobBtn.visibility = View.GONE
         }
 
-        // TODO: when editing jobs, editJobBTN is hidden by keyboard
-        // onClick listener for editJobBTN
+        // TODO: when editing jobs, saveEditedJobBtn is hidden by keyboard
+        // onClick listener for saveEditedJobBtn
         saveEditedJobBtn.setOnClickListener {
             if (jobIdToEdit != null) {
                 val companyName = companyTv.text.toString().replace("'","\'").toUpperCase()

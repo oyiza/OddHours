@@ -48,11 +48,6 @@ class JobRepository() {
         return dbJobs.getJobID(jobName, jobLocation)
     }
 
-    // TODO: this method does exactly what buildJobList() does.. if no need for this we can remove it then
-//    fun getAllJobs(): List<JobModel>{
-//        return dbJobs.getAllJobs()
-//    }
-
     fun editJob(jobModel: JobModel, jobIdToEdit: Int): Boolean {
         return dbJobs.editJob(jobModel, jobIdToEdit)
     }
@@ -83,6 +78,7 @@ class JobRepository() {
     }
 
     fun insertShift(newShift: ShiftsModel): Long {
+        // TODO: we need validation here to ensure duplicate shifts aren't entered into DB - user can't have the same shift twice for same job
         return dbShifts.insertShift(newShift)
     }
 
