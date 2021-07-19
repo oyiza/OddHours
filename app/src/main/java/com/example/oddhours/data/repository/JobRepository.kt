@@ -70,14 +70,6 @@ class JobRepository() {
     }
 
     fun editShift(shiftsModel: ShiftsModel, shiftIdtoEdit: Int): Boolean{
-
-        println("Inside edit shift in Job Repository")
-        println(shiftsModel.shiftID)
-        println(shiftsModel.shiftStartDate)
-        println(shiftsModel.shiftEndDate)
-        println(shiftsModel.startTime)
-        println(shiftsModel.endTime)
-
         return dbShifts.editShift(shiftsModel, shiftIdtoEdit)
     }
 
