@@ -114,11 +114,29 @@ class JobRepository() {
          */
         for (job in jobModelList) {
             shiftsFromJobId = dbShifts.getShiftsForJobID(job.jobID)
+
+            var swap = true
+            while(swap){
+                swap = false
+                for(i in 0 until shiftsFromJobId.size-1){
+                    if(shiftsFromJobId[i].shiftDayOfYear > shiftsFromJobId[i+1].shiftDayOfYear){
+                        val temp = shiftsFromJobId[i]
+                        shiftsFromJobId[i] = shiftsFromJobId[i+1]
+                        shiftsFromJobId[i + 1] = temp
+                        swap = true
+                    }
+                }
+            }
+
             if (shiftsFromJobId.size > 0) {
                 shiftsListModel = ShiftsListModel(job, shiftsFromJobId)
                 shiftsListForAdapter.add(shiftsListModel)
             }
         }
+
+        println("Bubble Sort TESTING")
+        println(shiftsListForAdapter)
+
         return shiftsListForAdapter
     }
 
