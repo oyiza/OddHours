@@ -10,11 +10,12 @@ class TableShifts {
     fun insertShift(newShift: ShiftsModel): Long {
         val contentValues = ContentValues()
         contentValues.put(DatabaseHelper.shift_Start_Date_COL_2, newShift.shiftStartDate)
-        contentValues.put(DatabaseHelper.shift_End_Date_COL_3, newShift.shiftEndDate)
-        contentValues.put(DatabaseHelper.job_ID_COL_4, newShift.jobID)
-        contentValues.put(DatabaseHelper.start_Time_COL_5, newShift.startTime)
-        contentValues.put(DatabaseHelper.end_Time_COL_6, newShift.endTime)
-        contentValues.put(DatabaseHelper.hours_Worked_COL_7, newShift.hoursWorked)
+        contentValues.put(DatabaseHelper.shift_Day_Of_Year_COL_3, newShift.shiftDayOfYear)
+        contentValues.put(DatabaseHelper.shift_End_Date_COL_4, newShift.shiftEndDate)
+        contentValues.put(DatabaseHelper.job_ID_COL_5, newShift.jobID)
+        contentValues.put(DatabaseHelper.start_Time_COL_6, newShift.startTime)
+        contentValues.put(DatabaseHelper.end_Time_COL_7, newShift.endTime)
+        contentValues.put(DatabaseHelper.hours_Worked_COL_8, newShift.hoursWorked)
 
         return db!!.insert(DatabaseHelper.shiftsTable, null, contentValues)
     }
@@ -24,7 +25,7 @@ class TableShifts {
         val listOfShifts: MutableList<ShiftsModel> = mutableListOf()
         if (res.count != 0) {
             while (res.moveToNext()) {
-                val shiftsModel = ShiftsModel(res.getInt(0), res.getString(1), res.getString(2), res.getInt(3), res.getString(4), res.getString(5), res.getString(6))
+                val shiftsModel = ShiftsModel(res.getInt(0), res.getString(1), res.getInt(2), res.getString(3), res.getInt(4), res.getString(5), res.getString(6), res.getString(7))
                 listOfShifts.add(shiftsModel)
             }
         }
@@ -33,11 +34,11 @@ class TableShifts {
 
     fun getShiftsForJobID(jobId: Int): MutableList<ShiftsModel> {
         val res = db!!.rawQuery(
-                "SELECT * FROM ${DatabaseHelper.shiftsTable} WHERE ${DatabaseHelper.job_ID_COL_4} = $jobId", null)
+                "SELECT * FROM ${DatabaseHelper.shiftsTable} WHERE ${DatabaseHelper.job_ID_COL_5} = $jobId", null)
         val listOfShifts: MutableList<ShiftsModel> = mutableListOf<ShiftsModel>()
         if (res.count != 0) {
             while (res.moveToNext()) {
-                val shiftsModel = ShiftsModel(res.getInt(0), res.getString(1), res.getString(2), res.getInt(3), res.getString(4), res.getString(5), res.getString(6))
+                val shiftsModel = ShiftsModel(res.getInt(0), res.getString(1), res.getInt(2), res.getString(3), res.getInt(4), res.getString(5), res.getString(6), res.getString(7))
                 listOfShifts.add(shiftsModel)
             }
             return listOfShifts
@@ -46,7 +47,7 @@ class TableShifts {
     }
 
     fun deleteShiftsForJob(jobId: Int): Boolean {
-        val whereClause = "${DatabaseHelper.job_ID_COL_4} = $jobId"
+        val whereClause = "${DatabaseHelper.job_ID_COL_5} = $jobId"
         val res = db!!.delete(DatabaseHelper.shiftsTable, whereClause, null)
         return res > 0
     }
@@ -55,10 +56,11 @@ class TableShifts {
         val res = db!!.rawQuery(
             "UPDATE ${DatabaseHelper.shiftsTable} SET " +
                     "${DatabaseHelper.shift_Start_Date_COL_2} = \"${shiftModel.shiftStartDate}\"," +
-                    "${DatabaseHelper.shift_End_Date_COL_3} = \"${shiftModel.shiftEndDate}\", " +
-                    "${DatabaseHelper.start_Time_COL_5} = \"${shiftModel.startTime}\"," +
-                    "${DatabaseHelper.end_Time_COL_6} = \"${shiftModel.endTime}\", " +
-                    "${DatabaseHelper.hours_Worked_COL_7} = \"${shiftModel.hoursWorked}\"" +
+                    "${DatabaseHelper.shift_Day_Of_Year_COL_3} = \"${shiftModel.shiftDayOfYear}\"," +
+                    "${DatabaseHelper.shift_End_Date_COL_4} = \"${shiftModel.shiftEndDate}\", " +
+                    "${DatabaseHelper.start_Time_COL_6} = \"${shiftModel.startTime}\"," +
+                    "${DatabaseHelper.end_Time_COL_7} = \"${shiftModel.endTime}\", " +
+                    "${DatabaseHelper.hours_Worked_COL_8} = \"${shiftModel.hoursWorked}\"" +
                     "WHERE ${DatabaseHelper.shift_ID_COL_1} = $shiftIdtoEdit", null)
         return res.count > -1
     }
@@ -68,9 +70,9 @@ class TableShifts {
             "SELECT ${DatabaseHelper.shift_ID_COL_1} FROM " +
                     "${DatabaseHelper.shiftsTable} " +
                     "WHERE ${DatabaseHelper.shift_Start_Date_COL_2} = \"$startDate\" " +
-                    "AND ${DatabaseHelper.shift_End_Date_COL_3} = \"$endDate\" " +
-                    "AND ${DatabaseHelper.start_Time_COL_5} = \"$startHour\" " +
-                    "AND ${DatabaseHelper.end_Time_COL_6} = \"$endHour\"",
+                    "AND ${DatabaseHelper.shift_End_Date_COL_4} = \"$endDate\" " +
+                    "AND ${DatabaseHelper.start_Time_COL_6} = \"$startHour\" " +
+                    "AND ${DatabaseHelper.end_Time_COL_7} = \"$endHour\"",
             null
         )
         if (res.count != 0) {

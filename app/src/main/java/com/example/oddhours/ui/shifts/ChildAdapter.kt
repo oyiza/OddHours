@@ -54,6 +54,9 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
     val month = c.get(Calendar.MONTH)
     val day = c.get(Calendar.DAY_OF_MONTH)
 
+    val daysInMonth = intArrayOf(31,28,31,30,31,30,31,31,30,31,30,31)
+    var dayOfYear = 0
+
     class ViewHolder(itemView: View, val context: Context): RecyclerView.ViewHolder(itemView) {
         fun bindShifts(items: ShiftsModel){
             itemView.shiftStartTv.text = items.shiftStartDate
@@ -105,6 +108,8 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                         startDateForDb = sdf.format(c.time).toString() // "06/14/2021"
                         mDialogView.shiftStartDateTv.text = sdf.format(c.time)
                         startDate.set(year, monthOfYear, dayOfMonth)
+                        dayOfYear = 0
+                        calculateDayOfTheYear(monthOfYear, dayOfMonth)
                         // DEBUG TODO: remove this eventually
                         // Log.d(TAG, "startDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
                         // Log.d(TAG, "$startDate")
@@ -169,7 +174,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                             getShiftType(endDate, startDate) == Constants.OVERNIGHT_SHIFT -> {
                                 Log.d(TAG, "overnight shift")
                                 val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour + 24, endTimeMin)
-                                val shiftsModel = ShiftsModel(editShiftID, startDateForDb, endDateForDb, 0, startTimeForDb, endTimeForDb, totalTimeWorked )
+                                val shiftsModel = ShiftsModel(editShiftID, startDateForDb, dayOfYear, endDateForDb, 0, startTimeForDb, endTimeForDb, totalTimeWorked )
                                 jobRepository.editShift(shiftsModel, editShiftID)
                                 Toast.makeText(context, "⏲ Successfully edited shift", Toast.LENGTH_LONG).show()
                                 mAlertDialog.dismiss()
@@ -181,7 +186,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                                 Log.d(TAG, "day shift")
                                 if (checkShiftDuration(endTimeHour, startTimeHour, endTimeMin, startTimeMin)) {
                                     val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
-                                    val shiftsModel = ShiftsModel(editShiftID, startDateForDb, endDateForDb, 0, startTimeForDb, endTimeForDb, totalTimeWorked )
+                                    val shiftsModel = ShiftsModel(editShiftID, startDateForDb, dayOfYear, endDateForDb, 0, startTimeForDb, endTimeForDb, totalTimeWorked )
                                     jobRepository.editShift(shiftsModel, editShiftID)
                                     Toast.makeText(context, "⏲ Successfully edited shift.", Toast.LENGTH_LONG).show()
                                     mAlertDialog.dismiss()
@@ -215,7 +220,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
             }
 
             mDialogView.deleteShiftBtn.setOnClickListener {
-                val shiftModel = ShiftsModel(1, holder.itemView.shiftStartTv.text as String, holder.itemView.shiftEndTv.text as String, 1, holder.itemView.shiftStartHourTv.text as String, holder.itemView.shiftEndHourTv.text as String, "")
+                val shiftModel = ShiftsModel(1, holder.itemView.shiftStartTv.text as String, dayOfYear, holder.itemView.shiftEndTv.text as String, 1, holder.itemView.shiftStartHourTv.text as String, holder.itemView.shiftEndHourTv.text as String, "")
                 val isDeleted = jobRepository.deleteIndividualShift(shiftModel)
                 if (isDeleted) {
                     Toast.makeText(
@@ -305,6 +310,20 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
         }
 
         return Constants.INVALID_SHIFT_RANGE
+    }
+
+    private fun calculateDayOfTheYear(monthOfYear: Int, dayOfMonth: Int): Int{
+        var counter = 0
+        for(item in daysInMonth){
+            if(counter <= (monthOfYear-1)){
+                dayOfYear += item
+            }
+            else if (counter == monthOfYear){
+                dayOfYear += dayOfMonth
+            }
+            counter++
+        }
+        return dayOfYear
     }
 
     private fun getShiftID(shiftStartDate: String, shiftEndDate: String, shiftStartTime: String, shiftEndTime: String): Int{
