@@ -133,10 +133,6 @@ class JobRepository() {
                 shiftsListForAdapter.add(shiftsListModel)
             }
         }
-
-        println("Bubble Sort TESTING")
-        println(shiftsListForAdapter)
-
         return shiftsListForAdapter
     }
 

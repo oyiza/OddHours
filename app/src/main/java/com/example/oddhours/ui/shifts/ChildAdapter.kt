@@ -18,6 +18,7 @@ import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.data.repository.JobRepository
 import com.example.oddhours.ui.home.HomeAdapter
 import com.example.oddhours.utils.Constants
+import com.example.oddhours.utils.Helper
 import kotlinx.android.synthetic.main.dialog_add_shift.view.*
 import kotlinx.android.synthetic.main.dialog_edit_delete_job.view.*
 import kotlinx.android.synthetic.main.dialog_edit_delete_shift.view.*
@@ -54,7 +55,6 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
     val month = c.get(Calendar.MONTH)
     val day = c.get(Calendar.DAY_OF_MONTH)
 
-    val daysInMonth = intArrayOf(31,28,31,30,31,30,31,31,30,31,30,31)
     var dayOfYear = 0
 
     class ViewHolder(itemView: View, val context: Context): RecyclerView.ViewHolder(itemView) {
@@ -109,7 +109,8 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                         mDialogView.shiftStartDateTv.text = sdf.format(c.time)
                         startDate.set(year, monthOfYear, dayOfMonth)
                         dayOfYear = 0
-                        calculateDayOfTheYear(monthOfYear, dayOfMonth)
+                        var helper = Helper()
+                        dayOfYear = helper.calculateDayOfTheYear(monthOfYear, dayOfMonth)
                         // DEBUG TODO: remove this eventually
                         // Log.d(TAG, "startDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
                         // Log.d(TAG, "$startDate")
@@ -311,21 +312,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
 
         return Constants.INVALID_SHIFT_RANGE
     }
-
-    private fun calculateDayOfTheYear(monthOfYear: Int, dayOfMonth: Int): Int{
-        var counter = 0
-        for(item in daysInMonth){
-            if(counter <= (monthOfYear-1)){
-                dayOfYear += item
-            }
-            else if (counter == monthOfYear){
-                dayOfYear += dayOfMonth
-            }
-            counter++
-        }
-        return dayOfYear
-    }
-
+    
     private fun getShiftID(shiftStartDate: String, shiftEndDate: String, shiftStartTime: String, shiftEndTime: String): Int{
         return jobRepository.getShiftID(shiftStartDate, shiftEndDate, shiftStartTime, shiftEndTime)
     }
