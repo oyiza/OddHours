@@ -20,6 +20,7 @@ import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.data.repository.JobRepository
 import com.example.oddhours.utils.Constants
+import com.example.oddhours.utils.Helper
 import kotlinx.android.synthetic.main.dialog_add_shift.view.*
 import kotlinx.android.synthetic.main.dialog_edit_delete_job.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
@@ -117,7 +118,8 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                     // Log.d(TAG, "startDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
                     // Log.d(TAG, "$startDate")
                     dayOfYear = 0
-                    calculateDayOfTheYear(monthOfYear, dayOfMonth)
+                    var helper = Helper()
+                    dayOfYear = helper.calculateDayOfTheYear(monthOfYear, dayOfMonth)
 
                 }, year, month, day)
                 // TODO: there should be some logic here to move around the maxDate and minDate for the datepicker
@@ -375,20 +377,6 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
         } catch (e: Exception) {
             Log.e(TAG, e.printStackTrace().toString())
         }
-    }
-
-    private fun calculateDayOfTheYear(monthOfYear: Int, dayOfMonth: Int): Int{
-        var counter = 0
-        for(item in daysInMonth){
-            if(counter <= (monthOfYear-1)){
-                dayOfYear += item
-            }
-            else if (counter == monthOfYear){
-                dayOfYear += dayOfMonth
-            }
-            counter++
-        }
-        return dayOfYear
     }
 
     override fun getItemCount() = jobList.size

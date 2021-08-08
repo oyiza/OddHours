@@ -312,7 +312,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
 
         return Constants.INVALID_SHIFT_RANGE
     }
-    
+
     private fun getShiftID(shiftStartDate: String, shiftEndDate: String, shiftStartTime: String, shiftEndTime: String): Int{
         return jobRepository.getShiftID(shiftStartDate, shiftEndDate, shiftStartTime, shiftEndTime)
     }
