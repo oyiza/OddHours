@@ -113,7 +113,7 @@ class JobRepository() {
          */
         for (job in jobModelList) {
             shiftsFromJobId = dbShifts.getShiftsForJobID(job.jobID)
-            
+
             val sortedShifts = shiftsFromJobId.sortedBy { shift -> shift.shiftDayOfYear}
 
             if (sortedShifts.size > 0) {

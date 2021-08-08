@@ -110,7 +110,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                         startDate.set(year, monthOfYear, dayOfMonth)
                         dayOfYear = 0
                         var helper = Helper()
-                        dayOfYear = helper.calculateDayOfTheYear(monthOfYear, dayOfMonth)
+                        dayOfYear = helper.calculateDayOfTheYear(monthOfYear, dayOfMonth, year)
                         // DEBUG TODO: remove this eventually
                         // Log.d(TAG, "startDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
                         // Log.d(TAG, "$startDate")

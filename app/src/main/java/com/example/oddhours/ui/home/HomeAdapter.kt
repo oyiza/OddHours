@@ -119,7 +119,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                     // Log.d(TAG, "$startDate")
                     dayOfYear = 0
                     var helper = Helper()
-                    dayOfYear = helper.calculateDayOfTheYear(monthOfYear, dayOfMonth)
+                    dayOfYear = helper.calculateDayOfTheYear(monthOfYear, dayOfMonth, year)
 
                 }, year, month, day)
                 // TODO: there should be some logic here to move around the maxDate and minDate for the datepicker
