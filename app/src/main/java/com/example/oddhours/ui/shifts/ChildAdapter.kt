@@ -18,6 +18,7 @@ import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.data.repository.JobRepository
 import com.example.oddhours.ui.home.HomeAdapter
 import com.example.oddhours.utils.Constants
+import com.example.oddhours.utils.Helper
 import kotlinx.android.synthetic.main.dialog_add_shift.view.*
 import kotlinx.android.synthetic.main.dialog_edit_delete_job.view.*
 import kotlinx.android.synthetic.main.dialog_edit_delete_shift.view.*
@@ -53,6 +54,8 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
     val year = c.get(Calendar.YEAR)
     val month = c.get(Calendar.MONTH)
     val day = c.get(Calendar.DAY_OF_MONTH)
+
+    var dayOfYear = 0
 
     class ViewHolder(itemView: View, val context: Context): RecyclerView.ViewHolder(itemView) {
         fun bindShifts(items: ShiftsModel){
@@ -105,6 +108,9 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                         startDateForDb = sdf.format(c.time).toString() // "06/14/2021"
                         mDialogView.shiftStartDateTv.text = sdf.format(c.time)
                         startDate.set(year, monthOfYear, dayOfMonth)
+                        dayOfYear = 0
+                        var helper = Helper()
+                        dayOfYear = helper.calculateDayOfTheYear(monthOfYear, dayOfMonth, year)
                         // DEBUG TODO: remove this eventually
                         // Log.d(TAG, "startDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
                         // Log.d(TAG, "$startDate")
@@ -169,7 +175,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                             getShiftType(endDate, startDate) == Constants.OVERNIGHT_SHIFT -> {
                                 Log.d(TAG, "overnight shift")
                                 val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour + 24, endTimeMin)
-                                val shiftsModel = ShiftsModel(editShiftID, startDateForDb, endDateForDb, 0, startTimeForDb, endTimeForDb, totalTimeWorked )
+                                val shiftsModel = ShiftsModel(editShiftID, startDateForDb, dayOfYear, endDateForDb, 0, startTimeForDb, endTimeForDb, totalTimeWorked )
                                 jobRepository.editShift(shiftsModel, editShiftID)
                                 Toast.makeText(context, "⏲ Successfully edited shift", Toast.LENGTH_LONG).show()
                                 mAlertDialog.dismiss()
@@ -181,7 +187,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                                 Log.d(TAG, "day shift")
                                 if (checkShiftDuration(endTimeHour, startTimeHour, endTimeMin, startTimeMin)) {
                                     val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
-                                    val shiftsModel = ShiftsModel(editShiftID, startDateForDb, endDateForDb, 0, startTimeForDb, endTimeForDb, totalTimeWorked )
+                                    val shiftsModel = ShiftsModel(editShiftID, startDateForDb, dayOfYear, endDateForDb, 0, startTimeForDb, endTimeForDb, totalTimeWorked )
                                     jobRepository.editShift(shiftsModel, editShiftID)
                                     Toast.makeText(context, "⏲ Successfully edited shift.", Toast.LENGTH_LONG).show()
                                     mAlertDialog.dismiss()
@@ -215,7 +221,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
             }
 
             mDialogView.deleteShiftBtn.setOnClickListener {
-                val shiftModel = ShiftsModel(1, holder.itemView.shiftStartTv.text as String, holder.itemView.shiftEndTv.text as String, 1, holder.itemView.shiftStartHourTv.text as String, holder.itemView.shiftEndHourTv.text as String, "")
+                val shiftModel = ShiftsModel(1, holder.itemView.shiftStartTv.text as String, dayOfYear, holder.itemView.shiftEndTv.text as String, 1, holder.itemView.shiftStartHourTv.text as String, holder.itemView.shiftEndHourTv.text as String, "")
                 val isDeleted = jobRepository.deleteIndividualShift(shiftModel)
                 if (isDeleted) {
                     Toast.makeText(

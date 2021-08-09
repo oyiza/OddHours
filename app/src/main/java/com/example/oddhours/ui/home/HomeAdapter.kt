@@ -20,6 +20,7 @@ import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.data.repository.JobRepository
 import com.example.oddhours.utils.Constants
+import com.example.oddhours.utils.Helper
 import kotlinx.android.synthetic.main.dialog_add_shift.view.*
 import kotlinx.android.synthetic.main.dialog_edit_delete_job.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
@@ -58,6 +59,9 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
     val year = c.get(Calendar.YEAR)
     val month = c.get(Calendar.MONTH)
     val day = c.get(Calendar.DAY_OF_MONTH)
+
+    val daysInMonth = intArrayOf(31,28,31,30,31,30,31,31,30,31,30,31)
+    var dayOfYear = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_job, parent, false)
@@ -113,6 +117,10 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                     // DEBUG TODO: remove this eventually
                     // Log.d(TAG, "startDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
                     // Log.d(TAG, "$startDate")
+                    dayOfYear = 0
+                    var helper = Helper()
+                    dayOfYear = helper.calculateDayOfTheYear(monthOfYear, dayOfMonth, year)
+
                 }, year, month, day)
                 // TODO: there should be some logic here to move around the maxDate and minDate for the datepicker
                 dpd.datePicker.maxDate = today.timeInMillis
@@ -196,7 +204,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                         getShiftType(endDate, startDate) == Constants.OVERNIGHT_SHIFT -> {
                             Log.d(TAG, "overnight shift")
                             val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour + 24, endTimeMin)
-                            val shiftsModel = ShiftsModel(1, startDateForDb, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
+                            val shiftsModel = ShiftsModel(1, startDateForDb, dayOfYear, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
                             jobRepository.insertShift(shiftsModel)
                             Toast.makeText(context, "⏲ Successfully added overnight shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
                             mAlertDialog.dismiss()
@@ -205,7 +213,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                             Log.d(TAG, "day shift")
                             if (checkShiftDuration(endTimeHour, startTimeHour, endTimeMin, startTimeMin)) {
                                 val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
-                                val shiftsModel = ShiftsModel(1, startDateForDb, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
+                                val shiftsModel = ShiftsModel(1, startDateForDb, dayOfYear, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
                                 jobRepository.insertShift(shiftsModel)
                                 Toast.makeText(context, "⏲ Successfully added day shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
                                 mAlertDialog.dismiss()

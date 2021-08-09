@@ -27,6 +27,7 @@ class JobRepository() {
     var jobModelList: List<JobModel>? = null
     private val dbJobs = TableJobs()
     private val dbShifts = TableShifts()
+
     /**
      * @return list of jobs from the DB
      */
@@ -60,11 +61,16 @@ class JobRepository() {
         return dbJobs.deleteJob(jobModel)
     }
 
-    fun getShiftID(shiftStartDate: String, shiftEndDate: String, shiftStartTime: String, shiftEndTime: String): Int {
+    fun getShiftID(
+        shiftStartDate: String,
+        shiftEndDate: String,
+        shiftStartTime: String,
+        shiftEndTime: String
+    ): Int {
         return dbShifts.getShiftID(shiftStartDate, shiftEndDate, shiftStartTime, shiftEndTime)
     }
 
-    fun editShift(shiftsModel: ShiftsModel, shiftIdtoEdit: Int): Boolean{
+    fun editShift(shiftsModel: ShiftsModel, shiftIdtoEdit: Int): Boolean {
         return dbShifts.editShift(shiftsModel, shiftIdtoEdit)
     }
 
@@ -76,13 +82,18 @@ class JobRepository() {
         }
     }
 
-    fun deleteIndividualShift(shiftsModel: ShiftsModel): Boolean{
-        val shiftID = dbShifts.getShiftID(shiftsModel.shiftStartDate, shiftsModel.shiftEndDate, shiftsModel.startTime, shiftsModel.endTime)
+    fun deleteIndividualShift(shiftsModel: ShiftsModel): Boolean {
+        val shiftID = dbShifts.getShiftID(
+            shiftsModel.shiftStartDate,
+            shiftsModel.shiftEndDate,
+            shiftsModel.startTime,
+            shiftsModel.endTime
+        )
         return dbShifts.deleteIndividualShift(shiftID)
     }
 
     fun checkJobExists(jobName: String, jobLocation: String): Boolean {
-        return dbJobs.checkJobExists(jobName,jobLocation)
+        return dbJobs.checkJobExists(jobName, jobLocation)
     }
 
     fun insertShift(newShift: ShiftsModel): Long {
@@ -102,15 +113,23 @@ class JobRepository() {
          */
         for (job in jobModelList) {
             shiftsFromJobId = dbShifts.getShiftsForJobID(job.jobID)
-            if (shiftsFromJobId.size > 0) {
-                shiftsListModel = ShiftsListModel(job,shiftsFromJobId)
+
+            val sortedShifts = shiftsFromJobId.sortedBy { shift -> shift.shiftDayOfYear}
+
+            if (sortedShifts.size > 0) {
+                shiftsListModel = ShiftsListModel(job, sortedShifts)
                 shiftsListForAdapter.add(shiftsListModel)
             }
         }
         return shiftsListForAdapter
     }
 
-    fun calculateTotalHours(startTimeHour: Int, startTimeMin: Int, endTimeHour: Int, endTimeMin: Int): String {
+    fun calculateTotalHours(
+        startTimeHour: Int,
+        startTimeMin: Int,
+        endTimeHour: Int,
+        endTimeMin: Int
+    ): String {
         val hoursWorked: Int
         val minutesWorked: Int
         val totalTimeWorked: String
@@ -119,17 +138,17 @@ class JobRepository() {
             endTimeMin > startTimeMin -> {
                 hoursWorked = endTimeHour - startTimeHour
                 minutesWorked = endTimeMin - startTimeMin
-                totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
+                totalTimeWorked = hoursWorked.toString() + "h " + minutesWorked.toString() + "m"
             }
             endTimeMin < startTimeMin -> {
                 hoursWorked = (endTimeHour - startTimeHour) - 1
                 minutesWorked = (endTimeMin - startTimeMin) + 60
-                totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
+                totalTimeWorked = hoursWorked.toString() + "h " + minutesWorked.toString() + "m"
             }
             else -> { // minutes are equal = 0
                 hoursWorked = endTimeHour - startTimeHour
                 minutesWorked = startTimeMin - endTimeMin
-                totalTimeWorked = hoursWorked.toString()+"h "+minutesWorked.toString()+"m"
+                totalTimeWorked = hoursWorked.toString() + "h " + minutesWorked.toString() + "m"
             }
         }
         return totalTimeWorked
