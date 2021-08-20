@@ -26,7 +26,6 @@ class HomeFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         // retrieve jobs
-//        jobRepository = JobRepository()
         try {
             jobRepository!!.buildJobList()
             hasJobs = jobRepository!!.jobModelList!!.isNotEmpty()

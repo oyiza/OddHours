@@ -18,6 +18,7 @@ class ShiftsFragment : Fragment() {
 
     private var jobRepository = JobRepository()
     private lateinit var shiftsForAdapter: List<ShiftsListModel>
+    private var hasShifts = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,18 +27,25 @@ class ShiftsFragment : Fragment() {
 
         try{
             shiftsForAdapter = jobRepository.getShiftsForUIList()
+            hasShifts = shiftsForAdapter.isNotEmpty()
         }catch (e: Exception){
             Log.e(TAG, e.printStackTrace().toString())
         }
-        return inflater.inflate(R.layout.fragment_shifts, container, false)
+        return if (hasShifts) {
+            inflater.inflate(R.layout.fragment_shifts, container, false)
+        } else {
+            inflater.inflate(R.layout.item_no_shift, container, false)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        parentRv.apply {
-            layoutManager = LinearLayoutManager(activity)
-            adapter = shiftsForAdapter.let { ParentAdapter(it, requireActivity(), view.findNavController()) }
+        if (hasShifts) {
+            parentRv.apply {
+                layoutManager = LinearLayoutManager(activity)
+                adapter = shiftsForAdapter.let { ParentAdapter(it, requireActivity(), view.findNavController()) }
+            }
         }
     }
 
