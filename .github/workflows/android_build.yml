@@ -8,12 +8,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
-      - name: Set Up JDK
-        uses: actions/setup-java@v1
-        with: # might have to verify this java version - there might be more recent ones
-          java-version: 1.8
+      - name: Set Up Java (JDK)
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
 
       - name: Change Wrapper Permissions
         run: chmod +x ./gradlew
