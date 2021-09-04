@@ -205,18 +205,26 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                             Log.d(TAG, "overnight shift")
                             val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour + 24, endTimeMin)
                             val shiftsModel = ShiftsModel(1, startDateForDb, dayOfYear, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
-                            jobRepository.insertShift(shiftsModel)
-                            Toast.makeText(context, "⏲ Successfully added overnight shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
-                            mAlertDialog.dismiss()
+                            if (jobRepository.shiftExists(shiftsModel)) {
+                                Toast.makeText(context, "Shift already exists. Modify current entry or go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
+                            } else {
+                                jobRepository.insertShift(shiftsModel)
+                                Toast.makeText(context, "⏲ Successfully added overnight shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
+                                mAlertDialog.dismiss()
+                            }
                         }
                         getShiftType(endDate, startDate) == Constants.DAY_SHIFT -> {
                             Log.d(TAG, "day shift")
                             if (checkShiftDuration(endTimeHour, startTimeHour, endTimeMin, startTimeMin)) {
                                 val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
                                 val shiftsModel = ShiftsModel(1, startDateForDb, dayOfYear, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
-                                jobRepository.insertShift(shiftsModel)
-                                Toast.makeText(context, "⏲ Successfully added day shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
-                                mAlertDialog.dismiss()
+                                if (jobRepository.shiftExists(shiftsModel)) {
+                                    Toast.makeText(context, "Shift already exists. Modify current entry or go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
+                                } else {
+                                    jobRepository.insertShift(shiftsModel)
+                                    Toast.makeText(context, "⏲ Successfully added day shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
+                                    mAlertDialog.dismiss()
+                                }
                             }
                             else {
                                 Toast.makeText(

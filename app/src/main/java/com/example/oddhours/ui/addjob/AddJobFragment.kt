@@ -88,7 +88,7 @@ class AddJobFragment : Fragment() {
 
             // TODO: when typing, navbar is still visible. small issue but might need correcting
             if (companyName != "" && location !="") {
-                if (!jobRepository.checkJobExists(newJob.jobName, newJob.jobLocation)) {
+                if (!jobRepository.jobExists(newJob.jobName, newJob.jobLocation)) {
                     val addJob = jobRepository.addNewJob(newJob)
                     if (!addJob.equals(-1)) {
                         Toast.makeText(activity, "Successfully added job. Press and hold job card for more options.", Toast.LENGTH_LONG).show()
