@@ -78,7 +78,7 @@ class JobRepository() {
         if (dbShifts.deleteShiftsForJob(jobID)) {
             Log.d(TAG, "shifts deleted for job with ID: $jobID")
         } else {
-            Log.d(TAG, "something went wrong and shifts were not deleted for job with ID: $jobID")
+            Log.d(TAG, "something probably went wrong and shifts were not deleted for job with ID: $jobID")
         }
     }
 
@@ -92,12 +92,15 @@ class JobRepository() {
         return dbShifts.deleteIndividualShift(shiftID)
     }
 
-    fun checkJobExists(jobName: String, jobLocation: String): Boolean {
-        return dbJobs.checkJobExists(jobName, jobLocation)
+    fun jobExists(jobName: String, jobLocation: String): Boolean {
+        return dbJobs.jobExists(jobName, jobLocation)
+    }
+
+    fun shiftExists(newShift: ShiftsModel): Boolean { // takes a shiftsModel object
+        return dbShifts.shiftExists(newShift)
     }
 
     fun insertShift(newShift: ShiftsModel): Long {
-        // TODO: we need validation here to ensure duplicate shifts aren't entered into DB - user can't have the same shift twice for same job
         return dbShifts.insertShift(newShift)
     }
 

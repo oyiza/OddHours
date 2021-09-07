@@ -65,6 +65,20 @@ class TableShifts {
         return res.count > -1
     }
 
+    fun shiftExists(newShift: ShiftsModel): Boolean {
+        val sqlQuery = "SELECT ${DatabaseHelper.shift_ID_COL_1} FROM ${DatabaseHelper.shiftsTable} WHERE " +
+                "${DatabaseHelper.shift_Day_Of_Year_COL_3} = \"${newShift.shiftDayOfYear}\" AND " +
+                "${DatabaseHelper.job_ID_COL_5} = \"${newShift.jobID}\" AND " +
+                "${DatabaseHelper.start_Time_COL_6} = \"${newShift.startTime}\" AND " +
+                "${DatabaseHelper.end_Time_COL_7} = \"${newShift.endTime}\""
+
+        val res = db!!.rawQuery(
+            sqlQuery,
+            null
+        )
+        return res.count != 0;
+    }
+
     fun getShiftID(startDate: String, endDate: String, startHour: String, endHour: String): Int{
         val res = db!!.rawQuery (
             "SELECT ${DatabaseHelper.shift_ID_COL_1} FROM " +

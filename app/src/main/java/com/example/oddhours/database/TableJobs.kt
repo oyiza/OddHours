@@ -33,7 +33,7 @@ class TableJobs {
         return listOfJobs
     }
 
-    fun checkJobExists(jobName: String, jobLocation: String): Boolean {
+    fun jobExists(jobName: String, jobLocation: String): Boolean {
         val res = db!!.rawQuery (
             "SELECT ${DatabaseHelper.job_ID_COL_1} FROM ${DatabaseHelper.jobTable} WHERE ${DatabaseHelper.job_Name_COL_2} = \"$jobName\" AND ${DatabaseHelper.job_Location_COL_3} = \"$jobLocation\"",
             null
