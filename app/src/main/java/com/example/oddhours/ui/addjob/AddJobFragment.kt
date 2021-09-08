@@ -59,20 +59,18 @@ class AddJobFragment : Fragment() {
             if (jobIdToEdit != null) {
                 val companyName = companyTv.text.toString().replace("'","\'").toUpperCase()
                 val location = locationTv.text.toString().toUpperCase()
-                val jobModel = JobModel(1, companyName, location)
-                val isEdited = jobRepository.editJob(jobModel, jobIdToEdit)
-                if (isEdited) {
-                    Toast.makeText(
-                        activity,
-                        "Successfully edited $companyName",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    hideKeyboard()
-                    findNavController().navigate(
-                        R.id.navigationHomeFragment
-                    )
+                if (jobRepository.jobExists(companyName, location)) {
+                    Toast.makeText(activity, "❌ A job already exists with this name and location.", Toast.LENGTH_LONG).show()
                 } else {
-                    Log.i(TAG, "Error, not able to edit $companyName")
+                    val jobModel = JobModel(1, companyName, location)
+                    val isEdited = jobRepository.editJob(jobModel, jobIdToEdit)
+                    if (isEdited) {
+                        Toast.makeText(activity,"Successfully edited $companyName", Toast.LENGTH_SHORT).show()
+                        hideKeyboard()
+                        findNavController().navigate(R.id.navigationHomeFragment)
+                    } else {
+                        Log.i(TAG, "Error, not able to edit $companyName")
+                    }
                 }
             } else {
                 Log.e(TAG, "job to edit has null ID")
@@ -93,9 +91,7 @@ class AddJobFragment : Fragment() {
                     if (!addJob.equals(-1)) {
                         Toast.makeText(activity, "Successfully added job. Press and hold job card for more options.", Toast.LENGTH_LONG).show()
                         hideKeyboard()
-                        findNavController().navigate(
-                            R.id.navigationHomeFragment
-                        )
+                        findNavController().navigate(R.id.navigationHomeFragment)
                     } else {
                         Toast.makeText(activity, "Failed to add job", Toast.LENGTH_LONG).show()
                         clearFields()
