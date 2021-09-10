@@ -28,7 +28,7 @@ class ShiftsFragment : Fragment() {
         try{
             shiftsForAdapter = jobRepository.getShiftsForUIList()
             hasShifts = shiftsForAdapter.isNotEmpty()
-        }catch (e: Exception){
+        } catch (e: Exception) {
             Log.e(TAG, e.printStackTrace().toString())
         }
         return if (hasShifts) {
