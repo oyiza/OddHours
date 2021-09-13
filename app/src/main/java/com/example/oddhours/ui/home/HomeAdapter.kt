@@ -290,6 +290,11 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                     mAlertDialog.dismiss()
                     jobList = removeItemFromUI(jobList, position)
                     notifyDataSetChanged()
+                    if (jobList.isEmpty()) {// we've removed the last job
+                        // ideally, we want to notify the app that we're deleting the last job and tell it to reload homepage so we get the right layout
+                        Log.d(TAG, "deleted the last job, displaying no job page")
+                        navController.navigate(R.id.navigationHomeFragment) // temporary workaround: reload the home fragment
+                    }
                 } else {
                     Log.i(TAG, "Error, not able to delete job")
                     mAlertDialog.dismiss()
@@ -363,7 +368,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
         return Constants.INVALID_SHIFT_RANGE
     }
 
-    // TODO: this might have to go to jobRepository too only if it's needed in another fragment / activity
+    // TODO: refactor this method to a repository / helper class as it's also called in ChildAdapter.kt
     private fun removeItemFromUI(list: List<JobModel>, position: Int): List<JobModel> {
         Log.i(TAG, "removeItem() called: position is $position")
         val result = list.toMutableList()
