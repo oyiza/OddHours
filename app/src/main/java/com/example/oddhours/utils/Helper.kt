@@ -4,7 +4,7 @@ class Helper {
 
     fun calculateDayOfTheYear(monthOfYear: Int, dayOfMonth: Int, year: Int): Int {
 
-        var daysInMonth: IntArray = if (ifLeapYear(year)){
+        val daysInMonth: IntArray = if (ifLeapYear(year)){
             intArrayOf(31,29,31,30,31,30,31,31,30,31,30,31)
         } else {
             intArrayOf(31,28,31,30,31,30,31,31,30,31,30,31)

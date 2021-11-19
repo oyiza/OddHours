@@ -53,19 +53,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    /**
-     * Leaving the getAllJobs function code below incase we ever need to reference it back or revert to this
-     * approach
-     */
-//    private fun getAllJobs(): List<JobModel> {
-//        val db = DatabaseHelper(requireActivity())
-//        jobRepository.jobModelList = db.getJobs()
-//        Log.i(TAG, "jobModelList: " + println(jobRepository.jobModelList.toString()))
-//
-//        hasJobs = jobRepository.jobModelList!!.isNotEmpty()
-//        return jobRepository.jobModelList!!
-//    }
-
     companion object {
         private const val TAG = "HomeFragment"
     }
