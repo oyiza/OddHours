@@ -27,8 +27,8 @@ class HomeFragment : Fragment() {
     ): View? {
         // retrieve jobs
         try {
-            jobRepository!!.buildJobList()
-            hasJobs = jobRepository!!.jobModelList!!.isNotEmpty()
+            jobRepository.buildJobList()
+            hasJobs = jobRepository.jobModelList!!.isNotEmpty()
         } catch (e: Exception) {
             Log.e(TAG, e.printStackTrace().toString())
         }
@@ -46,7 +46,7 @@ class HomeFragment : Fragment() {
         if (hasJobs) {
             homeRv.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = jobRepository!!.jobModelList?.let { HomeAdapter(it, requireActivity(), view.findNavController()) }
+                adapter = jobRepository.jobModelList?.let { HomeAdapter(it, requireActivity(), view.findNavController()) }
                 // let's keep an eye on the above adapter call, if we experience any weird issues, we can revert to the below one
                 // adapter = HomeAdapter(getAllJobs())
             }

@@ -13,13 +13,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val navView: BottomNavigationView = findViewById(R.id.bottomNv)
 
         /**
          * Calling initDatabase function to create the DatabaseHelper singleton
          */
         DatabaseHelper.initDatabase(this)
+
+        setContentView(R.layout.activity_main)
+        val navView: BottomNavigationView = findViewById(R.id.bottomNv)
 
         val navController = findNavController(R.id.navHostFragment)
         // Passing each menu ID as a set of Ids because each
