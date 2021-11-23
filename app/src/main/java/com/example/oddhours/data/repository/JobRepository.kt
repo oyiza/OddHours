@@ -70,8 +70,8 @@ class JobRepository() {
         return dbShifts.getShiftID(shiftStartDate, shiftEndDate, shiftStartTime, shiftEndTime)
     }
 
-    fun editShift(shiftsModel: ShiftsModel, shiftIdtoEdit: Int): Boolean {
-        return dbShifts.editShift(shiftsModel, shiftIdtoEdit)
+    fun editShift(shiftsModel: ShiftsModel, shiftIdToEdit: Int): Boolean {
+        return dbShifts.editShift(shiftsModel, shiftIdToEdit)
     }
 
     private fun deleteShiftsForJob(jobID: Int) {

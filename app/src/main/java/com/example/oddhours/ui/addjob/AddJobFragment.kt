@@ -42,6 +42,7 @@ class AddJobFragment : Fragment() {
 
         val args = arguments
         var jobIdToEdit: Int? = null
+
         if (args != null && !args.isEmpty && args.getBoolean(Constants.CURRENTLY_EDITING_JOB)) { // we're currently editing a job
             Log.d(TAG, args.toString())
             jobIdToEdit = jobRepository.getJobID(args.getString(Constants.JOB_NAME)!!, args.getString(Constants.JOB_LOCATION)!!)
@@ -117,13 +118,13 @@ class AddJobFragment : Fragment() {
         locationTv.setText("")
     }
 
-    fun Fragment.hideKeyboard() {
+    private fun Fragment.hideKeyboard() {
         view?.let { activity?.hideKeyboard(it) }
     }
-    fun Activity.hideKeyboard() {
-        hideKeyboard(currentFocus ?: View(this))
-    }
-    fun Context.hideKeyboard(view: View) {
+//    fun Activity.hideKeyboard() {
+//        hideKeyboard(currentFocus ?: View(this))
+//    }
+    private fun Context.hideKeyboard(view: View) {
         val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }

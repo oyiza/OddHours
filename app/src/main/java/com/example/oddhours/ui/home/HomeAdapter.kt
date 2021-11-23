@@ -60,7 +60,6 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
     val month = c.get(Calendar.MONTH)
     val day = c.get(Calendar.DAY_OF_MONTH)
 
-    val daysInMonth = intArrayOf(31,28,31,30,31,30,31,31,30,31,30,31)
     var dayOfYear = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
