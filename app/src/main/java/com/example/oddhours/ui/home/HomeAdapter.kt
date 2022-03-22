@@ -76,7 +76,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
         holder.jobLocation.text = currentItem.jobLocation
         holder.jobInfo.text = currentItem.jobInfo
 
-        // onClick listener for the add hours button
+        // onClick listener for the add shift button
         holder.addHoursButton.setOnClickListener {
             Log.i(TAG, "clicked button of : ${holder.jobName.text}")
 
@@ -166,6 +166,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                     // Log.d(TAG, "$endDate")
                 }, year, month, day)
                 dpd.datePicker.maxDate = today.timeInMillis
+                dpd.datePicker.minDate = startDate.timeInMillis
                 dpd.show()
             }
 
@@ -329,7 +330,6 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
         return true
     }
 
-    // TODO: could we move this to jobRepository?
     private fun getShiftType(endDate: Calendar, startDate: Calendar): Int {
         val endDateDay = endDate.get(Calendar.DAY_OF_MONTH)
         val endDateMonth = endDate.get(Calendar.MONTH)

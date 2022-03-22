@@ -15,7 +15,7 @@
     <string name="hours_worked">Hours Worked</string>
 
     <!-- buttons -->
-    <string name="btn_add_hours">Add Hours</string>
+    <string name="btn_add_hours">Add Shift</string>
     <string name="btn_add_job">Add Job</string>
     <string name="btn_delete_job">Delete Job</string>
     <string name="btn_edit_job">Edit Job</string>
