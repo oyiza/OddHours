@@ -1,16 +1,17 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
+    id 'kotlin-android-extensions' // TODO: this plugin id is deprecated
 }
 
 android {
     compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
+    // if you want to use lower minSdkVersion, would have to use multidex library: https://developer.android.com/studio/build/multidex#mdex-gradle
     defaultConfig {
         applicationId "com.example.oddhours"
-        minSdkVersion 18
+        minSdkVersion 21
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
@@ -34,7 +35,6 @@ android {
 }
 
 dependencies {
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     // For control over item selection of both touch and mouse driven selection
