@@ -4,7 +4,8 @@
     <string name="title_home">Home</string>
     <string name="txt_no_jobs">No Jobs Added Yet</string>
     <string name="txt_no_shifts">No Shifts Added Yet. Go to Home page to add a shift!</string>
-    <string name="title_notifications">Notify</string>
+    <string name="title_charts">Charts</string>
+    <string name="title_shifts">Shifts</string>
     <string name="app_name">OddHours</string>
     <string name="initial_date_value">--/--/----</string>
     <string name="initial_time_value">--:--</string>

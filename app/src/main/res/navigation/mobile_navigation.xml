@@ -24,9 +24,9 @@
         tools:layout="@layout/fragment_shifts" />
 
     <fragment
-        android:id="@+id/navigationNotificationsFragment"
-        android:name="com.example.oddhours.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigationChartsFragment"
+        android:name="com.example.oddhours.ui.charts.ChartsFragment"
+        android:label="@string/title_charts"
+        tools:layout="@layout/fragment_charts" />
 
 </navigation>
