@@ -119,7 +119,7 @@ class JobRepository() {
 
             val sortedShifts = shiftsFromJobId.sortedBy { shift -> shift.shiftDayOfYear}
 
-            if (sortedShifts.size > 0) {
+            if (sortedShifts.isNotEmpty()) {
                 shiftsListModel = ShiftsListModel(job, sortedShifts)
                 shiftsListForAdapter.add(shiftsListModel)
             }
