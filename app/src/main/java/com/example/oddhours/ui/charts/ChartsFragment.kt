@@ -1,4 +1,4 @@
-package com.example.oddhours.ui.notifications
+package com.example.oddhours.ui.charts
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.oddhours.R
 
-class NotificationsFragment : Fragment() {
+class ChartsFragment : Fragment() {
 
-    private lateinit var notificationsViewModel: NotificationsViewModel
+    private lateinit var chartsViewModel: ChartsViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        notificationsViewModel =
-                ViewModelProvider(this).get(NotificationsViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_notifications, container, false)
-        val textView: TextView = root.findViewById(R.id.notificationTv)
-        notificationsViewModel.text.observe(viewLifecycleOwner, Observer {
+        chartsViewModel =
+                ViewModelProvider(this).get(ChartsViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_charts, container, false)
+        val textView: TextView = root.findViewById(R.id.chartTv)
+        chartsViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

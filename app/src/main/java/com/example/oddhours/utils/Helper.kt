@@ -11,15 +11,13 @@ class Helper {
         }
 
         var dayOfYear = 0
-        var counter = 0
-        for (item in daysInMonth) {
+        for ((counter, item) in daysInMonth.withIndex()) {
             if(counter <= (monthOfYear-1)) {
                 dayOfYear += item
             }
             else if (counter == monthOfYear) {
                 dayOfYear += dayOfMonth
             }
-            counter++
         }
         return dayOfYear
     }

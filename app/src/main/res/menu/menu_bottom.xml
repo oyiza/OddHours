@@ -14,11 +14,11 @@
     <item
         android:id="@+id/navigationShiftsFragment"
         android:icon="@drawable/ic_list"
-        android:title="Shifts" />
+        android:title="@string/title_shifts" />
 
     <item
-        android:id="@+id/navigationNotificationsFragment"
-        android:icon="@drawable/ic_notifications"
-        android:title="@string/title_notifications" />
+        android:id="@+id/navigationChartsFragment"
+        android:icon="@drawable/ic_chart"
+        android:title="@string/title_charts" />
 
 </menu>
