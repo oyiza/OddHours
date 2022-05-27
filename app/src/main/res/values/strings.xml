@@ -33,7 +33,15 @@
     <string name="placeholder_job_information">Job Information</string>
     <string name="placeholder_job_location">Job Location</string>
     <string name="placeholder_job_name">Job Name</string>
+    <string name="placeholder_dropdown_prompt">Choose Chart Type</string>
 
     <!--  images / anything else  -->
     <string name="arrow">arrow</string>
+    
+    <!--  dropdown items (can't use constants here unfortunately) -->
+    <string-array name="chart_types">
+        <item>Choose Chart Type</item>
+        <item>Line Chart</item>
+        <item>Bar Chart</item>
+    </string-array>
 </resources>
