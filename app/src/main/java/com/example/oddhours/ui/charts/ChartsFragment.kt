@@ -45,14 +45,14 @@ class ChartsFragment : Fragment() {
 
         chartDropdownTV.setOnItemClickListener{ parent, view, position, id ->
             if (chartDropdownTV != null) {
-                Log.d(TAG, chartDropdownTV.text.toString())
+                Log.d(TAG, "selected dropdown item: ${chartDropdownTV.text}")
 
                 when (chartDropdownTV.text.toString()) {
                     DEFAULT -> hideOtherCharts(root, DEFAULT)
                     LINE -> buildLineChart(root)
                     BAR -> buildBarChart(root)
                     else -> {
-                        Log.e(TAG, "something went wrong, selected item isn't accounted for.")
+                        Log.e(TAG, "something went wrong, selected item ${chartDropdownTV.text} isn't accounted for.")
                     }
                 }
             }
@@ -62,23 +62,21 @@ class ChartsFragment : Fragment() {
     }
 
     private fun buildBarChart(root: View) {
-        Log.d(TAG, "buildBarChart() called")
         hideOtherCharts(root, BAR)
 
-        val strList = arrayListOf("test1", "test2", "test3", "test4", "test5", "test6")
-        val dataList = arrayListOf(1,2,3,4,5,6)
+        val listOfJobsNames = getJobNameAndLocationForDisplay()
+        val dataList = getTotalHoursList()
 
         val barView = root.findViewById(R.id.bar_view) as BarView
-        barView.setBottomTextList(strList)
+        barView.setBottomTextList(listOfJobsNames)
         barView.setDataList(dataList, 100)
     }
 
     private fun buildLineChart(root: View) {
-        Log.d(TAG, "buildLineChart() called")
         hideOtherCharts(root, LINE)
 
-        val strList = getJobNameAndLocationForDisplay() // list of job names
-        val dataList1: ArrayList<Int> = getTotalHoursListForLine() // list of hours worked
+        val listOfJobsNames = getJobNameAndLocationForDisplay()
+        val dataList1: ArrayList<Int> = getTotalHoursList() // list of hours worked
         val dataLists = arrayListOf(dataList1)
 
         val lineView = root.findViewById(R.id.line_view) as LineView
@@ -86,7 +84,7 @@ class ChartsFragment : Fragment() {
 
         lineView.setShowPopup(LineView.SHOW_POPUPS_All) //optional
 
-        lineView.setBottomTextList(strList)
+        lineView.setBottomTextList(listOfJobsNames)
         lineView.setColorArray(intArrayOf(Color.BLACK, Color.GREEN, Color.GRAY, Color.CYAN))
 
         lineView.setDataList(dataLists)
@@ -124,13 +122,14 @@ class ChartsFragment : Fragment() {
         return jobNameAndLocation.toCollection(ArrayList())
     }
 
-    private fun getTotalHoursListForLine(): ArrayList<Int> {
+    private fun getTotalHoursList(): ArrayList<Int> {
         val tempJobHours: MutableList<Int> = ArrayList()
         for (job in jobRepository.jobModelList!!) {
             tempJobHours.add(jobRepository.getTotalHoursForJobAsInt(job))
         }
-        Log.d(TAG, "displaying tempJobHours")
-        Log.d(TAG, tempJobHours.toCollection(ArrayList()).toString())
+        // DEBUG
+        // Log.d(TAG, "displaying tempJobHours")
+        // Log.d(TAG, tempJobHours.toCollection(ArrayList()).toString())
 
         return tempJobHours.toCollection(ArrayList())
     }
