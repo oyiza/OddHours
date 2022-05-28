@@ -28,6 +28,12 @@ class JobRepository() {
     private val dbJobs = TableJobs()
     private val dbShifts = TableShifts()
 
+    init {
+        if (jobModelList == null) {
+            jobModelList = buildJobList()
+        }
+    }
+
     /**
      * @return list of jobs from the DB
      */
@@ -155,6 +161,32 @@ class JobRepository() {
             }
         }
         return totalTimeWorked
+    }
+
+    fun getTotalHoursForJobAsInt(job: JobModel): Int {
+        var shiftsList = mutableListOf<ShiftsModel>()
+        shiftsList = dbShifts.getShiftsForJobID(job.jobID)
+        var totalHours = 0
+
+        for (shift in shiftsList) {
+            // Log.d("ChartsFragment", job.jobName + " " + shift.hoursWorked) // DEBUG
+            totalHours += convertShiftTimeToInt(shift.hoursWorked)
+        }
+
+        return totalHours
+    }
+
+    private fun convertShiftTimeToInt(hoursWorked: String): Int {
+        var shiftTime = 0
+        if (hoursWorked.isNotBlank()) {
+            val hours = hoursWorked.substringBefore("h").toInt()
+            val minutes = hoursWorked.substringAfter(" ").substringBefore("m").toInt()
+
+            shiftTime = hours + (minutes / 60)
+            // Log.d("ChartsFragment", "shiftTime: $shiftTime") // DEBUG
+        }
+
+        return shiftTime
     }
 
     companion object {
