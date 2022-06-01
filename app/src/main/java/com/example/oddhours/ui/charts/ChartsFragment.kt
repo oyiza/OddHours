@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.HorizontalScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.oddhours.R
@@ -49,7 +50,12 @@ class ChartsFragment : Fragment() {
 
                 when (chartDropdownTV.text.toString()) {
                     DEFAULT -> hideOtherCharts(root, DEFAULT)
-                    LINE -> buildLineChart(root)
+                    LINE -> {
+                        // when there's no jobs the line chart breaks the app
+                        if (jobRepository.jobModelList!!.isNotEmpty()) {
+                            buildLineChart(root)
+                        }
+                    }
                     BAR -> buildBarChart(root)
                     else -> {
                         Log.e(TAG, "something went wrong, selected item ${chartDropdownTV.text} isn't accounted for.")
@@ -94,21 +100,21 @@ class ChartsFragment : Fragment() {
     // LINE, BAR
     private fun hideOtherCharts(root: View, chartType: String) {
         // LINE
-        if (LINE != chartType) {
-            val chartView = root.findViewById(R.id.line_view) as LineView
-            chartView.visibility = View.GONE
-        } else {
-            val chartView = root.findViewById(R.id.line_view) as LineView
+        if (LINE == chartType) {
+            val chartView = root.findViewById(R.id.horizontalScrollViewLine) as HorizontalScrollView
             chartView.visibility = View.VISIBLE
+        } else {
+            val chartView = root.findViewById(R.id.horizontalScrollViewLine) as HorizontalScrollView
+            chartView.visibility = View.GONE
         }
 
         // BAR
-        if (BAR != chartType) {
-            val chartView = root.findViewById(R.id.bar_view) as BarView
-            chartView.visibility = View.GONE
-        } else {
-            val chartView = root.findViewById(R.id.bar_view) as BarView
+        if (BAR == chartType) {
+            val chartView = root.findViewById(R.id.horizontalScrollViewBar) as HorizontalScrollView
             chartView.visibility = View.VISIBLE
+        } else {
+            val chartView = root.findViewById(R.id.horizontalScrollViewBar) as HorizontalScrollView
+            chartView.visibility = View.GONE
         }
     }
 

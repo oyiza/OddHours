@@ -36,7 +36,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" >
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+        android:paddingStart="20dp"
+        android:paddingEnd="40dp" >
 
         <view
             android:id="@+id/line_view"
@@ -53,7 +55,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" >
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+        android:paddingStart="5dp"
+        android:paddingEnd="40dp" >
 
         <view
             android:id="@+id/bar_view"
