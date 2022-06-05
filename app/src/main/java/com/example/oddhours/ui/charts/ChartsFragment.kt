@@ -22,13 +22,14 @@ class ChartsFragment : Fragment() {
     private lateinit var chartsViewModel: ChartsViewModel
     private var jobRepository = JobRepository()
 
-    private val DEFAULT = "Choose Chart Type"
     private val LINE = "Line Chart"
     private val BAR = "Bar Chart"
 
-    // onCreateView, grab all the data we want to work with for the diff types of charts and load a default view chart?
-    // then present a drop down option for the user to select what type of chart they want to see
-    // depending on the choice of chart, call the function that will load the layout with the chart
+    /**
+     * onCreateView, grab all the data we want to work with for the diff types of charts and load a default view chart
+     * then present a drop down option for the user to select what type of chart they want to see
+     * depending on the choice of chart, call the function that will load the layout with the chart
+     */
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -44,12 +45,13 @@ class ChartsFragment : Fragment() {
         val chartDropdownTV = root.findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
         chartDropdownTV.setAdapter(arrayAdapter)
 
+        loadDefaultChart(root)
+
         chartDropdownTV.setOnItemClickListener{ parent, view, position, id ->
             if (chartDropdownTV != null) {
                 Log.d(TAG, "selected dropdown item: ${chartDropdownTV.text}")
 
                 when (chartDropdownTV.text.toString()) {
-                    DEFAULT -> hideOtherCharts(root, DEFAULT)
                     LINE -> {
                         // when there's no jobs the line chart breaks the app
                         if (jobRepository.jobModelList!!.isNotEmpty()) {
@@ -65,6 +67,13 @@ class ChartsFragment : Fragment() {
         }
 
         return root
+    }
+
+    /** default chart is currently Line Chart */
+    private fun loadDefaultChart(root: View?) {
+        if (root != null && jobRepository.jobModelList!!.isNotEmpty()) {
+            buildLineChart(root)
+        }
     }
 
     private fun buildBarChart(root: View) {
@@ -97,7 +106,7 @@ class ChartsFragment : Fragment() {
     }
 
     // should be a better way of doing this but we're hiding other charts individually
-    // LINE, BAR
+    // current charts implemented: LINE, BAR
     private fun hideOtherCharts(root: View, chartType: String) {
         // LINE
         if (LINE == chartType) {
