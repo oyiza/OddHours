@@ -29,7 +29,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/btn_delete_shift"
-            android:layout_marginStart="1dp"/>
+            android:layout_marginStart="1dp"
+            style="?android:attr/buttonBarButtonStyle"
+            android:backgroundTint="@android:color/holo_red_light" />
     </LinearLayout>
 
 

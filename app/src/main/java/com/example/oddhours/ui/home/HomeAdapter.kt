@@ -23,7 +23,6 @@ import com.example.oddhours.utils.Constants
 import com.example.oddhours.utils.Helper
 import kotlinx.android.synthetic.main.dialog_add_shift.view.*
 import kotlinx.android.synthetic.main.dialog_edit_delete_job.view.*
-import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.item_job.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -68,7 +67,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
         return JobViewHolder(itemView)
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("SimpleDateFormat", "NotifyDataSetChanged")
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
         val currentItem = jobList[position]
 
@@ -95,9 +94,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                 .setView(mDialogView)
                 .setTitle("Add a Shift")
             val mAlertDialog = mBuilder.show()
-            // not showing date text so we force the user to click on the date buttons - this sets the startDate and endDate correctly for us
-//            mDialogView.shiftStartDateTV.text = sdf.format(c.time)
-//            mDialogView.shiftEndDateTV.text = sdf.format(c.time)
+            // note: we're not showing date text so we force the user to click on the date buttons - this sets the startDate and endDate correctly for us
 
             /**
              * Shift Start Date Button onclicklistener
@@ -117,7 +114,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                     // Log.d(TAG, "startDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
                     // Log.d(TAG, "$startDate")
                     dayOfYear = 0
-                    var helper = Helper()
+                    val helper = Helper() // TODO: could make this a class field?
                     dayOfYear = helper.calculateDayOfTheYear(monthOfYear, dayOfMonth, year)
 
                 }, year, month, day)
@@ -278,7 +275,6 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
 
             // onClick listener for delete button
             mDialogView.deleteJobBtn.setOnClickListener{
-                // TODO: maybe add some confirmation before deleting the job, say like 'are you sure?' before deleting it or have the button red so user is warned
                 val jobModel = JobModel(1, holder.jobName.text as String, holder.jobLocation.text as String)
                 val isDeleted = jobRepository.deleteJob(jobModel)
                 if (isDeleted) {
