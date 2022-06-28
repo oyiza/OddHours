@@ -1,14 +1,13 @@
 package com.example.oddhours.ui.shifts
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.NavController
@@ -16,11 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.oddhours.R
 import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.data.repository.JobRepository
-import com.example.oddhours.ui.home.HomeAdapter
 import com.example.oddhours.utils.Constants
 import com.example.oddhours.utils.Helper
 import kotlinx.android.synthetic.main.dialog_add_shift.view.*
-import kotlinx.android.synthetic.main.dialog_edit_delete_job.view.*
 import kotlinx.android.synthetic.main.dialog_edit_delete_shift.view.*
 import kotlinx.android.synthetic.main.item_shift_detail.view.*
 import java.text.SimpleDateFormat
@@ -71,6 +68,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
         return ViewHolder(v, context)
     }
 
+    @SuppressLint("NotifyDataSetChanged", "SimpleDateFormat")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val shifts = shiftsList[position]
         holder.bindShifts(shifts)
@@ -89,10 +87,14 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                 val endDate = Calendar.getInstance()
                 val today = Calendar.getInstance()
 
+                // https://linear.app/oddhours/issue/ODD-27/edit-shift-should-pass-in-shift-details
+                // we should be able to pass in the shift's details to the form, something like this:
+                // mDialogView.shiftStartDateTV.text = sdf.format(c.time)
+                // mDialogView.shiftEndDateTV.text = sdf.format(c.time)
+
                 /**
                  * below code is for popup dialog and the respective on button click listeners
                  */
-
                 val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_shift, null)
                 val mBuilder = AlertDialog.Builder(context)
                     .setView(mDialogView)

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3D3A3A"
+    android:background="#3D3A4A"
     android:gravity="center_vertical"
     android:orientation="vertical" >
 
@@ -29,7 +29,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/btn_delete_job"
-                android:layout_marginStart="1dp"/>
+                android:layout_marginStart="1dp"
+                style="?android:attr/buttonBarButtonStyle"
+                android:backgroundTint="@android:color/holo_red_light" />
         </LinearLayout>
 
 
