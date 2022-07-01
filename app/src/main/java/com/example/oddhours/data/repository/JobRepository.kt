@@ -22,6 +22,7 @@ import com.example.oddhours.database.TableShifts
  *      }
  *  }
  */
+// TODO: unit test for jobRepository?
 class JobRepository() {
 
     var jobModelList: List<JobModel>? = null

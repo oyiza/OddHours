@@ -22,8 +22,8 @@ class ChartsFragment : Fragment() {
     private lateinit var chartsViewModel: ChartsViewModel
     private var jobRepository = JobRepository()
 
-    private val LINE = "Line Chart"
-    private val BAR = "Bar Chart"
+    private val LINE = "Line Chart (Hours)"
+    private val BAR = "Bar Chart (Hours)"
 
     /**
      * onCreateView, grab all the data we want to work with for the diff types of charts and load a default view chart
