@@ -292,7 +292,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
         // below variables help fix issue when startDate and endDate are at the end of the 7 day cycle and it's either
         // the same month or a different month. we want to ensure the overlap is still exactly one day
         val oneDayOverlapSameMonth = endDateDay - startDateDay == 1
-        val oneDayOverlapDiffMonth = (startDateDayOfWeek == 7 && endDateDayOfWeek == 1) && (endDateMonth - startDateMonth == 1)
+        val oneDayOverlapDiffMonth = ((startDateDayOfWeek == 7 && endDateDayOfWeek == 1) || (startDateDayOfWeek == endDateDayOfWeek-1)) && (endDateMonth - startDateMonth == 1)
         val oneDayOverlap = oneDayOverlapSameMonth || oneDayOverlapDiffMonth
 
         // DEBUG LOGS (uncomment following log lines for more information in logcat
