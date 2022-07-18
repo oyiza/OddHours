@@ -54,10 +54,10 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
     var endTimeHour = 0
     var endTimeMin = 0
 
-    val c = Calendar.getInstance()
-    val year = c.get(Calendar.YEAR)
-    val month = c.get(Calendar.MONTH)
-    val day = c.get(Calendar.DAY_OF_MONTH)
+    val calendar = Calendar.getInstance()
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH)
+    val day = calendar.get(Calendar.DAY_OF_MONTH)
 
     var dayOfYear = 0
 
@@ -104,11 +104,11 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
             mDialogView.shiftStartDateBtn.setOnClickListener{
                 val dpd = DatePickerDialog(context, { view, year, monthOfYear, dayOfMonth ->
                     // Display Selected date in TextView
-                    c.set(Calendar.YEAR, year)
-                    c.set(Calendar.MONTH, monthOfYear)
-                    c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    startDateForDb = sdf.format(c.time).toString() // "06/14/2021"
-                    mDialogView.shiftStartDateTv.text = sdf.format(c.time)
+                    calendar.set(Calendar.YEAR, year)
+                    calendar.set(Calendar.MONTH, monthOfYear)
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    startDateForDb = sdf.format(calendar.time).toString() // "06/14/2021"
+                    mDialogView.shiftStartDateTv.text = sdf.format(calendar.time)
                     startDate.set(year, monthOfYear, dayOfMonth)
                     // DEBUG TODO: remove this eventually
                     // Log.d(TAG, "startDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
@@ -132,15 +132,15 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
             mDialogView.startTimeBtn.setOnClickListener{
                 val timeSetListener = TimePickerDialog.OnTimeSetListener{
                         timePicker, hour, minute ->
-                    c.set(Calendar.HOUR_OF_DAY, hour)
-                    c.set(Calendar.MINUTE, minute)
+                    calendar.set(Calendar.HOUR_OF_DAY, hour)
+                    calendar.set(Calendar.MINUTE, minute)
                     startTimeHour = hour
                     startTimeMin = minute
-                    mDialogView.startTimeTv.text = SimpleDateFormat("HH:mm").format(c.time)
-                    startTimeForDb = SimpleDateFormat("HH:mm").format(c.time)
+                    mDialogView.startTimeTv.text = SimpleDateFormat("HH:mm").format(calendar.time)
+                    startTimeForDb = SimpleDateFormat("HH:mm").format(calendar.time)
                 }
 
-                TimePickerDialog(context, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(
+                TimePickerDialog(context, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(
                     Calendar.MINUTE), false).show()
             }
 
@@ -152,11 +152,11 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
             mDialogView.shiftEndDateBtn.setOnClickListener{
                 val dpd = DatePickerDialog(context, { view, year, monthOfYear, dayOfMonth ->
                     // Display Selected date in TextView
-                    c.set(Calendar.YEAR, year)
-                    c.set(Calendar.MONTH, monthOfYear)
-                    c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    endDateForDb = sdf.format(c.time).toString() // "06/14/2021"
-                    mDialogView.shiftEndDateTv.text = sdf.format(c.time)
+                    calendar.set(Calendar.YEAR, year)
+                    calendar.set(Calendar.MONTH, monthOfYear)
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    endDateForDb = sdf.format(calendar.time).toString() // "06/14/2021"
+                    mDialogView.shiftEndDateTv.text = sdf.format(calendar.time)
                     endDate.set(year, monthOfYear, dayOfMonth)
                     // DEBUG TODO: remove this eventually
                     // Log.d(TAG, "endDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
@@ -176,14 +176,14 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
             mDialogView.endTimeBtn.setOnClickListener{
                 val timeSetListener = TimePickerDialog.OnTimeSetListener{
                         timePicker, hour, minute ->
-                    c.set(Calendar.HOUR_OF_DAY, hour)
-                    c.set(Calendar.MINUTE, minute)
+                    calendar.set(Calendar.HOUR_OF_DAY, hour)
+                    calendar.set(Calendar.MINUTE, minute)
                     endTimeHour = hour
                     endTimeMin = minute
-                    mDialogView.endTimeTv.text = SimpleDateFormat("HH:mm").format(c.time)
-                    endTimeForDb = SimpleDateFormat("HH:mm").format(c.time)
+                    mDialogView.endTimeTv.text = SimpleDateFormat("HH:mm").format(calendar.time)
+                    endTimeForDb = SimpleDateFormat("HH:mm").format(calendar.time)
                 }
-                TimePickerDialog(context, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(
+                TimePickerDialog(context, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(
                     Calendar.MINUTE), false).show()
             }
 

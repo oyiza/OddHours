@@ -34,10 +34,10 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
     /**
      *  The 4 variables below are used to insert these values in SQLite
      */
-    var startDateForDb = ""
-    var endDateForDb = ""
-    var startTimeForDb = ""
-    var endTimeForDb = ""
+    private var startDateForDb = ""
+    private var endDateForDb = ""
+    private var startTimeForDb = ""
+    private var endTimeForDb = ""
 
     /**
      *  The 4 variables below are used for calculating the hours and min worked (together with the dates above - if they're different)
@@ -47,10 +47,10 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
     var endTimeHour = 0
     var endTimeMin = 0
 
-    val c = Calendar.getInstance()
-    val year = c.get(Calendar.YEAR)
-    val month = c.get(Calendar.MONTH)
-    val day = c.get(Calendar.DAY_OF_MONTH)
+    val calendar = Calendar.getInstance()
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH)
+    val day = calendar.get(Calendar.DAY_OF_MONTH)
 
     var dayOfYear = 0
 
@@ -80,20 +80,22 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
 
             mDialogView.editShiftBtn.setOnClickListener{
                 mDialog.dismiss()
+
+                // get values for displaying in the dialog
+                startDateForDb = holder.itemView.shiftStartTv.text.toString()
+                endDateForDb = holder.itemView.shiftEndTv.text.toString()
+                startTimeForDb = holder.itemView.shiftStartHourTv.text.toString()
+                endTimeForDb = holder.itemView.shiftEndHourTv.text.toString()
+
+                // TODO: should be able to call the jobrepository from here to get the shiftID
                 editShiftID = getShiftID(holder.itemView.shiftStartTv.text as String, holder.itemView.shiftEndTv.text as String, holder.itemView.shiftStartHourTv.text as String, holder.itemView.shiftEndHourTv.text as String)
 
-                // TODO: at the beginning, startDate and endDate are always the same because of similar initialization
                 val startDate = Calendar.getInstance()
                 val endDate = Calendar.getInstance()
                 val today = Calendar.getInstance()
 
-                // https://linear.app/oddhours/issue/ODD-27/edit-shift-should-pass-in-shift-details
-                // we should be able to pass in the shift's details to the form, something like this:
-                // mDialogView.shiftStartDateTV.text = sdf.format(c.time)
-                // mDialogView.shiftEndDateTV.text = sdf.format(c.time)
-
                 /**
-                 * below code is for popup dialog and the respective on button click listeners
+                 * edit shift popup dialog and the respective on button click listeners
                  */
                 val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_shift, null)
                 val mBuilder = AlertDialog.Builder(context)
@@ -101,21 +103,40 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                     .setTitle("Edit Shift")
                 val mAlertDialog = mBuilder.show()
 
+                // display values in the dialog
+                mDialogView.shiftStartDateTv.text = startDateForDb
+                mDialogView.startTimeTv.text = startTimeForDb
+                mDialogView.shiftEndDateTv.text = endDateForDb
+                mDialogView.endTimeTv.text = endTimeForDb
+
+                // since we're showing values, the user could potentially not click all the buttons and would hit save.
+                // we need to ensure the current values are still stored in the database
+                startTimeHour = startTimeForDb.substringBefore(":").toInt()
+                startTimeMin = startTimeForDb.substringAfter(":").toInt()
+                endTimeHour = endTimeForDb.substringBefore(":").toInt()
+                endTimeMin = endTimeForDb.substringAfter(":").toInt()
+
+                // DEBUG
+                // Log.d(TAG, "startDate before setting via the button: ${startDate.time}")
+                // Log.d(TAG, "startDateForDb: $startDateForDb, endDateForDb: $endDateForDb")
+                startDate.set(startDateForDb.substringAfterLast("/").toInt(), startDateForDb.substringBefore("/").toInt() -1, startDateForDb.substring(3, 5).toInt())
+                endDate.set(endDateForDb.substringAfterLast("/").toInt(), endDateForDb.substringBefore("/").toInt() -1, endDateForDb.substring(3, 5).toInt())
+
                 mDialogView.shiftStartDateBtn.setOnClickListener{
                     val dpd = DatePickerDialog(context, { view, year, monthOfYear, dayOfMonth ->
                         // Display Selected date in TextView
-                        c.set(Calendar.YEAR, year)
-                        c.set(Calendar.MONTH, monthOfYear)
-                        c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                        startDateForDb = sdf.format(c.time).toString() // "06/14/2021"
-                        mDialogView.shiftStartDateTv.text = sdf.format(c.time)
+                        calendar.set(Calendar.YEAR, year)
+                        calendar.set(Calendar.MONTH, monthOfYear)
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                        startDateForDb = sdf.format(calendar.time).toString() // "06/14/2021"
+                        mDialogView.shiftStartDateTv.text = sdf.format(calendar.time)
                         startDate.set(year, monthOfYear, dayOfMonth)
                         dayOfYear = 0
                         var helper = Helper()
                         dayOfYear = helper.calculateDayOfTheYear(monthOfYear, dayOfMonth, year)
-                        // DEBUG TODO: remove this eventually
+                        // DEBUG
                         // Log.d(TAG, "startDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
-                        // Log.d(TAG, "$startDate")
+                        // Log.d(TAG, "startDate after setting via the button: ${startDate.time}")
                     }, year, month, day)
                     // TODO: there should be some logic here to move around the maxDate and minDate for the datepicker
                     dpd.datePicker.maxDate = today.timeInMillis
@@ -125,31 +146,32 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                 mDialogView.startTimeBtn.setOnClickListener{
                     val timeSetListener = TimePickerDialog.OnTimeSetListener{
                             timePicker, hour, minute ->
-                        c.set(Calendar.HOUR_OF_DAY, hour)
-                        c.set(Calendar.MINUTE, minute)
+                        calendar.set(Calendar.HOUR_OF_DAY, hour)
+                        calendar.set(Calendar.MINUTE, minute)
                         startTimeHour = hour
                         startTimeMin = minute
-                        mDialogView.startTimeTv.text = SimpleDateFormat("HH:mm").format(c.time)
-                        startTimeForDb = SimpleDateFormat("HH:mm").format(c.time)
+                        mDialogView.startTimeTv.text = SimpleDateFormat("HH:mm").format(calendar.time)
+                        startTimeForDb = SimpleDateFormat("HH:mm").format(calendar.time)
                     }
 
-                    TimePickerDialog(context, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(
+                    TimePickerDialog(context, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(
                         Calendar.MINUTE), false).show()
+                    Log.e(TAG, "start hour: $startTimeHour, start minute: $startTimeMin")
                 }
 
 
                 mDialogView.shiftEndDateBtn.setOnClickListener{
                     val dpd = DatePickerDialog(context, { view, year, monthOfYear, dayOfMonth ->
                         // Display Selected date in TextView
-                        c.set(Calendar.YEAR, year)
-                        c.set(Calendar.MONTH, monthOfYear)
-                        c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                        endDateForDb = sdf.format(c.time).toString() // "06/14/2021"
-                        mDialogView.shiftEndDateTv.text = sdf.format(c.time)
+                        calendar.set(Calendar.YEAR, year)
+                        calendar.set(Calendar.MONTH, monthOfYear)
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                        endDateForDb = sdf.format(calendar.time).toString() // "06/14/2021"
+                        mDialogView.shiftEndDateTv.text = sdf.format(calendar.time)
                         endDate.set(year, monthOfYear, dayOfMonth)
-                        // DEBUG TODO: remove this eventually
+                        // DEBUG
                         // Log.d(TAG, "endDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
-                        // Log.d(TAG, "$endDate")
+                        // Log.d(TAG, "${endDate.time}")
                     }, year, month, day)
                     dpd.datePicker.maxDate = today.timeInMillis
                     dpd.show()
@@ -159,15 +181,17 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                 mDialogView.endTimeBtn.setOnClickListener{
                     val timeSetListener = TimePickerDialog.OnTimeSetListener{
                             timePicker, hour, minute ->
-                        c.set(Calendar.HOUR_OF_DAY, hour)
-                        c.set(Calendar.MINUTE, minute)
+                        calendar.set(Calendar.HOUR_OF_DAY, hour)
+                        calendar.set(Calendar.MINUTE, minute)
                         endTimeHour = hour
                         endTimeMin = minute
-                        mDialogView.endTimeTv.text = SimpleDateFormat("HH:mm").format(c.time)
-                        endTimeForDb = SimpleDateFormat("HH:mm").format(c.time)
+                        mDialogView.endTimeTv.text = SimpleDateFormat("HH:mm").format(calendar.time)
+                        endTimeForDb = SimpleDateFormat("HH:mm").format(calendar.time)
                     }
-                    TimePickerDialog(context, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(
+
+                    TimePickerDialog(context, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(
                         Calendar.MINUTE), false).show()
+                    // Log.e(TAG, "end time hour: $endTimeHour, end time minute: $endTimeMin")
                 }
 
 
@@ -181,6 +205,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                                 jobRepository.editShift(shiftsModel, editShiftID)
                                 Toast.makeText(context, "⏲ Successfully edited shift", Toast.LENGTH_LONG).show()
                                 mAlertDialog.dismiss()
+                                // TODO: why is this not needed here but needed in the day shift logic?
 //                                shiftsList = removeItemFromUI(shiftsList, position)
                                 notifyDataSetChanged()
                                 navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
@@ -201,6 +226,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                                         Toast.LENGTH_LONG
                                     ).show()
                                 }
+                                // TODO: why are we removing items from UI when editing?
                                 shiftsList = removeItemFromUI(shiftsList, position)
                                 notifyDataSetChanged()
                                 navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
@@ -277,7 +303,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
         return true
     }
 
-    // TODO: could we move this to jobRepository?
+    // TODO: could we move this to jobRepository? it's duplicated here from HomeAdapter
     private fun getShiftType(endDate: Calendar, startDate: Calendar): Int {
         val endDateDay = endDate.get(Calendar.DAY_OF_MONTH)
         val endDateMonth = endDate.get(Calendar.MONTH)
@@ -296,12 +322,13 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
         val oneDayOverlap = oneDayOverlapSameMonth || oneDayOverlapDiffMonth
 
         // DEBUG LOGS (uncomment following log lines for more information in logcat
-        // Log.d(TAG, "startDateDay: $startDateDay")
-        // Log.d(TAG, "startDateMonth: $startDateMonth")
-        // Log.d(TAG, "endDateDay: $endDateDay")
-        // Log.d(TAG, "endDateMonth: $endDateMonth")
-        // Log.d(TAG, "endDateDayOfWeek: $endDateDayOfWeek, startDateDayOfWeek: $startDateDayOfWeek")
-        // Log.d(TAG, "----------------------------------------------------------------------------")
+         // Log.d(TAG, "startDate: ${startDate.time}, endDate: ${endDate.time}")
+         // Log.d(TAG, "startDateDay: $startDateDay")
+         // Log.d(TAG, "startDateMonth: $startDateMonth")
+         // Log.d(TAG, "endDateDay: $endDateDay")
+         // Log.d(TAG, "endDateMonth: $endDateMonth")
+         // Log.d(TAG, "endDateDayOfWeek: $endDateDayOfWeek, startDateDayOfWeek: $startDateDayOfWeek")
+         // Log.d(TAG, "----------------------------------------------------------------------------")
 
         if (((startDateDayOfWeek == 7 && endDateDayOfWeek == 1) && oneDayOverlap)
             || ((endDateDayOfWeek == startDateDayOfWeek + 1) && oneDayOverlap)) {
