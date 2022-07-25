@@ -39,8 +39,8 @@ class AddJobFragment : Fragment() {
     @SuppressLint("DefaultLocale")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val locationPattern = Regex("[0-9]|[^A-Za-z,& ]")
-        val companyPattern = Regex("[^A-Za-z0-9]")
+        val locationPattern = Regex("[0-9]|[^A-Za-z, ]")
+        val companyPattern = Regex("[^A-Za-z0-9,& ]")
 
         val args = arguments
         var jobIdToEdit: Int? = null
