@@ -39,6 +39,8 @@ class AddJobFragment : Fragment() {
     @SuppressLint("DefaultLocale")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val locationPattern = Regex("[^0-9A-Za-z, ]")
+        val companyPattern = Regex("[^A-Za-z0-9&@#$\\- ]")
 
         val args = arguments
         var jobIdToEdit: Int? = null
@@ -60,7 +62,13 @@ class AddJobFragment : Fragment() {
             if (jobIdToEdit != null) {
                 val companyName = companyTv.text.toString().replace("'","\'").toUpperCase()
                 val location = locationTv.text.toString().toUpperCase()
-                if (jobRepository.jobExists(companyName, location)) {
+                if(locationPattern.containsMatchIn(location) || location == ""){
+                    Toast.makeText(activity, "❌ Please enter a valid location name", Toast.LENGTH_LONG).show()
+                }
+                else if(companyPattern.containsMatchIn(companyName) || companyName == ""){
+                    Toast.makeText(activity, "❌ Please enter a valid company name", Toast.LENGTH_LONG).show()
+                }
+                else if (jobRepository.jobExists(companyName, location)) {
                     Toast.makeText(activity, "❌ A job already exists with this name and location.", Toast.LENGTH_LONG).show()
                 } else {
                     val jobModel = JobModel(1, companyName, location)
@@ -84,9 +92,16 @@ class AddJobFragment : Fragment() {
             val companyName = companyTv.text.toString().replace("'","\'").toUpperCase()
             val location = locationTv.text.toString().toUpperCase()
             val newJob = JobModel(1, companyName, location)
+            print(location)
 
+            if(locationPattern.containsMatchIn(location)){
+                Toast.makeText(activity, "❌ Please enter a valid location name", Toast.LENGTH_LONG).show()
+            }
+            else if(companyPattern.containsMatchIn(companyName)){
+                Toast.makeText(activity, "❌ Please enter a valid company name", Toast.LENGTH_LONG).show()
+            }
             // TODO: when typing, navbar is still visible. small issue but might need correcting
-            if (companyName != "" && location !="") {
+            else if (companyName != "" && location !="") {
                 if (!jobRepository.jobExists(newJob.jobName, newJob.jobLocation)) {
                     val addJob = jobRepository.addNewJob(newJob)
                     if (!addJob.equals(-1)) {
@@ -103,7 +118,6 @@ class AddJobFragment : Fragment() {
                         "Job with this Name & Location exists already",
                         Toast.LENGTH_LONG
                     ).show()
-//                    clearFields()
                 }
             } else if (companyName == "") {
                 Toast.makeText(activity, "Please enter a name for the company", Toast.LENGTH_LONG).show()
@@ -121,7 +135,7 @@ class AddJobFragment : Fragment() {
     private fun Fragment.hideKeyboard() {
         view?.let { activity?.hideKeyboard(it) }
     }
-//    fun Activity.hideKeyboard() {
+    //    fun Activity.hideKeyboard() {
 //        hideKeyboard(currentFocus ?: View(this))
 //    }
     private fun Context.hideKeyboard(view: View) {
