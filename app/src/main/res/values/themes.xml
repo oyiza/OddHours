@@ -15,7 +15,7 @@
     </style>
     <style name="Theme.Calm" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/lapisLazuli</item>
+        <item name="colorPrimary">@color/pumpkin</item>
         <item name="colorPrimaryVariant">@color/lapisLazuli</item>
         <item name="colorOnPrimary">@color/babyPowder</item>
         <!-- Secondary brand color. -->
@@ -23,7 +23,7 @@
         <item name="colorSecondaryVariant">@color/ceruleanCrayola</item>
         <item name="colorOnSecondary">@color/richBlack</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/lapisLazuli</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/pumpkin</item>
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/calm</item>
         <item name="fontFamily">@font/calm</item>

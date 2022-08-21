@@ -18,18 +18,18 @@
             android:id="@+id/shiftStartDateLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="0dp"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:padding="10dp">
 
             <Button
                 android:id="@+id/shiftStartDateBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="0"
                 android:text="@string/btn_start_date"
-                android:textColor="#000000"
-                app:backgroundTint="#80D8FF" />
+                android:textColor="@color/richBlack"
+                app:backgroundTint="#ffffff" />
 
             <TextView
                 android:id="@+id/shiftStartDateTv"
@@ -40,23 +40,25 @@
                 android:textAlignment="viewEnd"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
-                android:textSize="28sp" />
+                android:textSize="24sp" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/startTimeLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="0dp"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:padding="10dp">
 
             <Button
                 android:id="@+id/startTimeBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/btn_start_time" />
+                android:layout_weight="0"
+                android:text="@string/btn_start_time"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/richBlack"/>
 
             <TextView
                 android:id="@+id/startTimeTv"
@@ -73,18 +75,19 @@
             android:id="@+id/shiftEndDateLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="0dp"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:padding="10dp">
 
             <Button
                 android:id="@+id/shiftEndDateBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="0"
                 android:text="@string/btn_end_date"
-                android:textColor="#000000"
-                app:backgroundTint="#80D8FF" />
+                android:textColor="@color/richBlack"
+                app:backgroundTint="#ffffff"
+                />
 
             <TextView
                 android:id="@+id/shiftEndDateTv"
@@ -95,23 +98,25 @@
                 android:textAlignment="viewEnd"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
-                android:textSize="28sp" />
+                android:textSize="24sp" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/endTimeLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="0dp"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:padding="10dp">
 
             <Button
                 android:id="@+id/endTimeBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/btn_end_time" />
+                android:layout_weight="0"
+                android:text="@string/btn_end_time"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/richBlack"/>
 
             <TextView
                 android:id="@+id/endTimeTv"
@@ -139,7 +144,7 @@
                 android:layout_weight="1"
                 android:text="@string/btn_cancel"
                 android:textColor="#000000"
-                app:backgroundTint="#FF8A80" />
+                android:backgroundTint="@color/colorWheel" />
 
             <Button
                 android:id="@+id/saveBtn"
@@ -149,7 +154,7 @@
                 android:layout_weight="1"
                 android:text="@string/btn_save"
                 android:textColor="#000000"
-                app:backgroundTint="#77DC00" />
+                android:backgroundTint="@color/celeste" />
         </LinearLayout>
 
     </LinearLayout>
