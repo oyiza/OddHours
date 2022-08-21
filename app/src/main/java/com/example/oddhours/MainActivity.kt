@@ -2,6 +2,7 @@ package com.example.oddhours
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -13,6 +14,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            setTheme(R.style.darkTheme) //when dark mode is enabled, we use the dark theme
+        } else {
+            setTheme(R.style.Theme_Calm)  //default app theme
+        }
 
         /**
          * Calling initDatabase function to create the DatabaseHelper singleton

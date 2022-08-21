@@ -25,13 +25,14 @@
 
             <Button
                 android:id="@+id/deleteJobBtn"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/btn_delete_job"
                 android:layout_marginStart="1dp"
-                style="?android:attr/buttonBarButtonStyle"
-                android:backgroundTint="@android:color/holo_red_light" />
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:text="@string/btn_delete_job"
+                android:textColor="#FFFFFF" />
         </LinearLayout>
 
 
