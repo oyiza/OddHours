@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="3dp"
     app:cardElevation="3dp"
+    android:backgroundTint="@color/lightpurple"
     app:cardUseCompatPadding="true"
     >
 
@@ -15,24 +16,27 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp" >
+        android:padding="12dp" >
 
         <TextView
             android:id="@+id/jobNameTv"
             android:layout_width="156dp"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
+            android:text="@string/placeholder_job_name"
+            android:textColor="@color/richBlack"
             android:textSize="16sp"
-            android:text="@string/placeholder_job_name" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/jobLocationTv"
             android:layout_width="203dp"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:gravity="end"
             android:layout_toEndOf="@+id/jobNameTv"
-            android:text="@string/placeholder_job_location" />
+            android:gravity="end"
+            android:text="@string/placeholder_job_location"
+            android:textColor="@color/richBlack"
+            android:textSize="16sp"
+            android:textStyle="normal" />
 
         <TextView
             android:id="@+id/jobInfoTv"
@@ -51,6 +55,7 @@
             android:layout_marginStart="2dp"
             android:layout_marginTop="3dp"
             android:layout_toEndOf="@+id/jobInfoTv"
+            android:backgroundTint="@color/white"
             android:text="@string/btn_add_hours"
             android:textColor="@color/richBlack"
             android:textSize="12sp" />

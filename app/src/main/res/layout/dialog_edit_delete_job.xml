@@ -21,9 +21,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/colorWheel"
                 android:text="@string/btn_edit_job"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:backgroundTint="@color/cancelRed" />
 
             <Button
                 android:id="@+id/deleteJobBtn"
@@ -32,9 +32,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/celeste"
                 android:text="@string/btn_delete_job"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:backgroundTint="@color/yesGreen" />
         </LinearLayout>
 
 

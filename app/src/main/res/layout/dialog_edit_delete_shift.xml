@@ -21,6 +21,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/btn_edit_shift"
+            android:textColor="#000000"
+            android:backgroundTint="@color/yesGreen"
             android:layout_marginEnd="1dp"/>
 
         <Button
@@ -31,7 +33,8 @@
             android:text="@string/btn_delete_shift"
             android:layout_marginStart="1dp"
             style="?android:attr/buttonBarButtonStyle"
-            android:backgroundTint="@android:color/holo_red_light" />
+            android:textColor="#000000"
+            android:backgroundTint="@color/cancelRed" />
     </LinearLayout>
 
 

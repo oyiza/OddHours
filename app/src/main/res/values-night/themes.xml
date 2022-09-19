@@ -16,10 +16,10 @@
     <!-- dark application theme. -->
     <style name="darkTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#000</item>
-        <item name="colorPrimaryDark">#000</item>
+        <item name="colorPrimary">@color/richBlack</item>
+        <item name="colorPrimaryDark">@color/richBlack</item>
         <item name="colorAccent">@color/teal_200</item>
-        <item name="background_color">#131313</item>
+        <item name="background_color">@color/richBlack</item>
         <!--     Our app's background changes to black when dark mode is activated -->
         <item name="text_color">#ffff</item>
         <!--     text and button color change to white to contrast with the app's background-->

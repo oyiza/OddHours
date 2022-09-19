@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#3D3A3A"
+        android:background="@color/gunmetal"
         android:orientation="vertical">
 
         <LinearLayout
@@ -29,7 +29,7 @@
                 android:layout_weight="0"
                 android:text="@string/btn_start_date"
                 android:textColor="@color/richBlack"
-                app:backgroundTint="#ffffff" />
+                app:backgroundTint="@color/darkpurple" />
 
             <TextView
                 android:id="@+id/shiftStartDateTv"
@@ -57,8 +57,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0"
                 android:text="@string/btn_start_time"
-                android:textColor="@color/white"
-                app:backgroundTint="@color/richBlack"/>
+                android:textColor="@color/richBlack"
+                app:backgroundTint="@color/lightpurple"/>
 
             <TextView
                 android:id="@+id/startTimeTv"
@@ -86,7 +86,7 @@
                 android:layout_weight="0"
                 android:text="@string/btn_end_date"
                 android:textColor="@color/richBlack"
-                app:backgroundTint="#ffffff"
+                app:backgroundTint="@color/darkpurple"
                 />
 
             <TextView
@@ -115,8 +115,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0"
                 android:text="@string/btn_end_time"
-                android:textColor="@color/white"
-                app:backgroundTint="@color/richBlack"/>
+                android:textColor="@color/richBlack"
+                app:backgroundTint="@color/lightpurple"/>
 
             <TextView
                 android:id="@+id/endTimeTv"
@@ -144,7 +144,7 @@
                 android:layout_weight="1"
                 android:text="@string/btn_cancel"
                 android:textColor="#000000"
-                android:backgroundTint="@color/colorWheel" />
+                android:backgroundTint="@color/cancelRed" />
 
             <Button
                 android:id="@+id/saveBtn"
@@ -154,7 +154,7 @@
                 android:layout_weight="1"
                 android:text="@string/btn_save"
                 android:textColor="#000000"
-                android:backgroundTint="@color/celeste" />
+                android:backgroundTint="@color/yesGreen" />
         </LinearLayout>
 
     </LinearLayout>
