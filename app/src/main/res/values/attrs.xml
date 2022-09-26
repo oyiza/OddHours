@@ -5,4 +5,9 @@
         <attr name="text_color" format="color"/>
         <attr name="button_color" format="color"/>
     </declare-styleable>
+
+    <attr name="bgColor" format="color"/>
+    <attr name="textColor" format="color"/>
+    <attr name="metaTextColor" format="color"/>
+
 </resources>

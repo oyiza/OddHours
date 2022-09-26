@@ -14,7 +14,7 @@
 <!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
 <!--    </style>-->
     <!-- dark application theme. -->
-    <style name="darkTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="darkThemeOld" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/richBlack</item>
         <item name="colorPrimaryDark">@color/richBlack</item>

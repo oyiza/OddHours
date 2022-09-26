@@ -25,6 +25,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:inputType="none"
+
             android:text="@string/placeholder_dropdown_default" />
 
     </com.google.android.material.textfield.TextInputLayout>
