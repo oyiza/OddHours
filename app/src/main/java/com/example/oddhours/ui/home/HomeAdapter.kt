@@ -92,7 +92,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
             val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_shift, null)
             val mBuilder = AlertDialog.Builder(context)
                 .setView(mDialogView)
-                .setTitle("Add a Shift")
+
             val mAlertDialog = mBuilder.show()
             // note: we're not showing date text so we force the user to click on the date buttons - this sets the startDate and endDate correctly for us
 
@@ -264,7 +264,6 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
             val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_delete_job, null)
             val mBuilder = AlertDialog.Builder(context)
                 .setView(mDialogView)
-                .setTitle(holder.jobName.text)
             val mAlertDialog = mBuilder.show()
 
             // onClick listener for edit button

@@ -100,7 +100,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                 val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_shift, null)
                 val mBuilder = AlertDialog.Builder(context)
                     .setView(mDialogView)
-                    .setTitle("Edit Shift")
+
                 val mAlertDialog = mBuilder.show()
 
                 // display values in the dialog
