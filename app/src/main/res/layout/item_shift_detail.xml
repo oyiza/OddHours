@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="7dp"
     android:padding="5dp"
+    android:backgroundTint="?attr/colorOnPrimary"
     app:cardCornerRadius="10dp">
 
     <LinearLayout
@@ -27,7 +28,6 @@
                 android:id="@+id/shiftStartTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#FFFFFF"
                 android:text="@string/start_date"
                 android:textAlignment="center"
                 android:textColor="#000000"
@@ -46,7 +46,6 @@
                 android:id="@+id/shiftEndTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#FFFFFF"
                 android:text="@string/end_date"
                 android:textAlignment="center"
                 android:textColor="#000000"
@@ -96,7 +95,7 @@
             android:layout_height="wrap_content"
             android:text="@string/hours_worked"
             android:textAlignment="center"
-            android:textColor="#D50000"
+            android:textColor="#000000"
             android:textSize="18sp" />
 
     </LinearLayout>

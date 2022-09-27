@@ -40,7 +40,7 @@ class AddJobFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val locationPattern = Regex("[^0-9A-Za-z, ]")
-        val companyPattern = Regex("[^A-Za-z0-9&@#$\\- ]")
+        val companyPattern = Regex("[^\\+\\'A-Za-z0-9&@-]")
 
         val args = arguments
         var jobIdToEdit: Int? = null

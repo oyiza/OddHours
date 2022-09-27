@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:background="#212121"
+    android:backgroundTint="?attr/colorPrimary"
+    android:background="@drawable/background_rounded_corners"
     android:padding="5dp"
     tools:context=".MainActivity">
 

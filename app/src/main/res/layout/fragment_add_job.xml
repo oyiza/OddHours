@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
     android:padding="20dp"
     tools:context=".ui.addjob.AddJobFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_rounded_corners"
         android:padding="0sp"
+        android:background="@drawable/background_rounded_corners"
+        android:backgroundTint="?attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,8 +21,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:background="#3D3A3A">
+            android:layout_centerInParent="true">
 
             <EditText
                 android:id="@+id/companyTv"
@@ -65,6 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20sp"
                 android:text="@string/btn_add_job"
+                android:textColor="?attr/bgColor"
+                android:backgroundTint="?attr/textColor"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -77,6 +78,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20sp"
                 android:text="@string/btn_edit_job"
+                android:textColor="?attr/bgColor"
+                android:backgroundTint="?attr/textColor"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -19,19 +19,22 @@
                 android:id="@+id/editJobBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:text="@string/btn_edit_job"
-                android:layout_marginEnd="1dp"/>
+                android:textColor="#000000"
+                android:backgroundTint="@color/cancelRed" />
 
             <Button
                 android:id="@+id/deleteJobBtn"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:text="@string/btn_delete_job"
-                android:layout_marginStart="1dp"
-                style="?android:attr/buttonBarButtonStyle"
-                android:backgroundTint="@android:color/holo_red_light" />
+                android:textColor="#000000"
+                android:backgroundTint="@color/yesGreen" />
         </LinearLayout>
 
 
