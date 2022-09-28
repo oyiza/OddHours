@@ -206,7 +206,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                                 Toast.makeText(context, "Shift already exists. Modify current entry or go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
                             } else {
                                 jobRepository.insertShift(shiftsModel)
-                                Toast.makeText(context, "⏲ Successfully added overnight shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, "⏲ Successfully added overnight shift", Toast.LENGTH_LONG).show()
                                 mAlertDialog.dismiss()
                             }
                         }
@@ -219,20 +219,20 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                                     Toast.makeText(context, "Shift already exists. Modify current entry or go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
                                 } else {
                                     jobRepository.insertShift(shiftsModel)
-                                    Toast.makeText(context, "⏲ Successfully added day shift. Go to shifts tab to view all shifts", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(context, "⏲ Successfully added day shift", Toast.LENGTH_LONG).show()
                                     mAlertDialog.dismiss()
                                 }
                             }
                             else {
                                 Toast.makeText(
                                         holder.itemView.context,
-                                        "End Time is earlier than Start Time.. Readjust times and try again",
+                                        "End Time is earlier than Start Time.. Please try again",
                                         Toast.LENGTH_LONG
                                 ).show()
                             }
                         }
                         getShiftType(endDate, startDate) == Constants.INVALID_SHIFT_RANGE -> {
-                            Toast.makeText(context, "Please choose dates one day apart max!", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "Please choose dates at most 1 day apart!", Toast.LENGTH_LONG).show()
                         }
                     }
                 } else {
@@ -249,18 +249,11 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
         // onClick listener for the card - in case we want to click the card and open the job details
         holder.itemView.setOnClickListener{
             Log.i(TAG, "clicked card: ${holder.jobName.text}")
-            Toast.makeText(
-                holder.itemView.context,
-                "You clicked ${holder.jobName.text}'s card",
-                Toast.LENGTH_SHORT
-            ).show()
             Log.d(TAG, "clicked position is $position")
         }
 
         // long click listener for the card
         holder.itemView.setOnLongClickListener{
-            Toast.makeText(holder.itemView.context, "Long click detected on ${holder.jobName.text}", Toast.LENGTH_SHORT).show()
-
             val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_delete_job, null)
             val mBuilder = AlertDialog.Builder(context)
                 .setView(mDialogView)
@@ -279,7 +272,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                 if (isDeleted) {
                     Toast.makeText(
                         holder.itemView.context,
-                        "Successfully deleted ${holder.jobName.text}",
+                        "Successfully removed ${holder.jobName.text}",
                         Toast.LENGTH_SHORT
                     ).show()
                     mAlertDialog.dismiss()
