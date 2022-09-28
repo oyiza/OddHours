@@ -222,7 +222,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                                 else {
                                     Toast.makeText(
                                         holder.itemView.context,
-                                        "End Time is earlier than Start Time.. Readjust times and try again",
+                                        "End Time is earlier than Start Time.. Please try again",
                                         Toast.LENGTH_LONG
                                     ).show()
                                 }
@@ -232,7 +232,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                                 navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
                             }
                             getShiftType(endDate, startDate) == Constants.INVALID_SHIFT_RANGE -> {
-                                Toast.makeText(context, "Please choose dates one day apart max!", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, "Please choose dates 1 day apart max!", Toast.LENGTH_LONG).show()
                             }
                         }
                     } else {
@@ -254,7 +254,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                 if (isDeleted) {
                     Toast.makeText(
                         holder.itemView.context,
-                        "Successfully deleted shift",
+                        "Successfully removed shift",
                         Toast.LENGTH_SHORT
                     ).show()
                     mDialog.dismiss()
@@ -266,7 +266,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                         navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
                     }
                 } else {
-                    Toast.makeText(context, "Unable to delete selected shift, something went wrong.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Unable to delete selected shift, something went wrong", Toast.LENGTH_SHORT).show()
                     Log.i(TAG, "Error, not able to delete shift")
                     mDialog.dismiss()
                 }
