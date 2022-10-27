@@ -22,8 +22,6 @@ class DatabaseHelper private constructor(context: Context) :
             "$hours_Worked_COL_8 TEXT, " +
             "FOREIGN KEY($job_ID_COL_5) REFERENCES $jobTable($job_ID_COL_1));"
 
-//    private val getJobs = "SELECT * FROM $jobTable"
-
     companion object {
         const val dbName = "oddHours"
         const val jobTable = "Jobs"
