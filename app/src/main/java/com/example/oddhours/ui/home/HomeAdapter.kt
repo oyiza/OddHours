@@ -61,6 +61,8 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
 
     var dayOfYear = 0
 
+    private val helper = Helper()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_job, parent, false)
 
@@ -114,7 +116,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                     // Log.d(TAG, "startDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
                     // Log.d(TAG, "$startDate")
                     dayOfYear = 0
-                    val helper = Helper() // TODO: could make this a class field?
+
                     dayOfYear = helper.calculateDayOfTheYear(monthOfYear, dayOfMonth, year)
 
                 }, year, month, day)
@@ -158,9 +160,6 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                     endDateForDb = sdf.format(calendar.time).toString() // "06/14/2021"
                     mDialogView.shiftEndDateTv.text = sdf.format(calendar.time)
                     endDate.set(year, monthOfYear, dayOfMonth)
-                    // DEBUG TODO: remove this eventually
-                    // Log.d(TAG, "endDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
-                    // Log.d(TAG, "$endDate")
                 }, year, month, day)
                 dpd.datePicker.maxDate = today.timeInMillis
                 dpd.datePicker.minDate = startDate.timeInMillis
@@ -242,7 +241,6 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
 
             mDialogView.cancelBtn.setOnClickListener{
                 mAlertDialog.cancel()
-                // mAlertDialog.dismiss()
             }
         }
 
@@ -276,7 +274,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                         Toast.LENGTH_SHORT
                     ).show()
                     mAlertDialog.dismiss()
-                    jobList = removeItemFromUI(jobList, position)
+                    jobList = helper.removeJobItemFromUI(jobList, position)
                     notifyDataSetChanged()
                     if (jobList.isEmpty()) {// we've removed the last job
                         // ideally, we want to notify the app that we're deleting the last job and tell it to reload homepage so we get the right layout
@@ -321,12 +319,10 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
     private fun getShiftType(endDate: Calendar, startDate: Calendar): Int {
         val endDateDay = endDate.get(Calendar.DAY_OF_MONTH)
         val endDateMonth = endDate.get(Calendar.MONTH)
-//        val endDateYear = endDate.get(Calendar.YEAR)
         val endDateDayOfWeek = endDate.get(Calendar.DAY_OF_WEEK)
 
         val startDateDay = startDate.get(Calendar.DAY_OF_MONTH)
         val startDateMonth = startDate.get(Calendar.MONTH)
-//        val startDateYear = startDate.get(Calendar.YEAR)
         val startDateDayOfWeek = startDate.get(Calendar.DAY_OF_WEEK)
 
         // below variables help fix issue when startDate and endDate are at the end of the 7 day cycle and it's either
@@ -353,14 +349,6 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
         }
 
         return Constants.INVALID_SHIFT_RANGE
-    }
-
-    // TODO: refactor this method to a repository / helper class as it's also called in ChildAdapter.kt
-    private fun removeItemFromUI(list: List<JobModel>, position: Int): List<JobModel> {
-        Log.i(TAG, "removeItem() called: position is $position")
-        val result = list.toMutableList()
-        result.removeAt(position)
-        return result.toList()
     }
 
     private fun openAddJobFragment(jobName: TextView, jobLocation: TextView) {
