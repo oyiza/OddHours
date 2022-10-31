@@ -31,9 +31,8 @@ class AddJobFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         dashboardViewModel =
-            ViewModelProvider(this).get(AddJobViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_add_job, container, false)
-        return root
+            ViewModelProvider(this)[AddJobViewModel::class.java]
+        return inflater.inflate(R.layout.fragment_add_job, container, false)
     }
 
     @SuppressLint("DefaultLocale")

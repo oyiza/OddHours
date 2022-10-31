@@ -36,7 +36,7 @@ class ChartsFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         chartsViewModel =
-                ViewModelProvider(this).get(ChartsViewModel::class.java)
+            ViewModelProvider(this)[ChartsViewModel::class.java]
         val root = inflater.inflate(R.layout.fragment_charts, container, false)
 
         // dropdown menu
