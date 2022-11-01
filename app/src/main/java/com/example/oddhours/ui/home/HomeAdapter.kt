@@ -120,7 +120,6 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                     dayOfYear = helper.calculateDayOfTheYear(monthOfYear, dayOfMonth, year)
 
                 }, year, month, day)
-                // TODO: there should be some logic here to move around the maxDate and minDate for the datepicker
                 dpd.datePicker.maxDate = today.timeInMillis
                 dpd.show()
             }

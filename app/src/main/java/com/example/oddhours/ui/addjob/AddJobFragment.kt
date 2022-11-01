@@ -18,6 +18,7 @@ import com.example.oddhours.data.model.JobModel
 import com.example.oddhours.data.repository.JobRepository
 import com.example.oddhours.utils.Constants
 import kotlinx.android.synthetic.main.fragment_add_job.*
+import java.util.*
 
 class AddJobFragment : Fragment() {
 
@@ -31,9 +32,8 @@ class AddJobFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         dashboardViewModel =
-            ViewModelProvider(this).get(AddJobViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_add_job, container, false)
-        return root
+            ViewModelProvider(this)[AddJobViewModel::class.java]
+        return inflater.inflate(R.layout.fragment_add_job, container, false)
     }
 
     @SuppressLint("DefaultLocale")
@@ -60,12 +60,12 @@ class AddJobFragment : Fragment() {
         // onClick listener for saveEditedJobBtn
         saveEditedJobBtn.setOnClickListener {
             if (jobIdToEdit != null) {
-                val companyName = companyTv.text.toString().replace("'","\'").toUpperCase()
-                val location = locationTv.text.toString().toUpperCase()
-                if(locationPattern.containsMatchIn(location) || location == ""){
+                val companyName = companyTv.text.toString().replace("'","\'").uppercase(Locale.getDefault())
+                val location = locationTv.text.toString().uppercase(Locale.getDefault())
+                if (locationPattern.containsMatchIn(location) || location == "") {
                     Toast.makeText(activity, "❌ Please enter a valid location name", Toast.LENGTH_LONG).show()
                 }
-                else if(companyPattern.containsMatchIn(companyName) || companyName == ""){
+                else if (companyPattern.containsMatchIn(companyName) || companyName == "") {
                     Toast.makeText(activity, "❌ Please enter a valid company name", Toast.LENGTH_LONG).show()
                 }
                 else if (jobRepository.jobExists(companyName, location)) {
@@ -88,20 +88,17 @@ class AddJobFragment : Fragment() {
 
         // onClick listener for addJobBTN
         addJobBtn.setOnClickListener {
-            // TODO: why are we doing .replace() here and not for location?
-            val companyName = companyTv.text.toString().replace("'","\'").toUpperCase()
-            val location = locationTv.text.toString().toUpperCase()
+            val companyName = companyTv.text.toString().replace("'","\'").uppercase(Locale.getDefault())
+            val location = locationTv.text.toString().uppercase(Locale.getDefault())
             val newJob = JobModel(1, companyName, location)
-            print(location)
 
-            if(locationPattern.containsMatchIn(location)){
+            if (locationPattern.containsMatchIn(location)) {
                 Toast.makeText(activity, "❌ Please enter a valid location name", Toast.LENGTH_LONG).show()
             }
-            else if(companyPattern.containsMatchIn(companyName)){
+            else if (companyPattern.containsMatchIn(companyName)) {
                 Toast.makeText(activity, "❌ Please enter a valid company name", Toast.LENGTH_LONG).show()
             }
-            // TODO: when typing, navbar is still visible. small issue but might need correcting
-            else if (companyName != "" && location !="") {
+            else if (companyName.isNotBlank() && location.isNotBlank()) {
                 if (!jobRepository.jobExists(newJob.jobName, newJob.jobLocation)) {
                     val addJob = jobRepository.addNewJob(newJob)
                     if (!addJob.equals(-1)) {
@@ -119,15 +116,15 @@ class AddJobFragment : Fragment() {
                         Toast.LENGTH_LONG
                     ).show()
                 }
-            } else if (companyName == "") {
+            } else if (companyName.isEmpty()) {
                 Toast.makeText(activity, "Please enter a name for the company", Toast.LENGTH_LONG).show()
-            } else if (location == "") {
+            } else if (location.isEmpty()) {
                 Toast.makeText(activity, "Please enter a location", Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun clearFields(){
+    private fun clearFields() {
         companyTv.setText("")
         locationTv.setText("")
     }
@@ -135,9 +132,7 @@ class AddJobFragment : Fragment() {
     private fun Fragment.hideKeyboard() {
         view?.let { activity?.hideKeyboard(it) }
     }
-    //    fun Activity.hideKeyboard() {
-//        hideKeyboard(currentFocus ?: View(this))
-//    }
+
     private fun Context.hideKeyboard(view: View) {
         val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)

@@ -44,7 +44,7 @@ class ShiftsFragment : Fragment() {
         if (hasShifts) {
             parentRv.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = shiftsForAdapter.let { ParentAdapter(it, requireActivity(), view.findNavController()) }
+                adapter = ParentAdapter(shiftsForAdapter, requireActivity(), view.findNavController())
             }
         }
     }

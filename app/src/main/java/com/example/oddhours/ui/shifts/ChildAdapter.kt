@@ -131,7 +131,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                         mDialogView.shiftStartDateTv.text = sdf.format(calendar.time)
                         startDate.set(year, monthOfYear, dayOfMonth)
                         dayOfYear = 0
-                        var helper = Helper()
+                        val helper = Helper()
                         dayOfYear = helper.calculateDayOfTheYear(monthOfYear, dayOfMonth, year)
                     }, year, month, day)
                     // DEBUG
@@ -173,6 +173,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                         // Log.d(TAG, "${endDate.time}")
                     }, year, month, day)
                     dpd.datePicker.maxDate = today.timeInMillis
+                    dpd.datePicker.minDate = startDate.timeInMillis
                     dpd.show()
                 }
 
