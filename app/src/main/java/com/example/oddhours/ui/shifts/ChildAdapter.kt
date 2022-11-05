@@ -133,11 +133,10 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                         dayOfYear = 0
                         val helper = Helper()
                         dayOfYear = helper.calculateDayOfTheYear(monthOfYear, dayOfMonth, year)
+                        // DEBUG
+                        // Log.d(TAG, "startDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
+                        // Log.d(TAG, "startDate after setting via the button: ${startDate.time}")
                     }, year, month, day)
-                    // DEBUG
-                    // Log.d(TAG, "startDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
-                    // Log.d(TAG, "startDate after setting via the button: ${startDate.time}")
-                    // TODO: there should be some logic here to move around the maxDate and minDate for the datepicker
                     dpd.datePicker.maxDate = today.timeInMillis
                     dpd.show()
                 }
