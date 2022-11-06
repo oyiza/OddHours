@@ -54,6 +54,8 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
 
     var dayOfYear = 0
 
+    private val helper = Helper()
+
     class ViewHolder(itemView: View, val context: Context): RecyclerView.ViewHolder(itemView) {
         fun bindShifts(items: ShiftsModel){
             itemView.shiftStartTv.text = items.shiftStartDate
@@ -116,9 +118,6 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                 endTimeHour = endTimeForDb.substringBefore(":").toInt()
                 endTimeMin = endTimeForDb.substringAfter(":").toInt()
 
-                // DEBUG
-                // Log.d(TAG, "startDate before setting via the button: ${startDate.time}")
-                // Log.d(TAG, "startDateForDb: $startDateForDb, endDateForDb: $endDateForDb")
                 startDate.set(startDateForDb.substringAfterLast("/").toInt(), startDateForDb.substringBefore("/").toInt() -1, startDateForDb.substring(3, 5).toInt())
                 endDate.set(endDateForDb.substringAfterLast("/").toInt(), endDateForDb.substringBefore("/").toInt() -1, endDateForDb.substring(3, 5).toInt())
 
@@ -191,7 +190,6 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
 
                     TimePickerDialog(context, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(
                         Calendar.MINUTE), false).show()
-                    // Log.e(TAG, "end time hour: $endTimeHour, end time minute: $endTimeMin")
                 }
 
 
@@ -205,8 +203,6 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                                 jobRepository.editShift(shiftsModel, editShiftID)
                                 Toast.makeText(context, "⏲ Successfully edited shift", Toast.LENGTH_LONG).show()
                                 mAlertDialog.dismiss()
-                                // TODO: why is this not needed here but needed in the day shift logic?
-//                                shiftsList = removeItemFromUI(shiftsList, position)
                                 notifyDataSetChanged()
                                 navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
                             }
@@ -227,7 +223,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                                     ).show()
                                 }
                                 // TODO: why are we removing items from UI when editing?
-                                shiftsList = removeItemFromUI(shiftsList, position)
+                                shiftsList = helper.removeShiftItemFromUI(shiftsList, position)
                                 notifyDataSetChanged()
                                 navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
                             }
@@ -243,7 +239,6 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
 
                 mDialogView.cancelBtn.setOnClickListener{
                     mAlertDialog.cancel()
-                    // mAlertDialog.dismiss()
                 }
 
             }
@@ -258,7 +253,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                         Toast.LENGTH_SHORT
                     ).show()
                     mDialog.dismiss()
-                    shiftsList = removeItemFromUI(shiftsList, position)
+                    shiftsList = helper.removeShiftItemFromUI(shiftsList, position)
                     notifyDataSetChanged()
                     if (shiftsList.isEmpty()) { // we've removed the last item
                         // ideally, we want to notify the parent adapter that we're deleting the last shift for current job and tell it to reload data
@@ -307,29 +302,23 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
     private fun getShiftType(endDate: Calendar, startDate: Calendar): Int {
         val endDateDay = endDate.get(Calendar.DAY_OF_MONTH)
         val endDateMonth = endDate.get(Calendar.MONTH)
-//        val endDateYear = endDate.get(Calendar.YEAR)
         val endDateDayOfWeek = endDate.get(Calendar.DAY_OF_WEEK)
 
         val startDateDay = startDate.get(Calendar.DAY_OF_MONTH)
         val startDateMonth = startDate.get(Calendar.MONTH)
-//        val startDateYear = startDate.get(Calendar.YEAR)
         val startDateDayOfWeek = startDate.get(Calendar.DAY_OF_WEEK)
 
-        // below variables help fix issue when startDate and endDate are at the end of the 7 day cycle and it's either
-        // the same month or a different month. we want to ensure the overlap is still exactly one day
         val oneDayOverlapSameMonth = endDateDay - startDateDay == 1
         val oneDayOverlapDiffMonth = ((startDateDayOfWeek == 7 && endDateDayOfWeek == 1) || (startDateDayOfWeek == endDateDayOfWeek-1)) && (endDateMonth - startDateMonth == 1)
         val oneDayOverlap = oneDayOverlapSameMonth || oneDayOverlapDiffMonth
-
         // DEBUG LOGS (uncomment following log lines for more information in logcat
-         // Log.d(TAG, "startDate: ${startDate.time}, endDate: ${endDate.time}")
-         // Log.d(TAG, "startDateDay: $startDateDay")
-         // Log.d(TAG, "startDateMonth: $startDateMonth")
-         // Log.d(TAG, "endDateDay: $endDateDay")
-         // Log.d(TAG, "endDateMonth: $endDateMonth")
-         // Log.d(TAG, "endDateDayOfWeek: $endDateDayOfWeek, startDateDayOfWeek: $startDateDayOfWeek")
-         // Log.d(TAG, "----------------------------------------------------------------------------")
-
+        // Log.d(TAG, "startDate: ${startDate.time}, endDate: ${endDate.time}")
+        // Log.d(TAG, "startDateDay: $startDateDay")
+        // Log.d(TAG, "startDateMonth: $startDateMonth")
+        // Log.d(TAG, "endDateDay: $endDateDay")
+        // Log.d(TAG, "endDateMonth: $endDateMonth")
+        // Log.d(TAG, "endDateDayOfWeek: $endDateDayOfWeek, startDateDayOfWeek: $startDateDayOfWeek")
+        // Log.d(TAG, "----------------------------------------------------------------------------")
         if (((startDateDayOfWeek == 7 && endDateDayOfWeek == 1) && oneDayOverlap)
             || ((endDateDayOfWeek == startDateDayOfWeek + 1) && oneDayOverlap)) {
             // overnight shift
@@ -344,13 +333,6 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
 
     private fun getShiftID(shiftStartDate: String, shiftEndDate: String, shiftStartTime: String, shiftEndTime: String): Int{
         return jobRepository.getShiftID(shiftStartDate, shiftEndDate, shiftStartTime, shiftEndTime)
-    }
-
-    private fun removeItemFromUI(list: List<ShiftsModel>, position: Int): List<ShiftsModel> {
-        Log.i(TAG, "removeItem() called: position is $position")
-        val result = list.toMutableList()
-        result.removeAt(position)
-        return result.toList()
     }
 
     companion object {
