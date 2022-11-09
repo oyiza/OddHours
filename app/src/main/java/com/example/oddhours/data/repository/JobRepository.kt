@@ -6,6 +6,8 @@ import com.example.oddhours.data.model.ShiftsListModel
 import com.example.oddhours.data.model.ShiftsModel
 import com.example.oddhours.database.TableJobs
 import com.example.oddhours.database.TableShifts
+import com.example.oddhours.utils.Constants
+import java.util.*
 
 /**
  * JobRepository class could take context as a parameter
@@ -22,7 +24,7 @@ import com.example.oddhours.database.TableShifts
  *      }
  *  }
  */
-// TODO: unit test for jobRepository?
+
 class JobRepository() {
 
     var jobModelList: List<JobModel>? = null
@@ -175,6 +177,41 @@ class JobRepository() {
         }
 
         return totalHours
+    }
+
+    fun getShiftType(endDate: Calendar, startDate: Calendar): Int {
+        val endDateDayOfMonth = endDate.get(Calendar.DAY_OF_MONTH)
+        val endDateMonth = endDate.get(Calendar.MONTH)
+        val endDateDayOfWeek = endDate.get(Calendar.DAY_OF_WEEK)
+
+        val startDateDayOfMonth = startDate.get(Calendar.DAY_OF_MONTH)
+        val startDateMonth = startDate.get(Calendar.MONTH)
+        val startDateDayOfWeek = startDate.get(Calendar.DAY_OF_WEEK)
+
+        val oneDayOverlapSameMonth = endDateDayOfMonth - startDateDayOfMonth == 1
+        val oneDayOverlapDiffMonth = ((startDateDayOfWeek == Constants.SATURDAY && endDateDayOfWeek == Constants.SUNDAY) || (startDateDayOfWeek == endDateDayOfWeek - 1))
+                && (endDateMonth - startDateMonth == 1)
+        val oneDayOverlap = oneDayOverlapSameMonth || oneDayOverlapDiffMonth
+
+        // DEBUG LOGS (uncomment following log lines for more information in logcat
+        // Log.d(TAG, "startDate: ${startDate.time}, endDate: ${endDate.time}")
+        // Log.d(TAG, "startDateDay: $startDateDay")
+        // Log.d(TAG, "startDateMonth: $startDateMonth")
+        // Log.d(TAG, "endDateDay: $endDateDay")
+        // Log.d(TAG, "endDateMonth: $endDateMonth")
+        // Log.d(TAG, "endDateDayOfWeek: $endDateDayOfWeek, startDateDayOfWeek: $startDateDayOfWeek")
+        // Log.d(TAG, "----------------------------------------------------------------------------")
+
+        if (((startDateDayOfWeek == Constants.SATURDAY && endDateDayOfWeek == Constants.SUNDAY) && oneDayOverlap)
+            || ((endDateDayOfWeek == startDateDayOfWeek + 1) && oneDayOverlap)) {
+            // overnight shift
+            return Constants.OVERNIGHT_SHIFT
+        } else if (endDateDayOfWeek == startDateDayOfWeek) {
+            // day shift
+            return Constants.DAY_SHIFT
+        }
+
+        return Constants.INVALID_SHIFT_RANGE
     }
 
     private fun convertShiftTimeToInt(hoursWorked: String): Int {

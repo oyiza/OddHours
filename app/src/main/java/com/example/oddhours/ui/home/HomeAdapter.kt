@@ -195,7 +195,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
             mDialogView.saveBtn.setOnClickListener {
                 if (allButtonsClicked(mDialogView)) {
                     when {
-                        getShiftType(endDate, startDate) == Constants.OVERNIGHT_SHIFT -> {
+                        jobRepository.getShiftType(endDate, startDate) == Constants.OVERNIGHT_SHIFT -> {
                             Log.d(TAG, "overnight shift")
                             val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour + 24, endTimeMin)
                             val shiftsModel = ShiftsModel(1, startDateForDb, dayOfYear, endDateForDb, clickedJobID, startTimeForDb, endTimeForDb, totalTimeWorked )
@@ -207,7 +207,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                                 mAlertDialog.dismiss()
                             }
                         }
-                        getShiftType(endDate, startDate) == Constants.DAY_SHIFT -> {
+                        jobRepository.getShiftType(endDate, startDate) == Constants.DAY_SHIFT -> {
                             Log.d(TAG, "day shift")
                             if (checkShiftDuration(endTimeHour, startTimeHour, endTimeMin, startTimeMin)) {
                                 val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
@@ -228,7 +228,7 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                                 ).show()
                             }
                         }
-                        getShiftType(endDate, startDate) == Constants.INVALID_SHIFT_RANGE -> {
+                        jobRepository.getShiftType(endDate, startDate) == Constants.INVALID_SHIFT_RANGE -> {
                             Toast.makeText(context, "Please choose dates at most 1 day apart!", Toast.LENGTH_LONG).show()
                         }
                     }
@@ -311,41 +311,6 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
             return false
         }
         return true
-    }
-
-    private fun getShiftType(endDate: Calendar, startDate: Calendar): Int {
-        val endDateDay = endDate.get(Calendar.DAY_OF_MONTH)
-        val endDateMonth = endDate.get(Calendar.MONTH)
-        val endDateDayOfWeek = endDate.get(Calendar.DAY_OF_WEEK)
-
-        val startDateDay = startDate.get(Calendar.DAY_OF_MONTH)
-        val startDateMonth = startDate.get(Calendar.MONTH)
-        val startDateDayOfWeek = startDate.get(Calendar.DAY_OF_WEEK)
-
-        // below variables help fix issue when startDate and endDate are at the end of the 7 day cycle and it's either
-        // the same month or a different month. we want to ensure the overlap is still exactly one day
-        val oneDayOverlapSameMonth = endDateDay - startDateDay == 1
-        val oneDayOverlapDiffMonth = ((startDateDayOfWeek == 7 && endDateDayOfWeek == 1) || (startDateDayOfWeek == endDateDayOfWeek-1)) && (endDateMonth - startDateMonth == 1)
-        val oneDayOverlap = oneDayOverlapSameMonth || oneDayOverlapDiffMonth
-
-        // DEBUG LOGS (uncomment following log lines for more information in logcat
-        // Log.d(TAG, "startDateDay: $startDateDay")
-        // Log.d(TAG, "startDateMonth: $startDateMonth")
-        // Log.d(TAG, "endDateDay: $endDateDay")
-        // Log.d(TAG, "endDateMonth: $endDateMonth")
-        // Log.d(TAG, "endDateDayOfWeek: $endDateDayOfWeek, startDateDayOfWeek: $startDateDayOfWeek")
-        // Log.d(TAG, "----------------------------------------------------------------------------")
-
-        if (((startDateDayOfWeek == 7 && endDateDayOfWeek == 1) && oneDayOverlap)
-                || ((endDateDayOfWeek == startDateDayOfWeek + 1) && oneDayOverlap)) {
-            // overnight shift
-            return Constants.OVERNIGHT_SHIFT
-        } else if (endDateDayOfWeek == startDateDayOfWeek) {
-            // day shift
-            return Constants.DAY_SHIFT
-        }
-
-        return Constants.INVALID_SHIFT_RANGE
     }
 
     private fun openAddJobFragment(jobName: TextView, jobLocation: TextView) {
