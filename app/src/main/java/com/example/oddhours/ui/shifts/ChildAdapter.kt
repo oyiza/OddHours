@@ -222,8 +222,6 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                                         Toast.LENGTH_LONG
                                     ).show()
                                 }
-                                // TODO: why are we removing items from UI when editing?
-                                shiftsList = helper.removeShiftItemFromUI(shiftsList, position)
                                 notifyDataSetChanged()
                                 navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
                             }
