@@ -112,11 +112,10 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
                     startDateForDb = sdf.format(calendar.time).toString() // "06/14/2021"
                     mDialogView.shiftStartDateTv.text = sdf.format(calendar.time)
                     startDate.set(year, monthOfYear, dayOfMonth)
-                    // DEBUG TODO: remove this eventually
+                    // DEBUG
                     // Log.d(TAG, "startDate: year: $year, month: ${monthOfYear}, day: $dayOfMonth")
                     // Log.d(TAG, "$startDate")
                     dayOfYear = 0
-
                     dayOfYear = helper.calculateDayOfTheYear(monthOfYear, dayOfMonth, year)
 
                 }, year, month, day)
@@ -303,7 +302,6 @@ class HomeAdapter(private var jobList: List<JobModel>, val context: Context, pri
         val endDateText = mDialogView.shiftEndDateTv.text
         val endTimeText = mDialogView.endTimeTv.text
 
-        // TODO: there should be a better way to compare with initial_date_value variable in strings.xml
         // e.g: val string: String = getString(R.string.hello)
         val initialDateValue = "--/--/----"
         val initialTimeValue = "--:--"

@@ -56,7 +56,6 @@ class AddJobFragment : Fragment() {
             saveEditedJobBtn.visibility = View.GONE
         }
 
-        // TODO: when editing jobs, saveEditedJobBtn is hidden by keyboard
         // onClick listener for saveEditedJobBtn
         saveEditedJobBtn.setOnClickListener {
             if (jobIdToEdit != null) {

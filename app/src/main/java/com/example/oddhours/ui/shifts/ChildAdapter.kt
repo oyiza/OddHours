@@ -284,7 +284,6 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
         val endDateText = mDialogView.shiftEndDateTv.text
         val endTimeText = mDialogView.endTimeTv.text
 
-        // TODO: there should be a better way to compare with initial_date_value variable in strings.xml
         // e.g: val string: String = getString(R.string.hello)
         val initialDateValue = "--/--/----"
         val initialTimeValue = "--:--"
