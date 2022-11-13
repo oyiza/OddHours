@@ -40,7 +40,7 @@ class AddJobFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val locationPattern = Regex("[^0-9A-Za-z, ]")
-        val companyPattern = Regex("[^\\+\\'A-Za-z0-9&@-]")
+        val companyPattern = Regex("[^\\+\\'\\ A-Za-z0-9&@-]")
 
         val args = arguments
         var jobIdToEdit: Int? = null
@@ -69,7 +69,7 @@ class AddJobFragment : Fragment() {
                     Toast.makeText(activity, "❌ Please enter a valid company name", Toast.LENGTH_LONG).show()
                 }
                 else if (jobRepository.jobExists(companyName, location)) {
-                    Toast.makeText(activity, "❌ A job already exists with this name and location.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, "❌ already exists with this name and location.", Toast.LENGTH_LONG).show()
                 } else {
                     val jobModel = JobModel(1, companyName, location)
                     val isEdited = jobRepository.editJob(jobModel, jobIdToEdit)
