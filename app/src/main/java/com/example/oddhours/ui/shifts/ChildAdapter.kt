@@ -90,7 +90,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                 endTimeForDb = holder.itemView.shiftEndHourTv.text.toString()
 
                 // TODO: should be able to call the jobrepository from here to get the shiftID
-                editShiftID = getShiftID(holder.itemView.shiftStartTv.text as String, holder.itemView.shiftEndTv.text as String, holder.itemView.shiftStartHourTv.text as String, holder.itemView.shiftEndHourTv.text as String)
+                editShiftID = jobRepository.getShiftID(holder.itemView.shiftStartTv.text as String, holder.itemView.shiftEndTv.text as String, holder.itemView.shiftStartHourTv.text as String, holder.itemView.shiftEndHourTv.text as String)
 
                 val startDate = Calendar.getInstance()
                 val endDate = Calendar.getInstance()
@@ -196,23 +196,23 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                 mDialogView.saveBtn.setOnClickListener {
                     if (allButtonsClicked(mDialogView)) {
                         when {
-                            getShiftType(endDate, startDate) == Constants.OVERNIGHT_SHIFT -> {
+                            jobRepository.getShiftType(endDate, startDate) == Constants.OVERNIGHT_SHIFT -> {
                                 Log.d(TAG, "overnight shift")
                                 val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour + 24, endTimeMin)
                                 val shiftsModel = ShiftsModel(editShiftID, startDateForDb, dayOfYear, endDateForDb, 0, startTimeForDb, endTimeForDb, totalTimeWorked )
                                 jobRepository.editShift(shiftsModel, editShiftID)
-                                Toast.makeText(context, "⏲ Successfully edited shift", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, "⏲ Successfully edited overnight shift", Toast.LENGTH_LONG).show()
                                 mAlertDialog.dismiss()
                                 notifyDataSetChanged()
                                 navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
                             }
-                            getShiftType(endDate, startDate) == Constants.DAY_SHIFT -> {
+                            jobRepository.getShiftType(endDate, startDate) == Constants.DAY_SHIFT -> {
                                 Log.d(TAG, "day shift")
                                 if (checkShiftDuration(endTimeHour, startTimeHour, endTimeMin, startTimeMin)) {
                                     val totalTimeWorked = jobRepository.calculateTotalHours(startTimeHour, startTimeMin, endTimeHour, endTimeMin)
                                     val shiftsModel = ShiftsModel(editShiftID, startDateForDb, dayOfYear, endDateForDb, 0, startTimeForDb, endTimeForDb, totalTimeWorked )
                                     jobRepository.editShift(shiftsModel, editShiftID)
-                                    Toast.makeText(context, "⏲ Successfully edited shift.", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(context, "⏲ Successfully edited day shift.", Toast.LENGTH_LONG).show()
                                     mAlertDialog.dismiss()
                                 }
                                 else {
@@ -225,7 +225,7 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                                 notifyDataSetChanged()
                                 navController.navigate(R.id.navigationShiftsFragment) // temporary workaround: reload the shifts fragment
                             }
-                            getShiftType(endDate, startDate) == Constants.INVALID_SHIFT_RANGE -> {
+                            jobRepository.getShiftType(endDate, startDate) == Constants.INVALID_SHIFT_RANGE -> {
                                 Toast.makeText(context, "Please choose dates 1 day apart max!", Toast.LENGTH_LONG).show()
                             }
                         }
@@ -233,7 +233,6 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
                         Toast.makeText(context, "Please fill in all missing information", Toast.LENGTH_SHORT).show()
                     }
                 }
-
 
                 mDialogView.cancelBtn.setOnClickListener{
                     mAlertDialog.cancel()
@@ -284,7 +283,6 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
         val endDateText = mDialogView.shiftEndDateTv.text
         val endTimeText = mDialogView.endTimeTv.text
 
-        // TODO: there should be a better way to compare with initial_date_value variable in strings.xml
         // e.g: val string: String = getString(R.string.hello)
         val initialDateValue = "--/--/----"
         val initialTimeValue = "--:--"
@@ -294,43 +292,6 @@ class ChildAdapter(private var shiftsList: List<ShiftsModel>, val context: Conte
             return false
         }
         return true
-    }
-
-    // TODO: could we move this to jobRepository? it's duplicated here from HomeAdapter
-    private fun getShiftType(endDate: Calendar, startDate: Calendar): Int {
-        val endDateDay = endDate.get(Calendar.DAY_OF_MONTH)
-        val endDateMonth = endDate.get(Calendar.MONTH)
-        val endDateDayOfWeek = endDate.get(Calendar.DAY_OF_WEEK)
-
-        val startDateDay = startDate.get(Calendar.DAY_OF_MONTH)
-        val startDateMonth = startDate.get(Calendar.MONTH)
-        val startDateDayOfWeek = startDate.get(Calendar.DAY_OF_WEEK)
-
-        val oneDayOverlapSameMonth = endDateDay - startDateDay == 1
-        val oneDayOverlapDiffMonth = ((startDateDayOfWeek == 7 && endDateDayOfWeek == 1) || (startDateDayOfWeek == endDateDayOfWeek-1)) && (endDateMonth - startDateMonth == 1)
-        val oneDayOverlap = oneDayOverlapSameMonth || oneDayOverlapDiffMonth
-        // DEBUG LOGS (uncomment following log lines for more information in logcat
-        // Log.d(TAG, "startDate: ${startDate.time}, endDate: ${endDate.time}")
-        // Log.d(TAG, "startDateDay: $startDateDay")
-        // Log.d(TAG, "startDateMonth: $startDateMonth")
-        // Log.d(TAG, "endDateDay: $endDateDay")
-        // Log.d(TAG, "endDateMonth: $endDateMonth")
-        // Log.d(TAG, "endDateDayOfWeek: $endDateDayOfWeek, startDateDayOfWeek: $startDateDayOfWeek")
-        // Log.d(TAG, "----------------------------------------------------------------------------")
-        if (((startDateDayOfWeek == 7 && endDateDayOfWeek == 1) && oneDayOverlap)
-            || ((endDateDayOfWeek == startDateDayOfWeek + 1) && oneDayOverlap)) {
-            // overnight shift
-            return Constants.OVERNIGHT_SHIFT
-        } else if (endDateDayOfWeek == startDateDayOfWeek) {
-            // day shift
-            return Constants.DAY_SHIFT
-        }
-
-        return Constants.INVALID_SHIFT_RANGE
-    }
-
-    private fun getShiftID(shiftStartDate: String, shiftEndDate: String, shiftStartTime: String, shiftEndTime: String): Int{
-        return jobRepository.getShiftID(shiftStartDate, shiftEndDate, shiftStartTime, shiftEndTime)
     }
 
     companion object {
