@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="3dp"
+    android:backgroundTint="?attr/colorPrimaryVariant"
+    app:cardUseCompatPadding="true">
+<!--    android:backgroundTint="@color/lightpurple"-->
+
+
+<!--    https://www.youtube.com/watch?v=op2rBiJb79A  -->
+<!--    https://www.youtube.com/watch?v=6Gm3eMG8KqI  this was better / clearer -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp" >
+
+        <TextView
+            android:id="@+id/jobNameTv"
+            android:layout_width="156dp"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_job_name"
+            android:textColor="?attr/textColor"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        <!--            android:textColor="@color/richBlack"-->
+
+
+        <TextView
+            android:id="@+id/jobLocationTv"
+            android:layout_width="203dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/jobNameTv"
+            android:gravity="end"
+            android:text="@string/placeholder_job_location"
+            android:textColor="?attr/metaTextColor"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+<!--        android:textColor="@color/richBlack"-->
+
+
+        <TextView
+            android:id="@+id/jobInfoTv"
+            android:layout_width="231dp"
+            android:layout_height="36dp"
+            android:textSize="14sp"
+            android:layout_below="@+id/jobNameTv"
+            android:layout_marginTop="1dp"
+            android:text="@string/placeholder_job_information" />
+
+        <Button
+            android:id="@+id/addHoursBtn"
+            android:layout_width="126dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/jobLocationTv"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="3dp"
+            android:layout_toEndOf="@+id/jobInfoTv"
+            android:backgroundTint="@color/white"
+            android:text="@string/btn_add_hours"
+            android:textColor="@color/richBlack"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

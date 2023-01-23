@@ -1,6 +1,46 @@
 <resources>
-    <string name="app_name">OddHours</string>
+    <!-- text -->
+    <string name="title_add_job">Add Job</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="txt_no_jobs">No Jobs Added Yet</string>
+    <string name="txt_no_shifts">No Shifts Added Yet. Go to Home page to add a shift!</string>
+    <string name="title_charts">Charts</string>
+    <string name="title_shifts">Shifts</string>
+    <string name="app_name">OddHours</string>
+    <string name="initial_date_value">--/--/----</string>
+    <string name="initial_time_value">--:--</string>
+    <string name="end_date">End Date</string>
+    <string name="start_date">Start Date</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="hours_worked">Hours Worked</string>
+
+    <!-- buttons -->
+    <string name="btn_add_hours">Add Shift</string>
+    <string name="btn_add_job">Add Job</string>
+    <string name="btn_delete_job">Delete Job</string>
+    <string name="btn_edit_job">Edit Job</string>
+    <string name="btn_delete_shift">Delete Shift</string>
+    <string name="btn_edit_shift">Edit Shift</string>
+    <string name="btn_start_time">Start Time</string>
+    <string name="btn_end_time">End Time</string>
+    <string name="btn_start_date">Start Date</string>
+    <string name="btn_end_date">End Date</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_save">Save</string>
+
+    <!-- placeholders -->
+    <string name="placeholder_job_information">Job Information</string>
+    <string name="placeholder_job_location">Job Location</string>
+    <string name="placeholder_job_name">Job Name</string>
+    <string name="placeholder_dropdown_default">Line Chart (Hours)</string>
+
+    <!--  images / anything else  -->
+    <string name="arrow">arrow</string>
+    
+    <!--  dropdown items (can't use constants here unfortunately) -->
+    <string-array name="chart_types">
+        <item>Line Chart (Hours)</item>
+        <item>Bar Chart (Hours)</item>
+    </string-array>
 </resources>

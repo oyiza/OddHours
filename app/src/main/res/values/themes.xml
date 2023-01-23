@@ -13,4 +13,55 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="Theme.PraisePurple" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/darkpurple</item>
+        <item name="colorPrimaryVariant">@color/lightpurple</item>
+        <item name="colorOnPrimary">@color/lightgrey</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/lightpurple</item>
+        <item name="colorSecondaryVariant">@color/ceruleanCrayola</item>
+        <item name="colorOnSecondary">@color/richBlack</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/darkpurple</item>
+        <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/calm</item>
+        <item name="fontFamily">@font/calm</item>
+    </style>
+    <style name="Theme.Calm" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/pumpkin</item>
+        <item name="colorPrimaryVariant">@color/lapisLazuli</item>
+        <item name="colorOnPrimary">@color/babyPowder</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/sandyBrown</item>
+        <item name="colorSecondaryVariant">@color/ceruleanCrayola</item>
+        <item name="colorOnSecondary">@color/richBlack</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/pumpkin</item>
+        <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/calm</item>
+        <item name="fontFamily">@font/calm</item>
+    </style>
+
+    <style name="LightTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/darkpurple</item>
+        <item name="colorPrimaryVariant">@color/lightpurple</item>
+        <item name="colorOnPrimary">@color/lightgrey</item>
+        <item name="textColor">#000000</item>
+        <item name="metaTextColor">#606060</item>
+        <item name="bgColor">#ffffff</item>
+        <item name="fontFamily">@font/calm</item>
+    </style>
+
+    <style name="DarkTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/darkpurple</item>
+        <item name="colorPrimaryVariant">@color/lightpurple</item>
+        <item name="colorOnPrimary">@color/lightgrey</item>
+        <item name="textColor">#000000</item>
+        <item name="metaTextColor">#606060</item>
+        <item name="bgColor">#ffffff</item>
+        <item name="fontFamily">@font/calm</item>
+    </style>
+
 </resources>

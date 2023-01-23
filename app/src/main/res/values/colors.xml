@@ -7,4 +7,27 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+<!--    Calm Colors - New Look -->
+    <color name="lapisLazuli">#2660A4</color>
+    <color name="babyPowder">#FFFFFA</color>
+    <color name="sandyBrown">#F19953</color>
+    <color name="richBlack">#000103</color>
+    <color name="ceruleanCrayola">#05B2DC</color>
+    <color name="cyanProcess">#08B2E3</color>
+    <color name="pumpkin">#FA7921</color>
+    <color name="colorWheel">#FE9920</color>
+    <color name="darkOlive">#566E3D</color>
+    <color name="celeste">#B5F8FE</color>
+    <color name="orangeYellowCrayola">#FBD87F</color>
+    <color name="gunmetal">#2A2D34</color>
+
+    <color name="darkpurple">#9381FF</color>
+    <color name="lightpurple">#B8B8FF</color>
+    <color name="lightgrey">#F8F7FF</color>
+    <color name="cream">#FFEEDD</color>
+    <color name="cancelRed">#dd7f5a</color>
+    <color name="yesGreen">#84ffc9</color>
+
+
 </resources>

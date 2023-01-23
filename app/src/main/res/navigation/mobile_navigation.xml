@@ -3,23 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigationHomeFragment">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigationHomeFragment"
         android:name="com.example.oddhours.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.oddhours.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigationAddJobFragment"
+        android:name="com.example.oddhours.ui.addjob.AddJobFragment"
+        android:label="@string/title_add_job"
+        tools:layout="@layout/fragment_add_job" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.oddhours.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigationShiftsFragment"
+        android:name="com.example.oddhours.ui.shifts.ShiftsFragment"
+        android:label="Shifts"
+        tools:layout="@layout/fragment_shifts" />
+
+    <fragment
+        android:id="@+id/navigationChartsFragment"
+        android:name="com.example.oddhours.ui.charts.ChartsFragment"
+        android:label="@string/title_charts"
+        tools:layout="@layout/fragment_charts" />
+
 </navigation>
