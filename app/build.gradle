@@ -10,11 +10,11 @@ android {
 
     // if you want to use lower minSdkVersion, would have to use multidex library: https://developer.android.com/studio/build/multidex#mdex-gradle
     defaultConfig {
-        applicationId "com.example.oddhours"
+        applicationId "com.prismlabs.oddhours"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
