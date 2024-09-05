@@ -23,10 +23,10 @@
         android:label="Shifts"
         tools:layout="@layout/fragment_shifts" />
 
-    <fragment
-        android:id="@+id/navigationChartsFragment"
-        android:name="com.example.oddhours.ui.charts.ChartsFragment"
-        android:label="@string/title_charts"
-        tools:layout="@layout/fragment_charts" />
+<!--    <fragment-->
+<!--        android:id="@+id/navigationChartsFragment"-->
+<!--        android:name="com.example.oddhours.ui.charts.ChartsFragment"-->
+<!--        android:label="@string/title_charts"-->
+<!--        tools:layout="@layout/fragment_charts" />-->
 
 </navigation>
