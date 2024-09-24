@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         /**
          * Calling initDatabase function to create the DatabaseHelper singleton
          */
-        val test = "";
         DatabaseHelper.initDatabase(this)
 
         setContentView(R.layout.activity_main)
